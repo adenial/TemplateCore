@@ -1,0 +1,116 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IAuthorizationService AuthorizationService
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"] - TemplateCore</title>
+
+  <environment names="Development">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-table/dist/bootstrap-table.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/font-awesome.css" />
+  </environment>
+  <environment names="Staging,Production">
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+          asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+          asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+  </environment>
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">TemplateCore</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i> @Localizer["Home"]</a></li>
+
+          @if (await AuthorizationService.AuthorizeAsync(User, "View Administrator Menu"))
+          {
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-cogs"></i>
+                @Localizer["Administration"]
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a asp-area="" asp-controller="User" asp-action="Index"><i class="fa fa-users"></i> @Localizer["Users"]</a></li>
+                <li><a asp-area="" asp-controller="Role" asp-action="Index"><i class="fa fa-sitemap"></i> @Localizer["Roles"]</a></li>
+              </ul>
+            </li>
+          }
+
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="fa fa-info-circle"></i>
+              @Localizer["Info"]
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a asp-area="" asp-controller="Home" asp-action="About"><i class="fa fa-search"></i> @Localizer["About"]</a></li>
+              <li><a asp-area="" asp-controller="Home" asp-action="Contact"><i class="fa fa-envelope"></i> @Localizer["Contact"]</a></li>
+            </ul>
+          </li>
+        </ul>
+        @await Html.PartialAsync("_LoginPartial")
+      </div>
+    </div>
+  </div>
+  <div class="container body-content">
+    @RenderBody()
+    <hr />
+    <footer>
+      <div class="row">
+        <div class="col-md-6">
+          <p>&copy; 2016 - Template ASP.NET Core</p>
+        </div>
+        <div class="col-md-6 text-right">
+          @await Html.PartialAsync("_SelectLanguagePartial")
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <environment names="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    @*<script src="~/lib/bootstrap-table/dist/bootstrap-table-locale-all.js"></script>*@
+    <script src="~/lib/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/error.js" asp-append-version="true"></script>
+  </environment>
+
+  <environment names="Staging,Production">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery">
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+    </script>
+    @*<script src="~/lib/bootstrap-table/dist/bootstrap-table-locale-all.js"></script>*@
+    <script src="~/lib/bootstrap-table/dist/bootstrap-table.js"></script>    
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/js/error.js" asp-append-version="true"></script>
+  </environment>
+
+  @RenderSection("scripts", required: false)
+</body>
+</html>

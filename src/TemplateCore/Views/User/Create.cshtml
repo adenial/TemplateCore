@@ -1,0 +1,53 @@
+@model UserCreateViewModel
+
+@{
+  ViewData["Title"] = "Create";
+}
+
+<h2>Create new user</h2>
+
+<form asp-action="Create">
+  <div class="form-horizontal">
+    <hr />
+    @*where the error messages will be displayed*@
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+      @*name field*@
+      <label asp-for="Name" class="col-md-2 control-label"></label>
+      <div class="col-md-10">
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger" />
+      </div>
+    </div>
+    <div class="form-group">
+      @*name username*@
+      <label asp-for="UserName" class="col-md-2 control-label"></label>
+      <div class="col-md-10">
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger" />
+      </div>
+    </div>
+    <div class="form-group">
+      @*name email*@
+      <label asp-for="Email" class="col-md-2 control-label"></label>
+      <div class="col-md-10">
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Create" class="btn btn-default" />
+      </div>
+    </div>
+  </div>
+</form>
+
+@*<div>
+    <a asp-action="Index">Back to List</a>
+  </div>*@
+
+@section Scripts {
+  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

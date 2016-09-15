@@ -1,0 +1,57 @@
+@model IEnumerable<UserIndexViewModel>
+
+@{
+  ViewData["Title"] = "Users";
+}
+
+<h2>Users</h2>
+
+<div class="col-sm-12 text-right">
+  <a asp-action="Create"><i class="fa fa-plus"></i></a>
+</div>
+
+<div class="col-sm-12">
+  <table id="table"
+         data-smart-display="true"
+         data-mobile-responsive="true"
+         data-search="true"
+         data-show-toggle="true"
+         data-show-columns="true"
+         data-show-export="true"
+         data-minimum-count-columns="2"
+         data-pagination="true"
+         data-id-field="id"
+         data-page-list="[10, 25, 50, 100, ALL]"
+         data-toggle="table"
+         data-striped="true">
+    <thead>
+      <tr>
+        <th data-field="name" data-sortable="true" data-halign="center">
+          @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th data-field="alias" data-sortable="true" data-halign="center">
+          @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th data-halign="center" data-align="center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+          <td>
+            @Html.DisplayFor(modelItem => item.Name)
+          </td>
+          <td>
+            @Html.DisplayFor(model => item.UserName)
+          </td>
+          <td>
+            <a class="btn btn-circle btn-icon-only red" title="Eliminar" href='@Url.Action("Delete", "User", new { id = item.Id })'>
+              <i class="fa fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
