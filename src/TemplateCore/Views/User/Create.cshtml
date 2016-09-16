@@ -1,10 +1,14 @@
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Http.Features
 @model UserCreateViewModel
+@inject IViewLocalizer Localizer
 
 @{
-  ViewData["Title"] = "Create";
+  ViewData["Title"] = Localizer["Create new user"];
 }
 
-<h2>Create new user</h2>
+<h2>@Localizer["Create new user"]</h2>
 
 <form asp-action="Create">
   <div class="form-horizontal">
@@ -14,7 +18,8 @@
 
     <div class="form-group">
       @*name field*@
-      <label asp-for="Name" class="col-md-2 control-label"></label>
+      <label class="col-md-2 control-label">@Localizer["Name"]</label>
+      @*<label asp-for="Name" class="col-md-2 control-label"></label>*@
       <div class="col-md-10">
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger" />
@@ -22,7 +27,8 @@
     </div>
     <div class="form-group">
       @*name username*@
-      <label asp-for="UserName" class="col-md-2 control-label"></label>
+      <label class="col-md-2 control-label">@Localizer["Username"]</label>
+      @*<label asp-for="UserName" class="col-md-2 control-label"></label>*@
       <div class="col-md-10">
         <input asp-for="UserName" class="form-control" />
         <span asp-validation-for="UserName" class="text-danger" />
@@ -30,23 +36,62 @@
     </div>
     <div class="form-group">
       @*name email*@
-      <label asp-for="Email" class="col-md-2 control-label"></label>
+      <label class="col-md-2 control-label">@Localizer["Email"]</label>
+      @*<label asp-for="Email" class="col-md-2 control-label"></label>*@
       <div class="col-md-10">
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger" />
       </div>
     </div>
+
+    <div class="col-sm-12">
+      <table id="table"
+             data-smart-display="true"
+             data-mobile-responsive="true"
+             data-search="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             data-minimum-count-columns="2"
+             data-pagination="true"
+             data-id-field="id"
+             data-page-list="[10, 25, 50, 100, ALL]"
+             data-toggle="table"
+             data-striped="true">
+        <thead>
+          <tr>
+            <th data-sortable="true" data-halign="center">
+              @Localizer["Check"]
+            </th>
+            <th data-field="name" data-sortable="true" data-halign="center">
+              @Localizer["Role"]
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in Model.Roles)
+          {
+            <tr>
+              <td>
+                @Html.CheckBoxFor(modelItem => item.Check)
+              </td>
+              <td>
+                @Html.DisplayFor(modelItem => item.Name)
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+
     <div class="form-group">
       <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Create" class="btn btn-default" />
+        <input type="submit" value=@Localizer["Create"] class="btn btn-default" />
       </div>
     </div>
   </div>
 </form>
-
-@*<div>
-    <a asp-action="Index">Back to List</a>
-  </div>*@
 
 @section Scripts {
   @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

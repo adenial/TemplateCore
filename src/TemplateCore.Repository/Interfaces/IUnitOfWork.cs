@@ -1,5 +1,6 @@
 ﻿namespace TemplateCore.Repository
 {
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using System;
 
@@ -9,6 +10,8 @@
   /// <typeparam name="U"></typeparam>
   public interface IUnitOfWork<U> where U : DbContext, IDisposable
   {
+    IRepository<IdentityRole> RoleRepository { get; }
+
     /// <summary>
     /// Saves all pending changes
     /// </summary>

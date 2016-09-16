@@ -1,5 +1,6 @@
 ﻿namespace TemplateCore.Service
 {
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Model;
   using System.Collections.Generic;
 
@@ -13,6 +14,12 @@
     /// </summary>
     /// <returns>List of type <see cref="AspNetUser"/>.</returns>
     IEnumerable<AspNetUser> GetAll();
+
+    /// <summary>
+    /// Gets all roles.
+    /// </summary>
+    /// <returns>List of type <see cref="IdentityRole"/>.</returns>
+    IEnumerable<IdentityRole> GetAllRoles();
 
     /// <summary>
     /// Determines whether this instance [can insert user name] the specified user name.

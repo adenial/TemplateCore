@@ -1,5 +1,6 @@
 ﻿namespace TemplateCore.Repository
 {
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Model;
   using System;
@@ -15,6 +16,21 @@
     /// The movio repository
     /// </summary>
     private IRepository<ApplicationUser> movieRepository = null;
+
+    /// <summary>
+    /// The roles repository
+    /// Testing out the IdentityRole.
+    /// </summary>
+    private IRepository<IdentityRole> rolesRepository = null;
+
+    /// <summary>
+    /// Gets or sets the role repository.
+    /// </summary>
+    /// <value>The role repository.</value>
+    public IRepository<IdentityRole> RoleRepository
+    {
+      get { return this.rolesRepository ?? (this.rolesRepository = new Repository<IdentityRole>(this.dataContext)); }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.

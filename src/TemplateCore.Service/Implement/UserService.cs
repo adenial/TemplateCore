@@ -1,7 +1,9 @@
 ﻿namespace TemplateCore.Service
 {
   using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Model;
+  using Repository;
   using System;
   using System.Collections.Generic;
   using System.Linq;
@@ -17,18 +19,29 @@
     private TemplateDbContext dataContext = null;
 
     /// <summary>
+    /// UnitOfWork
+    /// </summary>
+    private IUnitOfWork<TemplateDbContext> unitOfWork = null;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="UserService"/> class.
     /// </summary>
     /// <param name="dataContext">The data context.</param>
     /// <exception cref="ArgumentNullException">dataContext</exception>
-    public UserService(TemplateDbContext dataContext)
+    public UserService(TemplateDbContext dataContext, IUnitOfWork<TemplateDbContext> unitOfWork)
     {
       if (dataContext == null)
       {
         throw new ArgumentNullException("dataContext");
       }
 
+      if (unitOfWork == null)
+      {
+        throw new ArgumentNullException("unitOfWork");
+      }
+
       this.dataContext = dataContext;
+      this.unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -111,6 +124,15 @@
       var users = this.dataContext.Users.ToList();
 
       return users.Select(x => new AspNetUser { Id = new Guid(x.Id), UserName = x.UserName, Name = x.Name }).ToList();
+    }
+
+    /// <summary>
+    /// Gets all roles.
+    /// </summary>
+    /// <returns>List of type <see cref="IdentityRole"/>.</returns>
+    public IEnumerable<IdentityRole> GetAllRoles()
+    {
+      return this.unitOfWork.RoleRepository.GetAll().ToList();
     }
 
     /// <summary>

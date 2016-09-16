@@ -8,6 +8,7 @@ namespace TemplateCore.Controllers
   using System.Collections.Generic;
   using System.Linq;
   using ViewModels.User;
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
   /// <summary>
   /// Class UserController.
@@ -61,8 +62,25 @@ namespace TemplateCore.Controllers
       // create view model.
       var model = new UserCreateViewModel();
 
+      var roles = this.userService.GetAllRoles();
+
+      // load the roles. id and name.
+      var rolesViewmodel = GetRolesForViewModel(roles);
+
+      model.Roles = rolesViewmodel;
+
       // create view and return the model.
       return this.View(model);
+    }
+
+    /// <summary>
+    /// Gets the roles for view model.
+    /// </summary>
+    /// <param name="roles">The roles.</param>
+    /// <returns>System.Collections.Generic.IEnumerable&lt;TemplateCore.ViewModels.User.UserRoleCreateViewModel&gt;.</returns>
+    private IEnumerable<UserRoleCreateViewModel> GetRolesForViewModel(IEnumerable<IdentityRole> roles)
+    {
+      return roles.Select(x => new UserRoleCreateViewModel { Id = x.Id, Name = x.Name }).ToList();
     }
 
     /// <summary>
@@ -100,7 +118,7 @@ namespace TemplateCore.Controllers
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Administrator")]
-    public IActionResult Create(UserCreateViewModel model)
+    public IActionResult Create(UserCreateViewModel model [Bind("Roles")])
     {
       if (ModelState.IsValid)
       {
