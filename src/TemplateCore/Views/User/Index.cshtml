@@ -5,7 +5,7 @@
   ViewData["Title"] = "Users";
 }
 
-<h2>Users</h2>
+<h2>@Localizer["Users"]</h2>
 
 <div class="col-sm-12 text-right">
   <a asp-action="Create"><i class="fa fa-plus"></i></a>
@@ -36,7 +36,9 @@
         <th data-field="roles" data-sortable="true" data-halign="center">
           @Localizer["Roles"]
         </th>
-        <th data-halign="center" data-align="center">Acciones</th>
+        <th data-halign="center" data-align="center">
+          @Localizer["Actions"]
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -53,9 +55,8 @@
             @Html.DisplayFor(model => item.Roles)
           </td>
           <td>
-            <a class="btn btn-circle btn-icon-only red" title="Eliminar" href='@Url.Action("Delete", "User", new { id = item.Id })'>
-              <i class="fa fa-trash"></i>
-            </a>
+            <a class="btn btn-circle btn-icon-only red" title=@Localizer["Edit"] href='@Url.Action("Edit", "User", new { id = item.Id })'><i class="fa fa-pencil-square-o"></i></a>
+            <a class="btn btn-circle btn-icon-only red" title=@Localizer["Delete"] href='@Url.Action("Delete", "User", new { id = item.Id })'><i class="fa fa-trash"></i></a>
           </td>
         </tr>
       }

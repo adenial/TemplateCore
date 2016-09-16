@@ -1,10 +1,16 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model IEnumerable<AdminRoleIndexViewModel>
 
 @{
-  ViewData["Title"] = "Roles";
+  ViewData["Title"] = Localizer["Roles"];
 }
 
-<h2>Roles</h2>
+<h2>@Localizer["Roles"]</h2>
+
+<div class="col-sm-12 text-right">
+  <a asp-action="Create"><i class="fa fa-plus"></i></a>
+</div>
 
 <div class="col-sm-12">
   <table id="table"
