@@ -24,5 +24,12 @@
     /// <value>The name.</value>
     [Display(Name = "Nombre")]
     public string Name { get; set; }
+
+    /// <summary>
+    /// Gets or sets the roles.
+    /// </summary>
+    /// <value>The roles.</value>
+    [Display(Name = "Roles")]
+    public string Roles { get; set; }
   }
 }

@@ -1,5 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
 @model IEnumerable<UserIndexViewModel>
-
+@inject IViewLocalizer Localizer
 @{
   ViewData["Title"] = "Users";
 }
@@ -27,10 +28,13 @@
     <thead>
       <tr>
         <th data-field="name" data-sortable="true" data-halign="center">
-          @Html.DisplayNameFor(model => model.Name)
+          @Localizer["Name"]
         </th>
-        <th data-field="alias" data-sortable="true" data-halign="center">
-          @Html.DisplayNameFor(model => model.UserName)
+        <th data-field="username" data-sortable="true" data-halign="center">
+          @Localizer["Username"]
+        </th>
+        <th data-field="roles" data-sortable="true" data-halign="center">
+          @Localizer["Roles"]
         </th>
         <th data-halign="center" data-align="center">Acciones</th>
       </tr>
@@ -44,6 +48,9 @@
           </td>
           <td>
             @Html.DisplayFor(model => item.UserName)
+          </td>
+          <td>
+            @Html.DisplayFor(model => item.Roles)
           </td>
           <td>
             <a class="btn btn-circle btn-icon-only red" title="Eliminar" href='@Url.Action("Delete", "User", new { id = item.Id })'>

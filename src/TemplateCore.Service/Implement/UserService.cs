@@ -122,7 +122,52 @@
       // if users are like a normal context...
       var users = this.unitOfWork.UserRepository.GetAll().ToList(); // this.dataContext.Users.ToList();
 
-      return users.Select(x => new AspNetUser { Id = new Guid(x.Id), UserName = x.UserName, Name = x.Name }).ToList();
+      List<AspNetUser> aspNetUsers = new List<AspNetUser>();
+
+      foreach (var user in users)
+      {
+        // roles are null... dont know why, will do it the hard way.
+        var aspNetUser = new AspNetUser { Id = new Guid(user.Id), Name = user.Name, UserName = user.UserName, Roles = GetRolesString(user.Id) };
+
+        aspNetUsers.Add(aspNetUser);
+      }
+
+      return aspNetUsers;
+      
+      //return users.Select(x => new AspNetUser { Id = new Guid(x.Id), UserName = x.UserName, Name = x.Name, Roles = GetRolesString(x.Roles.ToList()) }).ToList();
+    }
+
+    /// <summary>
+    /// Gets the roles string.
+    /// </summary>
+    /// <param name="userId">The user identifier.</param>
+    /// <returns>System.String.</returns>
+    private string GetRolesString(string userId)
+    {
+      List<string> roleNames = new List<string>();
+
+      //foreach (var role in roles)
+      //{
+      //  var query = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(role.RoleId));
+      //  roleNames.Add(query.Name);
+      //}
+
+      // query all the UserRoles.
+      var userRoles = this.unitOfWork.UseRolesRepository.GetAll().ToList() ;
+
+      foreach (var userRole in userRoles)
+      {
+        if (userRole.UserId.Equals(userId))
+        {
+          // if the UserRoles is equal...
+          var role = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(userRole.RoleId));
+
+          // finally...
+          roleNames.Add(role.Name);
+        }
+      }
+
+      return string.Join(",", roleNames);
     }
 
     /// <summary>
@@ -140,7 +185,8 @@
     /// <param name="email">The email.</param>
     /// <param name="userName">Name of the user.</param>
     /// <param name="name">The name.</param>
-    public void Insert(string email, string userName, string name)
+    /// <param name="roleIds">The role ids.</param>
+    public void Insert(string email, string userName, string name, IEnumerable<string> roleIds)
     {
       // create new User
       ApplicationUser newUser = new ApplicationUser
@@ -159,16 +205,33 @@
       // password by default.
       var password = new PasswordHasher<ApplicationUser>();
       var hashed = password.HashPassword(newUser, "1122334455");
-
-      // forgot this.
       newUser.PasswordHash = hashed;
 
       // attach to context.
       // this.dataContext.Users.Add(newUser);
       this.unitOfWork.UserRepository.Insert(newUser);
 
-      // save changes.
-      // this.dataContext.SaveChanges();
+      // save changes in context.
+      //this.unitOfWork.Commit();
+
+      // query for the user by its username, or check if the newUser's Id is updated after commit.
+      //var insertedUser = this.unitOfWork.UserRepository.FindBy(x => x.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase));
+
+      var allUserRoles = this.unitOfWork.UseRolesRepository.GetAll().ToList();
+
+      // query for the selected roles by the id and then add to the repository.
+      foreach(var roleId in roleIds)
+      {
+        var role = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(roleId, StringComparison.CurrentCultureIgnoreCase));
+
+        if (role != null)
+        {
+          // add to user roles.
+          this.unitOfWork.UseRolesRepository.Insert(new IdentityUserRole<string> { RoleId = role.Id, UserId = newUser.Id });
+        }
+      }
+
+      // save changes made to AspNetUsers table and AspNetUserRoles
       this.unitOfWork.Commit();
     }
   }

@@ -24,5 +24,11 @@ namespace TemplateCore.Model
     /// </summary>
     /// <value>The name.</value>
     public string Name { get; set; }
+
+    /// <summary>
+    /// Gets or sets the roles.
+    /// </summary>
+    /// <value>The roles.</value>
+    public string Roles { get; set; }
   }
 }

@@ -5,6 +5,10 @@
   using Model;
   using System;
 
+  /// <summary>
+  /// Class UnitOfWork.
+  /// </summary>
+  /// <typeparam name="TContext">The type of the t context.</typeparam>
   public class UnitOfWork<TContext> : IDisposable, IUnitOfWork<TContext> where TContext : DbContext, new()
   {
     /// <summary>
@@ -22,6 +26,20 @@
     /// The user repository
     /// </summary>
     private IRepository<ApplicationUser> userRepository = null;
+
+    /// <summary>
+    /// The user roles repository
+    /// </summary>
+    private IRepository<IdentityUserRole<string>> useRolesRepository = null;
+
+    /// <summary>
+    /// Gets the user roles repository.
+    /// </summary>
+    /// <value>The user roles repository.</value>
+    public IRepository<IdentityUserRole<string>> UseRolesRepository
+    {
+      get { return this.useRolesRepository ?? (this.useRolesRepository = new Repository<IdentityUserRole<string>>(this.dataContext)); }
+    }
 
     /// <summary>
     /// Gets or sets the role repository.

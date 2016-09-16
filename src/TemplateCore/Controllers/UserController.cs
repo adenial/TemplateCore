@@ -133,8 +133,12 @@ namespace TemplateCore.Controllers
 
           if (canInsert)
           {
+            // get all the selected roles from model.Roles
+            var selectedRoles = model.Roles.Where(x => x.Check == true);
+            IEnumerable<string> rolesIds = selectedRoles.Select(x => x.Id).ToList();
+
             // if there are no more validations insert.
-            this.userService.Insert(model.Email, model.UserName, model.Name);
+            this.userService.Insert(model.Email, model.UserName, model.Name, rolesIds);
             return RedirectToAction("Index");
           }
           else
@@ -162,7 +166,7 @@ namespace TemplateCore.Controllers
     /// <returns>IEnumerable&lt;UserIndexViewModel&gt;.</returns>
     private IEnumerable<UserIndexViewModel> GetIndexModelFromUsers(IEnumerable<AspNetUser> users)
     {
-      return users.Select(x => new UserIndexViewModel { Id = x.Id, UserName = x.UserName, Name = x.Name });
+      return users.Select(x => new UserIndexViewModel { Id = x.Id, UserName = x.UserName, Name = x.Name, Roles = x.Roles });
     }
   }
 }

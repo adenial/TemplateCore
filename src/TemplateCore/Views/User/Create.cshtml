@@ -60,26 +60,17 @@
              data-striped="true">
         <thead>
           <tr>
-            <th data-sortable="true" data-halign="center">
+            <th data-field="Check" data-sortable="true" data-halign="center">
               @Localizer["Check"]
             </th>
             <th data-field="name" data-sortable="true" data-halign="center">
-              @Localizer["Role"]
+              @Localizer["Name"]
             </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          @foreach (var item in Model.Roles)
-          {
-            <tr>
-              <td>
-                @Html.CheckBoxFor(modelItem => item.Check)
-              </td>
-              <td>
-                @Html.DisplayFor(modelItem => item.Name)
-              </td>
-            </tr>
-          }
+          @Html.EditorFor(x => Model.Roles)
         </tbody>
       </table>
     </div>

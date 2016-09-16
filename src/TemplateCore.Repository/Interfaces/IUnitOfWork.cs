@@ -15,6 +15,8 @@
 
     IRepository<ApplicationUser> UserRepository { get; }
 
+    IRepository<IdentityUserRole<string>> UseRolesRepository { get;  }
+
     /// <summary>
     /// Saves all pending changes
     /// </summary>

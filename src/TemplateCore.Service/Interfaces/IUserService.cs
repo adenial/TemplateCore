@@ -41,7 +41,8 @@
     /// <param name="email">The email.</param>
     /// <param name="userName">Name of the user.</param>
     /// <param name="name">The name.</param>
-    void Insert(string email, string userName, string name);
+    /// <param name="rolesIds">The roles ids.</param>
+    void Insert(string email, string userName, string name, IEnumerable<string> rolesIds);
 
     /// <summary>
     /// Exists the specified identifier.
