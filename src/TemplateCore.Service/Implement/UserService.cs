@@ -14,11 +14,6 @@
   public class UserService : IUserService
   {
     /// <summary>
-    /// The datacontext
-    /// </summary>
-    private TemplateDbContext dataContext = null;
-
-    /// <summary>
     /// UnitOfWork
     /// </summary>
     private IUnitOfWork<TemplateDbContext> unitOfWork = null;
@@ -28,19 +23,13 @@
     /// </summary>
     /// <param name="dataContext">The data context.</param>
     /// <exception cref="ArgumentNullException">dataContext</exception>
-    public UserService(TemplateDbContext dataContext, IUnitOfWork<TemplateDbContext> unitOfWork)
+    public UserService(IUnitOfWork<TemplateDbContext> unitOfWork)
     {
-      if (dataContext == null)
-      {
-        throw new ArgumentNullException("dataContext");
-      }
-
       if (unitOfWork == null)
       {
         throw new ArgumentNullException("unitOfWork");
       }
 
-      this.dataContext = dataContext;
       this.unitOfWork = unitOfWork;
     }
 
@@ -53,7 +42,9 @@
     {
       bool canInsert = false;
 
-      var query = this.dataContext.Users.Where(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
+      var query = this.unitOfWork.UserRepository.FindBy(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
+
+      //var query = this.dataContext.Users.Where(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
 
       if (query == null)
       {
@@ -73,7 +64,9 @@
     {
       bool canInsert = false;
 
-      var query = this.dataContext.Users.Where(x => x.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
+      var query = this.unitOfWork.UserRepository.FindBy(x => x.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase));
+
+      //var query = this.dataContext.Users.Where(x => x.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
 
       if (query == null)
       {
@@ -90,9 +83,14 @@
     /// <param name="id">The identifier.</param>
     public void DeleteById(string id)
     {
-      var user = this.dataContext.Users.Where(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-      this.dataContext.Users.Remove(user);
-      this.dataContext.SaveChanges();
+      var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+      //var user = this.dataContext.Users.Where(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+      //this.dataContext.Users.Remove(user);
+      this.unitOfWork.UserRepository.Delete(query);
+
+      //this.dataContext.SaveChanges();
+      this.unitOfWork.Commit();
     }
 
     /// <summary>
@@ -104,7 +102,8 @@
     {
       bool exists = false;
 
-      var query = this.dataContext.Users.Where(x => x.Id == id).FirstOrDefault();
+      var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+      //var query = this.dataContext.Users.Where(x => x.Id == id).FirstOrDefault();
 
       if (query != null)
       {
@@ -121,7 +120,7 @@
     public IEnumerable<AspNetUser> GetAll()
     {
       // if users are like a normal context...
-      var users = this.dataContext.Users.ToList();
+      var users = this.unitOfWork.UserRepository.GetAll().ToList(); // this.dataContext.Users.ToList();
 
       return users.Select(x => new AspNetUser { Id = new Guid(x.Id), UserName = x.UserName, Name = x.Name }).ToList();
     }
@@ -165,10 +164,12 @@
       newUser.PasswordHash = hashed;
 
       // attach to context.
-      this.dataContext.Users.Add(newUser);
+      // this.dataContext.Users.Add(newUser);
+      this.unitOfWork.UserRepository.Insert(newUser);
 
       // save changes.
-      this.dataContext.SaveChanges();
+      // this.dataContext.SaveChanges();
+      this.unitOfWork.Commit();
     }
   }
 }

@@ -2,6 +2,7 @@
 {
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
+  using Model;
   using System;
 
   /// <summary>
@@ -11,6 +12,8 @@
   public interface IUnitOfWork<U> where U : DbContext, IDisposable
   {
     IRepository<IdentityRole> RoleRepository { get; }
+
+    IRepository<ApplicationUser> UserRepository { get; }
 
     /// <summary>
     /// Saves all pending changes

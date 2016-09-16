@@ -118,7 +118,7 @@ namespace TemplateCore.Controllers
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Administrator")]
-    public IActionResult Create(UserCreateViewModel model [Bind("Roles")])
+    public IActionResult Create(UserCreateViewModel model)
     {
       if (ModelState.IsValid)
       {

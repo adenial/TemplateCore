@@ -13,15 +13,15 @@
     private DbContext dataContext = null;
 
     /// <summary>
-    /// The movio repository
-    /// </summary>
-    private IRepository<ApplicationUser> movieRepository = null;
-
-    /// <summary>
     /// The roles repository
     /// Testing out the IdentityRole.
     /// </summary>
     private IRepository<IdentityRole> rolesRepository = null;
+
+    /// <summary>
+    /// The user repository
+    /// </summary>
+    private IRepository<ApplicationUser> userRepository = null;
 
     /// <summary>
     /// Gets or sets the role repository.
@@ -30,6 +30,15 @@
     public IRepository<IdentityRole> RoleRepository
     {
       get { return this.rolesRepository ?? (this.rolesRepository = new Repository<IdentityRole>(this.dataContext)); }
+    }
+
+    /// <summary>
+    /// Gets the user repository.
+    /// </summary>
+    /// <value>The user repository.</value>
+    public IRepository<ApplicationUser> UserRepository
+    {
+      get { return this.userRepository ?? (this.userRepository = new Repository<ApplicationUser>(this.dataContext)); }
     }
 
     /// <summary>
