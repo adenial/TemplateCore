@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>ed2ff0a8-ca08-446b-94de-f4d3b03c9ddc</ProjectGuid>
-    <RootNamespace>TemplateCore.Test</RootNamespace>
+    <ProjectGuid>3dc3e0c1-23c8-4afc-9800-5ba05e499212</ProjectGuid>
+    <RootNamespace>TemplateCore.Tests</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>

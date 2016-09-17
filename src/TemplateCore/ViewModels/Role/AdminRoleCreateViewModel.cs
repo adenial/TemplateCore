@@ -11,8 +11,8 @@
     /// Gets or sets the name.
     /// </summary>
     /// <value>The name.</value>
-    [Required(ErrorMessage = "El nombre es requerido.")]
-    [Display(Name = "Nombre")]
+    [Required(ErrorMessage = "The name is a required field.")]
+    [Display(Name = "Name")]
     public string Name { get; set; }
   }
 }

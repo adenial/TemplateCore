@@ -91,7 +91,7 @@ namespace TemplateCore.Controllers
           if (canInsert)
           {
             // get all the selected roles from model.Roles
-            var selectedRoles = model.Roles.Where(x => x.Check == true);
+            List<UserRoleCreateViewModel> selectedRoles = model.Roles.Where(x => x.Check == true).ToList();
             IEnumerable<string> rolesIds = selectedRoles.Select(x => x.Id).ToList();
 
             // if there are no more validations insert.
@@ -100,19 +100,19 @@ namespace TemplateCore.Controllers
           }
           else
           {
-            ModelState.AddModelError(string.Empty, "Ya existe un usuario con el correo electrónico proporcionado.");
-            return View(model);
+            ModelState.AddModelError("", "There's already a user with the provided email.");
+            return this.View(model);
           }
         }
         else
         {
-          ModelState.AddModelError(string.Empty, "Ya existe un usuario con el nombre de usuario proporcionado.");
-          return View(model);
+          ModelState.AddModelError("UserName", "There's already a user with the provided username.");
+          return this.View(model);
         }
       }
       else
       {
-        return View(model);
+        return this.View(model);
       }
     }
 
@@ -148,6 +148,7 @@ namespace TemplateCore.Controllers
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>IActionResult.</returns>
+    [Authorize(Roles = "Administrator")]
     public IActionResult Edit(string id)
     {
       // validate if string is not null or empty.
@@ -186,6 +187,7 @@ namespace TemplateCore.Controllers
     /// <returns>Redirects to Index or to present the errors due validation.</returns>
     [ValidateAntiForgeryToken]
     [HttpPost]
+    [Authorize(Roles = "Administrator")]
     public IActionResult Edit(UserEditViewModel model)
     {
       if (ModelState.IsValid)

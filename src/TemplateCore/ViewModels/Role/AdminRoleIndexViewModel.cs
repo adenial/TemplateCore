@@ -11,7 +11,7 @@ namespace TemplateCore.ViewModels.Role
     /// Gets or sets the name.
     /// </summary>
     /// <value>The name.</value>
-    [Display(Name = "Nombre")]
+    [Display(Name = "Name")]
     public string Name { get; set; }
   }
 }

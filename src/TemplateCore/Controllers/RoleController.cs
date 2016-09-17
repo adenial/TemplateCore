@@ -14,7 +14,13 @@ namespace TemplateCore.Controllers
   [Authorize(Roles = "Administrator")]
   public class RoleController : Controller
   {
+    #region Private Fields
+
     private IRoleService roleService;
+
+    #endregion Private Fields
+
+    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RoleController" /> class.
@@ -24,6 +30,10 @@ namespace TemplateCore.Controllers
     {
       this.roleService = roleService;
     }
+
+    #endregion Public Constructors
+
+    #region Public Methods
 
     /// <summary>
     /// Creates this instance.
@@ -37,26 +47,6 @@ namespace TemplateCore.Controllers
 
       // pass it to view.
       return View(model);
-    }
-
-    /// <summary>
-    /// Deletes the specified name.
-    /// </summary>
-    /// <param name="name">The name.</param>
-    /// <returns>IActionResult.</returns>
-    [Authorize(Roles = "Administrator")]
-    public IActionResult Delete(string name)
-    {
-      if (string.IsNullOrWhiteSpace(name))
-      {
-        // create custom page for not found.
-        return this.NotFound();
-      }
-
-      // query the role given the name.
-
-      this.roleService.DeleteRole(name);
-      return this.RedirectToAction("Index");
     }
 
     /// <summary>
@@ -94,6 +84,26 @@ namespace TemplateCore.Controllers
     }
 
     /// <summary>
+    /// Deletes the specified name.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns>IActionResult.</returns>
+    [Authorize(Roles = "Administrator")]
+    public IActionResult Delete(string name)
+    {
+      if (string.IsNullOrWhiteSpace(name))
+      {
+        // create custom page for not found.
+        return this.NotFound();
+      }
+
+      // query the role given the name.
+
+      this.roleService.DeleteRole(name);
+      return this.RedirectToAction("Index");
+    }
+
+    /// <summary>
     /// Indexes this instance.
     /// </summary>
     /// <returns>IActionResult.</returns>
@@ -105,6 +115,10 @@ namespace TemplateCore.Controllers
       return View(model);
     }
 
+    #endregion Public Methods
+
+    #region Private Methods
+
     /// <summary>
     /// Gets the view model of the Index Action.
     /// </summary>
@@ -114,5 +128,7 @@ namespace TemplateCore.Controllers
     {
       return roleNames.Select(x => new AdminRoleIndexViewModel { Name = x }).ToList();
     }
+
+    #endregion Private Methods
   }
 }

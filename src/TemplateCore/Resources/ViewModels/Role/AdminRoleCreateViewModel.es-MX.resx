@@ -117,31 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Email" xml:space="preserve">
-    <value>Correo electrónico</value>
-  </data>
-  <data name="Invalid email format." xml:space="preserve">
-    <value>Formato inválido de correo</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Nombre</value>
-  </data>
-  <data name="The email is a required field." xml:space="preserve">
-    <value>El correo electrónico es campo requerido.</value>
-  </data>
   <data name="The name is a required field." xml:space="preserve">
     <value>El nombre es un campo requerido.</value>
-  </data>
-  <data name="The username is a required field." xml:space="preserve">
-    <value>El nombre de usuario es campo requerido.</value>
-  </data>
-  <data name="There's already a user with the provided email." xml:space="preserve">
-    <value>Ya existe un usuario con el correo electrónico proporcionado.</value>
-  </data>
-  <data name="There's already a user with the provided username." xml:space="preserve">
-    <value>Ya existe un usuario con el nombre de usuario proporcionado.</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Nombre de usuario</value>
   </data>
 </root>

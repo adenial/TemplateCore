@@ -29,9 +29,10 @@
     <thead>
       <tr>
         <th data-field="name" data-sortable="true" data-halign="center">
-          @Html.DisplayNameFor(model => model.Name)
+          @Localizer["Name"]
+          @*@Html.DisplayNameFor(model => model.Name)*@
         </th>
-        <th data-halign="center" data-align="center">Acciones</th>
+        <th data-halign="center" data-align="center">@Localizer["Actions"]</th>
       </tr>
     </thead>
     <tbody>
@@ -42,7 +43,7 @@
             @Html.DisplayFor(modelItem => item.Name)
           </td>
           <td>
-            <a class="btn btn-circle btn-icon-only red" title="Eliminar" href='@Url.Action("Delete", "User", new { name = item.Name })'>
+            <a class="btn btn-circle btn-icon-only red" title=@Localizer["Delete"] href='@Url.Action("Delete", "User", new { name = item.Name })'>
               <i class="fa fa-trash"></i>
             </a>
           </td>

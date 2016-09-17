@@ -129,6 +129,12 @@
   <data name="Name" xml:space="preserve">
     <value>Nombre</value>
   </data>
+  <data name="There's already a user with the provided email." xml:space="preserve">
+    <value>Ya existe un usuario con el correo electrónico proporcionado</value>
+  </data>
+  <data name="There's already a user with the provided username." xml:space="preserve">
+    <value>Ya existe un usuario con el nombre de usuario proporcionado.</value>
+  </data>
   <data name="Username" xml:space="preserve">
     <value>Nombre de Usuario</value>
   </data>

@@ -35,6 +35,8 @@
 
     #endregion Private Properties
 
+    #region Public Constructors
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Repository{TEntity}"/> class.
     /// </summary>
@@ -43,6 +45,8 @@
     {
       this.dataContext = context;
     }
+
+    #endregion Public Constructors
 
     #region Public Methods
 
