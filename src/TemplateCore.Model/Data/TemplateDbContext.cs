@@ -26,7 +26,7 @@
     public TemplateDbContext()
       : base( new DbContextOptions<TemplateDbContext>())
     {
-      // create db
+      // create db, lets wait till SetDbInitializer is implemented in EntityFramework Core.
       Database.EnsureCreated();
     }
 

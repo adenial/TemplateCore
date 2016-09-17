@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "testRunner": "xunit",
 
@@ -11,10 +11,10 @@
     },
     "xunit": "2.1.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "TemplateCore.Service": 
-    {
+    "TemplateCore.Service": {
       "target": "project"
-    }
+    },
+    "Microsoft.EntityFrameworkCore.InMemory": "1.0.1"
   },
 
   "frameworks": 

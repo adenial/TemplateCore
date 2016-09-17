@@ -1,4 +1,4 @@
-﻿namespace TemplateCore.Service
+﻿namespace TemplateCore.Service.Interfaces
 {
   using System.Collections.Generic;
   using System.Threading.Tasks;

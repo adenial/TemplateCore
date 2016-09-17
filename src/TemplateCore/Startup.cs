@@ -12,6 +12,8 @@ using System.Globalization;
 using TemplateCore.Model;
 using TemplateCore.Repository;
 using TemplateCore.Service;
+using TemplateCore.Service.Implement;
+using TemplateCore.Service.Interfaces;
 using TemplateCore.Services;
 
 namespace TemplateCore

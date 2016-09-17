@@ -1,4 +1,4 @@
-﻿namespace TemplateCore.Service
+﻿namespace TemplateCore.Service.Interfaces
 {
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Model;

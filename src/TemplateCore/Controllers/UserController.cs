@@ -4,7 +4,7 @@ namespace TemplateCore.Controllers
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.AspNetCore.Mvc;
   using Model;
-  using Service;
+  using Service.Interfaces;
   using System;
   using System.Collections.Generic;
   using System.Linq;

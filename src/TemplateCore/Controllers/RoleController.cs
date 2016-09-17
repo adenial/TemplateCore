@@ -2,7 +2,7 @@ namespace TemplateCore.Controllers
 {
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;
-  using Service;
+  using Service.Interfaces;
   using System.Collections.Generic;
   using System.Linq;
   using System.Threading.Tasks;
