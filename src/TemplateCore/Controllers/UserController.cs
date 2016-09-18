@@ -3,6 +3,7 @@ namespace TemplateCore.Controllers
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.Localization;
   using Model;
   using Service.Interfaces;
   using System;
@@ -23,22 +24,34 @@ namespace TemplateCore.Controllers
     /// </summary>
     private IUserService userService = null;
 
+    /// <summary>
+    /// The localizer
+    /// </summary>
+    private IStringLocalizer<UserController> localizer = null;
+
     #endregion Private Fields
 
     #region Public Constructors
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="UserController"/> class.
+    /// Initializes a new instance of the <see cref="UserController" /> class.
     /// </summary>
     /// <param name="userService">The user service.</param>
+    /// <param name="localizer">The localizer.</param>
     /// <exception cref="System.ArgumentNullException">userService</exception>
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IStringLocalizer<UserController> localizer)
     {
       if (userService == null)
       {
         throw new ArgumentNullException("userService");
       }
 
+      if (localizer == null)
+      {
+        throw new ArgumentNullException("localizer");
+      }
+
+      this.localizer = localizer;
       this.userService = userService;
     }
 
@@ -80,8 +93,8 @@ namespace TemplateCore.Controllers
       if (ModelState.IsValid)
       {
         bool canInsert = false;
-        // validate if user does not exists with provided username.
 
+        // validate if user does not exists with provided username.
         canInsert = this.userService.CanInsertUserName(model.UserName);
         if (canInsert)
         {
@@ -100,13 +113,23 @@ namespace TemplateCore.Controllers
           }
           else
           {
-            ModelState.AddModelError("", "There's already a user with the provided email.");
+            ModelState.AddModelError("Email", this.localizer["There's already a user with the provided email."]);
+
+            var roles = this.userService.GetAllRoles();
+            // load the roles. id and name.
+            var rolesViewmodel = GetRolesForViewModel(roles);
+            model.Roles = rolesViewmodel;
             return this.View(model);
           }
         }
         else
         {
-          ModelState.AddModelError("UserName", "There's already a user with the provided username.");
+          ModelState.AddModelError("UserName", this.localizer["There's already a user with the provided username."]);
+          var roles = this.userService.GetAllRoles();
+          // load the roles. id and name.
+          var rolesViewmodel = GetRolesForViewModel(roles);
+          model.Roles = rolesViewmodel;
+
           return this.View(model);
         }
       }

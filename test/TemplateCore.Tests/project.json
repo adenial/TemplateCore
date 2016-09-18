@@ -2,14 +2,18 @@
   "version": "1.0.0-*",
   "testRunner": "xunit",
 
-  "dependencies": {
-    "Microsoft.NETCore.App": {
+  "dependencies": 
+  {
+    "Microsoft.NETCore.App": 
+    {
       "type": "platform",
       "version": "1.0.0"
     },
     "xunit": "2.1.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "TemplateCore": {
+    "Moq": "4.6.38-alpha",
+    "TemplateCore": 
+    {
       "target": "project"
     }
   },

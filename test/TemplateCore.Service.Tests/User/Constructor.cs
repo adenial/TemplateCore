@@ -62,15 +62,8 @@
     [Fact]
     public void ConstructorThrowsException()
     {
-      // dont like this.
-      try
-      {
-        this.userService = new UserService(null);
-      }
-      catch (ArgumentNullException ex)
-      {
-        Assert.IsType(typeof(ArgumentNullException), ex);
-      }
+      Action constructor = () => this.userService = new UserService(null);
+      Assert.Throws(typeof(ArgumentNullException), constructor);
     }
   }
 }
