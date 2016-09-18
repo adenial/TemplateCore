@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "testRunner": "xunit",
 
@@ -11,12 +11,14 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "TemplateCore.Model": {
       "target": "project"
-    }
+    },
+    "Microsoft.CodeCoverage": "1.0.1"
   },
 
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
+        "dnxcore50",
         "dotnet54",
         "portable-net45+win8"
       ]

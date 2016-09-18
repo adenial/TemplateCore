@@ -14,7 +14,8 @@
     "Moq": "4.6.38-alpha",
     "TemplateCore": {
       "target": "project"
-    }
+    },
+    "Microsoft.CodeCoverage": "1.0.1"
   },
 
   "frameworks": 
@@ -22,6 +23,7 @@
     "netcoreapp1.0": 
     {
       "imports": [
+        "dnxcore50",
         "dotnet54",
         "portable-net45+win8"
       ]

@@ -14,7 +14,8 @@
     "TemplateCore.Service": {
       "target": "project"
     },
-    "Microsoft.EntityFrameworkCore.InMemory": "1.0.1"
+    "Microsoft.EntityFrameworkCore.InMemory": "1.0.1",
+    "Microsoft.CodeCoverage": "1.0.1"
   },
 
   "frameworks": 
@@ -22,6 +23,7 @@
     "netcoreapp1.0": 
     {
       "imports": [
+        "dnxcore50",
         "dotnet54",
         "portable-net45+win8"
       ]
