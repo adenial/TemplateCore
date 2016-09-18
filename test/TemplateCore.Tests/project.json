@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "testRunner": "xunit",
 
@@ -7,13 +7,12 @@
     "Microsoft.NETCore.App": 
     {
       "type": "platform",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     "xunit": "2.1.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Moq": "4.6.38-alpha",
-    "TemplateCore": 
-    {
+    "TemplateCore": {
       "target": "project"
     }
   },
