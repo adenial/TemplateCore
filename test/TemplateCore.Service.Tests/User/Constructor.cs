@@ -62,8 +62,19 @@
     [Fact]
     public void ConstructorThrowsException()
     {
-      Action constructor = () => this.userService = new UserService(null);
-      Assert.Throws(typeof(ArgumentNullException), constructor);
+      // This do not count for code coverage, probably due to Action
+      // Action constructor = () => this.userService = new UserService(null);
+      // Assert.Throws(typeof(ArgumentNullException), constructor);
+
+      try
+      {
+        this.userService = new UserService(null);
+      }
+      catch (ArgumentNullException ex)
+      {
+
+        Assert.IsType(typeof(ArgumentNullException), ex);
+      }
     }
   }
 }

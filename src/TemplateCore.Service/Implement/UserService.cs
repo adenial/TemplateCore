@@ -190,7 +190,16 @@
     /// <returns>ApplicationUser.</returns>
     public ApplicationUser GetUserById(string id)
     {
-      return this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+      var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+
+      if (query != null)
+      {
+        return query;
+      }
+      else
+      {
+        throw new InvalidOperationException(string.Format("User not found with the provided Id, provided Id: {0}", id));
+      }
     }
 
     /// <summary>
@@ -200,7 +209,16 @@
     /// <returns>List of type <see cref="IdentityUserRole<string>"/> .</returns>
     public IEnumerable<IdentityUserRole<string>> GetUserRolesByUserId(string id)
     {
-      return this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase)).ToList();
+      var query = this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+      if (query.Count > 0)
+      {
+        return query;
+      }
+      else
+      {
+        throw new InvalidOperationException(string.Format("No UserRoles were found with the provided user Id, provided user Id: {0}", id));
+      }
     }
 
     /// <summary>
