@@ -10,12 +10,11 @@
 * Generic Repository
 * Role based Authorization & Claims-Based Authorization (Administration Menu) [See](https://docs.asp.net/en/latest/security/authorization/index.html)
 * For icons I am using Awesomefont [See](http://fontawesome.io/icons/)
-* For tables: [See](http://bootstrap-table.wenzhixin.net.cn/)
 * Users: admin and test, password for both of them 1122334455
 * All new accounts are created with the default password: 1122334455
 * Implemented Globalization and internationalization (only Index and Login page)
 * Working in CRUD of users and roles.
 
 ## Unit Testing
-* For Repository, Using InMemory [See](https://docs.efproject.net/en/latest/providers/in-memory/index.html?highlight=testing)
+* For Repository (database), Using InMemory [See](https://docs.efproject.net/en/latest/providers/in-memory/index.html?highlight=testing)
 * For Controllers, Unit Moq 4.6.38-alpha
