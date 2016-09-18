@@ -1,6 +1,7 @@
 ﻿namespace TemplateCore.Service.Tests.User
 {
   using Implement;
+  using Interfaces;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,9 @@
   using Xunit;
 
   /// <summary>
-  /// Test class that tests the method CanInsertUserName of the class <see cref="UserService"/>
+  /// Class test that tests the method UpdateUserInfo of the class <see cref="UserService"/>
   /// </summary>
-  public class CanInsertUserName
+  public class UpdateUserInfo
   {
     #region Private Fields
 
@@ -24,56 +25,24 @@
     private DbContextOptions<TemplateDbContext> contextOptions;
 
     /// <summary>
+    /// The user identifier
+    /// </summary>
+    private string userId = string.Empty;
+
+    /// <summary>
     /// The user service
     /// </summary>
-    private UserService userService = null;
-
-    /// <summary>
-    /// Test the method CanInsertUserName of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns False.
-    /// </summary>
-    [Fact]
-    public void CanInsertUserNameFalse()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      var result = this.userService.CanInsertUserName("test");
-
-      // assert
-      Assert.False(result);
-    }
-
-    /// <summary>
-    /// Test the method CanInsertUserName of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns True.
-    /// </summary>
-    [Fact]
-    public void CanInsertUserNameTrue()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      var result = this.userService.CanInsertUserName("test 1");
-
-      // assert
-      Assert.True(result);
-    }
+    private IUserService userService = null;
 
     #endregion Private Fields
 
     #region Public Constructors
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CanInsertEmail"/> class.
+    /// Initializes a new instance of the <see cref="UpdateUserInfo"/> class.
+    /// Seeds the database.
     /// </summary>
-    public CanInsertUserName()
+    public UpdateUserInfo()
     {
       // Create a service provider to be shared by all test methods
       var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
@@ -102,10 +71,8 @@
           SecurityStamp = Guid.NewGuid().ToString()
         };
 
-        if (!context.Roles.Any(r => r.Name == "User"))
-        {
-          roleStore.CreateAsync(new IdentityRole { Name = "User", NormalizedName = "User" });
-        }
+        var role = new IdentityRole { Name = "User", NormalizedName = "User" };
+        roleStore.CreateAsync(role);
 
         if (!context.Users.Any(u => u.UserName == user.UserName))
         {
@@ -114,13 +81,57 @@
           user.PasswordHash = hashed;
           var userStore = new UserStore<ApplicationUser>(context);
           userStore.CreateAsync(user);
-          userStore.AddToRoleAsync(user, "User");
         }
 
         context.SaveChangesAsync();
+        context.UserRoles.Add(new IdentityUserRole<string> { RoleId = role.Id, UserId = user.Id });
+        context.SaveChanges();
+        this.userId = user.Id;
       }
     }
 
     #endregion Public Constructors
+
+    #region Public Methods
+
+    /// <summary>
+    /// Tests the method UpdateUserInfo of the class <see cref="UserService"/>.
+    /// Assert the name of the user was updated.
+    /// </summary>
+    [Fact]
+    public void UpdateUserInfoOk()
+    {
+      // setup
+      string editedName = "User for test purposes TEST";
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      this.userService.UpdateUserInfo(this.userId, editedName);
+
+      var query = this.userService.GetAll();
+
+      // assert
+      Assert.Equal(editedName, query.ToList()[0].Name);
+    }
+
+    /// <summary>
+    /// Tests the method UpdateUserInfo of the class <see cref="UserService"/>
+    /// Assert the invoke of the method throws an exception of type <see cref="InvalidOperationException"/>.
+    /// </summary>
+    [Fact]
+    public void UpdateUserInfoThrowsException()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action && assert
+      Assert.Throws<InvalidOperationException>(() => this.userService.UpdateUserInfo(Guid.NewGuid().ToString(), "Test"));
+    }
+
+    #endregion Public Methods
   }
 }

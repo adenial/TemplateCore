@@ -18,10 +18,7 @@
   /// </summary>
   public class GetUserRolesByUserId
   {
-    /// <summary>
-    /// The user identifier
-    /// </summary>
-    private string userId = string.Empty;
+    #region Private Fields
 
     /// <summary>
     /// The context options
@@ -29,44 +26,18 @@
     private DbContextOptions<TemplateDbContext> contextOptions;
 
     /// <summary>
+    /// The user identifier
+    /// </summary>
+    private string userId = string.Empty;
+
+    /// <summary>
     /// The user service
     /// </summary>
     private IUserService userService = null;
 
-    /// <summary>
-    /// Tests the method GetUserRolesByUserId of the class <see cref="UserService"/>
-    /// Assert the invoke of the method returns a List of the type <see cref="IdentityUserRole<string>"/>
-    /// </summary>
-    [Fact]
-    public void GetUserRolesByUserIdOk()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
+    #endregion Private Fields
 
-      // act
-      var result = this.userService.GetUserRolesByUserId(this.userId);
-
-      // assert
-      Assert.IsType(typeof(List<IdentityUserRole<string>>), result);
-    }
-
-    /// <summary>
-    /// Tests the method GetUserRolesByUserId of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method throws an exception of type <see cref="InvalidOperationException"/>.
-    /// </summary>
-    [Fact]
-    public void GetUserRolesByUserIdThrowsExceptionDueUserRolesNotFound()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // act && asert
-      Assert.Throws<InvalidOperationException>(() => this.userService.GetUserRolesByUserId(Guid.NewGuid().ToString()));
-    }
+    #region Public Constructors
 
     public GetUserRolesByUserId()
     {
@@ -115,5 +86,46 @@
         this.userId = user.Id;
       }
     }
+
+    #endregion Public Constructors
+
+    #region Public Methods
+
+    /// <summary>
+    /// Tests the method GetUserRolesByUserId of the class <see cref="UserService"/>
+    /// Assert the invoke of the method returns a List of the type <see cref="IdentityUserRole<string>"/>
+    /// </summary>
+    [Fact]
+    public void GetUserRolesByUserIdOk()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // act
+      var result = this.userService.GetUserRolesByUserId(this.userId);
+
+      // assert
+      Assert.IsType(typeof(List<IdentityUserRole<string>>), result);
+    }
+
+    /// <summary>
+    /// Tests the method GetUserRolesByUserId of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method throws an exception of type <see cref="InvalidOperationException"/>.
+    /// </summary>
+    [Fact]
+    public void GetUserRolesByUserIdThrowsExceptionDueUserRolesNotFound()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // act && asert
+      Assert.Throws<InvalidOperationException>(() => this.userService.GetUserRolesByUserId(Guid.NewGuid().ToString()));
+    }
+
+    #endregion Public Methods
   }
 }

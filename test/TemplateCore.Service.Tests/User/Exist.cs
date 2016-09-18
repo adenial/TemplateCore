@@ -39,25 +39,6 @@
 
     /// <summary>
     /// Test the method Exist of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns True.
-    /// </summary>
-    [Fact]
-    public void ExistTrue()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      var result = this.userService.Exist(this.userId);
-
-      // assert
-      Assert.True(result);
-    }
-
-    /// <summary>
-    /// Test the method Exist of the class <see cref="UserService"/>.
     /// Assert the invoke of the method returns False.
     /// </summary>
     [Fact]
@@ -73,6 +54,25 @@
 
       // assert
       Assert.False(result);
+    }
+
+    /// <summary>
+    /// Test the method Exist of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method returns True.
+    /// </summary>
+    [Fact]
+    public void ExistTrue()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      var result = this.userService.Exist(this.userId);
+
+      // assert
+      Assert.True(result);
     }
 
     #endregion Public Methods

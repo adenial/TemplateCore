@@ -1,4 +1,4 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿namespace TemplateCore.Service.Tests.Role
 {
   using Implement;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -6,14 +6,14 @@
   using Microsoft.Extensions.DependencyInjection;
   using Model;
   using Repository;
-  using System.Collections.Generic;
   using System.Linq;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
-  /// Class Test that tests the method GetAllRoles of the class <see cref="UserService"/>.
+  /// Class test that tests the method CanInsert of the class <see cref="RoleService"/>
   /// </summary>
-  public class GetAllRoles
+  public class CanInsert
   {
     #region Private Fields
 
@@ -23,19 +23,19 @@
     private DbContextOptions<TemplateDbContext> contextOptions;
 
     /// <summary>
-    /// The user service
+    /// The role service
     /// </summary>
-    private UserService userService = null;
+    private IRoleService roleService = null;
 
     #endregion Private Fields
 
     #region Public Constructors
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="GetAllRoles" /> class.
-    /// Seeds the DbContext
+    /// Initializes a new instance of the <see cref="CanInsert"/> class.
+    /// Seeds the data.
     /// </summary>
-    public GetAllRoles()
+    public CanInsert()
     {
       // Create a service provider to be shared by all test methods
       var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
@@ -49,19 +49,10 @@
       // seed in constructor.
       using (var context = new TemplateDbContext(this.contextOptions))
       {
-        // seed roles.
         var roleStore = new RoleStore<IdentityRole>(context);
-
-        if (!context.Roles.Any(r => r.Name == "Administrator"))
-        {
-          var roleAdministrator = new IdentityRole { Name = "Administrator", NormalizedName = "Administrator" };
-          roleStore.CreateAsync(roleAdministrator);
-        }
-
         if (!context.Roles.Any(r => r.Name == "User"))
         {
-          var roleAdministrator = new IdentityRole { Name = "User", NormalizedName = "User" };
-          roleStore.CreateAsync(roleAdministrator);
+          roleStore.CreateAsync(new IdentityRole { Name = "User", NormalizedName = "User" });
         }
 
         context.SaveChangesAsync();
@@ -73,24 +64,41 @@
     #region Public Methods
 
     /// <summary>
-    /// Test the method GetAll of the class <see cref="UserService"/>
-    /// Assert the invoke of the method returns a list of the type <see cref="IdentityRole"/>.
-    /// Assert there are 2 roles.
+    /// Tests the method CanInsert of the class <see cref="RoleService"/>
+    /// Assert the invoke of method returns False
     /// </summary>
     [Fact]
-    public void GetAllRolesOk()
+    public void CanInsertFalse()
     {
       // setup
       TemplateDbContext context = new TemplateDbContext(this.contextOptions);
       IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
+      this.roleService = new RoleService(unitOfWork);
 
       // action
-      List<IdentityRole> result = this.userService.GetAllRoles().ToList();
+      var result = this.roleService.CanInsert("User");
 
       // assert
-      Assert.IsType(typeof(List<IdentityRole>), result);
-      Assert.True(result.Count == 2);
+      Assert.False(result);
+    }
+
+    /// <summary>
+    /// Tests the method CanInsert of the class <see cref="RoleService"/>
+    /// Assert the invoke of method returns True
+    /// </summary>
+    [Fact]
+    public void CanInsertTrue()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.roleService = new RoleService(unitOfWork);
+
+      // action
+      var result = this.roleService.CanInsert("Administrator");
+
+      // assert
+      Assert.True(result);
     }
 
     #endregion Public Methods

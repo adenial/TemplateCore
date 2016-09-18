@@ -57,7 +57,7 @@ namespace TemplateCore.Controllers
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Administrator")]
-    public async Task<IActionResult> Create(AdminRoleCreateViewModel model)
+    public IActionResult Create(AdminRoleCreateViewModel model)
     {
       if (ModelState.IsValid)
       {
@@ -67,7 +67,7 @@ namespace TemplateCore.Controllers
         if (canInsert)
         {
           // insert new role and redirect.
-          await this.roleService.Insert(model.Name);
+          this.roleService.Insert(model.Name);
           return this.RedirectToAction("Index");
         }
         else
@@ -99,7 +99,7 @@ namespace TemplateCore.Controllers
 
       // query the role given the name.
 
-      this.roleService.DeleteRole(name);
+      this.roleService.DeleteRoleByName(name);
       return this.RedirectToAction("Index");
     }
 

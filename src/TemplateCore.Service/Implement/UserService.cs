@@ -285,9 +285,17 @@
     public void UpdateUserInfo(string userId, string name)
     {
       var user = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(userId, StringComparison.CurrentCultureIgnoreCase));
-      user.Name = name;
-      this.unitOfWork.UserRepository.Update(user);
-      this.unitOfWork.Commit();
+
+      if (user != null)
+      {
+        user.Name = name;
+        this.unitOfWork.UserRepository.Update(user);
+        this.unitOfWork.Commit();
+      }
+      else
+      {
+        throw new InvalidOperationException(string.Format("User not found with the provided Id, provided Id: {0}", userId));
+      }
     }
 
     /// <summary>

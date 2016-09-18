@@ -2,6 +2,7 @@
 {
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Model;
+  using Repository;
   using System;
   using System.Collections.Generic;
   using System.Linq;
@@ -14,8 +15,10 @@
   public class RoleService : IRoleService
   {
     #region Private Fields
-
-    private TemplateDbContext context;
+    /// <summary>
+    /// The unit of work
+    /// </summary>
+    private IUnitOfWork<TemplateDbContext> unitOfWork = null;
 
     #endregion Private Fields
 
@@ -25,14 +28,14 @@
     /// Initializes a new instance of the <see cref="RoleService"/> class.
     /// </summary>
     /// <param name="context">The context.</param>
-    public RoleService(TemplateDbContext context)
+    public RoleService(IUnitOfWork<TemplateDbContext> unitOfWork)
     {
-      if (context == null)
+      if (unitOfWork == null)
       {
-        throw new ArgumentNullException("context");
+        throw new ArgumentNullException("unitOfWork");
       }
 
-      this.context = context;
+      this.unitOfWork = unitOfWork;
     }
 
     #endregion Public Constructors
@@ -48,9 +51,9 @@
     {
       bool canInsert = false;
 
-      var roleStore = new RoleStore<IdentityRole>(this.context);
+      var query = this.unitOfWork.RoleRepository.FindBy(x => x.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 
-      if (!context.Roles.Any(r => r.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase)))
+      if (query == null)
       {
         canInsert = true;
       }
@@ -63,16 +66,22 @@
     /// </summary>
     /// <param name="name">The name of the role to delete.</param>
     /// <returns>Task.</returns>
-    public void DeleteRole(string name)
+    public void DeleteRoleByName(string name)
     {
-      //var roleStore = new RoleStore<IdentityRole>(this.context);
+      if (string.IsNullOrWhiteSpace(name))
+      {
+        throw new ArgumentNullException("name");
+      }
 
-      //// test?
-      //await roleStore.DeleteAsync(new IdentityRole { Name = name, NormalizedName = name }, new System.Threading.CancellationToken());
-      var role = this.context.Roles.Where(x => x.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
+      var query = this.unitOfWork.RoleRepository.FindBy(x => x.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 
-      this.context.Roles.Remove(role);
-      this.context.SaveChanges();
+      if (query == null)
+      {
+        throw new ArgumentNullException(string.Format("Role not found with the provided name, provided name: {0}", name));
+      }
+
+      this.unitOfWork.RoleRepository.Delete(query);
+      this.unitOfWork.Commit();
     }
 
     /// <summary>
@@ -81,26 +90,32 @@
     /// <returns>List of type <see cref="string" />.</returns>
     public IEnumerable<string> GetAllRoleNames()
     {
-      var roleStore = new RoleStore<IdentityRole>(this.context);
+      return this.unitOfWork.RoleRepository.GetAll().ToList().Select(x => x.Name).ToList();
+
+      /*var roleStore = new RoleStore<IdentityRole>(this.context);
 
       // list of role names.
-      var roles = roleStore.Roles.ToList().Select(x => x.Name).ToList();
+      var roles = roleStore.Roles.ToList().Select(x => x.Name).ToList();*/
 
-      return roles;
+      // return roles;
     }
 
     /// <summary>
     /// Inserts a new role with the specified name
     /// </summary>
     /// <param name="name">The name of the role to Insert.</param>
-    public async Task Insert(string name)
+    public void Insert(string name)
     {
-      var roleStore = new RoleStore<IdentityRole>(context);
+      var newIdentityRole = new IdentityRole { Name = name, NormalizedName = name };
+      this.unitOfWork.RoleRepository.Insert(newIdentityRole);
+      this.unitOfWork.Commit();
+
+      /*var roleStore = new RoleStore<IdentityRole>(context);
 
       await roleStore.CreateAsync(new IdentityRole { Name = name, NormalizedName = name });
 
       // not needed
-      // context.SaveChanges();
+      // context.SaveChanges();*/
     }
 
     #endregion Public Methods

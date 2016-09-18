@@ -16,16 +16,53 @@
   /// </summary>
   public class Insert
   {
-    private string roleId = string.Empty;
+    #region Private Fields
+
     /// <summary>
     /// The context options
     /// </summary>
     private DbContextOptions<TemplateDbContext> contextOptions;
 
+    private string roleId = string.Empty;
+
     /// <summary>
     /// The user service
     /// </summary>
     private IUserService userService = null;
+
+    #endregion Private Fields
+
+    #region Public Constructors
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Insert"/> class.
+    /// Seeds the database.
+    /// </summary>
+    public Insert()
+    {
+      // Create a service provider to be shared by all test methods
+      var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
+
+      // Create options telling the context to use an
+      // InMemory database and the service provider.
+      var builder = new DbContextOptionsBuilder<TemplateDbContext>();
+      builder.UseInMemoryDatabase().UseInternalServiceProvider(serviceProvider);
+      this.contextOptions = builder.Options;
+
+      // seed in constructor.
+      using (var context = new TemplateDbContext(this.contextOptions))
+      {
+        var roleStore = new RoleStore<IdentityRole>(context);
+        var role = new IdentityRole { Name = "User", NormalizedName = "User" };
+        roleStore.CreateAsync(role);
+        context.SaveChangesAsync();
+        this.roleId = role.Id;
+      }
+    }
+
+    #endregion Public Constructors
+
+    #region Public Methods
 
     /// <summary>
     /// Tests the method Insert of the class <see cref="UserService"/>.
@@ -71,30 +108,6 @@
       Assert.True(afterInsert > beforeInsert);
     }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Insert"/> class.
-    /// Seeds the database.
-    /// </summary>
-    public Insert()
-    {
-      // Create a service provider to be shared by all test methods
-      var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
-
-      // Create options telling the context to use an
-      // InMemory database and the service provider.
-      var builder = new DbContextOptionsBuilder<TemplateDbContext>();
-      builder.UseInMemoryDatabase().UseInternalServiceProvider(serviceProvider);
-      this.contextOptions = builder.Options;
-
-      // seed in constructor.
-      using (var context = new TemplateDbContext(this.contextOptions))
-      {
-        var roleStore = new RoleStore<IdentityRole>(context);
-        var role = new IdentityRole { Name = "User", NormalizedName = "User" };
-        roleStore.CreateAsync(role);
-        context.SaveChangesAsync();
-        this.roleId = role.Id;
-      }
-    }
+    #endregion Public Methods
   }
 }

@@ -1,6 +1,7 @@
 ﻿namespace TemplateCore.Service.Tests.User
 {
   using Implement;
+  using Interfaces;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
@@ -10,15 +11,19 @@
   using System;
   using System.Collections.Generic;
   using System.Linq;
-  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
-  /// Class test that tests the method GetRolesByUserId of the class <see cref="UserService"/>.
+  /// Class test that tests the method UpdateUserRoles of the class <see cref="UserService"/>
   /// </summary>
-  public class GetRolesByUserId
+  public class UpdateUserRoles
   {
     #region Private Fields
+
+    /// <summary>
+    /// The administrator role identifier
+    /// </summary>
+    private string administratorRoleId = string.Empty;
 
     /// <summary>
     /// The context options
@@ -26,9 +31,19 @@
     private DbContextOptions<TemplateDbContext> contextOptions;
 
     /// <summary>
+    /// The reporter role identifier
+    /// </summary>
+    private string reporterRoleId = string.Empty;
+
+    /// <summary>
     /// The user identifier
     /// </summary>
     private string userId = string.Empty;
+
+    /// <summary>
+    /// The user role identifier
+    /// </summary>
+    private string userRoleId = string.Empty;
 
     /// <summary>
     /// The user service
@@ -40,10 +55,10 @@
     #region Public Constructors
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="GetRolesByUserId"/> class.
+    /// Initializes a new instance of the <see cref="UpdateUserRoles"/> class.
     /// Seeds the database.
     /// </summary>
-    public GetRolesByUserId()
+    public UpdateUserRoles()
     {
       // Create a service provider to be shared by all test methods
       var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
@@ -75,6 +90,12 @@
         var role = new IdentityRole { Name = "User", NormalizedName = "User" };
         roleStore.CreateAsync(role);
 
+        var administratorRole = new IdentityRole { Name = "Administrator", NormalizedName = "Administrator" };
+        roleStore.CreateAsync(administratorRole);
+
+        var executeReportsRole = new IdentityRole { Name = "Execute Reports Role", NormalizedName = "Execute Reports Role " };
+        roleStore.CreateAsync(executeReportsRole);
+
         if (!context.Users.Any(u => u.UserName == user.UserName))
         {
           var hasher = new PasswordHasher<ApplicationUser>();
@@ -82,19 +103,17 @@
           user.PasswordHash = hashed;
           var userStore = new UserStore<ApplicationUser>(context);
           userStore.CreateAsync(user);
-          //userStore.AddToRoleAsync(user, "User");
         }
 
         context.SaveChangesAsync();
-
-        // after the user and roles are inserted...
-        // this has to work..
         context.UserRoles.Add(new IdentityUserRole<string> { RoleId = role.Id, UserId = user.Id });
-
-        // save again.
         context.SaveChanges();
 
+        // after save changes, can use references of Ids.
         this.userId = user.Id;
+        this.userRoleId = role.Id;
+        this.administratorRoleId = administratorRole.Id;
+        this.reporterRoleId = executeReportsRole.Id;
       }
     }
 
@@ -103,41 +122,40 @@
     #region Public Methods
 
     /// <summary>
-    /// Test the method GetRolesByUserId of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns a List of the type <see cref="IdentityRole"/>
-    /// Assert the Roles the user has is 1, see Constructor to see how the Database is seeded.
+    /// Tests the method UpdateUserRoles of the class <see cref="UserService"/>.
+    /// Assert the count of UserRoles of user after the invoke of the method, must be 2 roles.
+    /// Assert the name of the roles.
     /// </summary>
     [Fact]
-    public void GetRolesByUserIdOk()
+    public void UpdateUserRolesOk()
     {
       // setup
       TemplateDbContext context = new TemplateDbContext(this.contextOptions);
       IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
       this.userService = new UserService(unitOfWork);
+
+      // create UserRoles to insert.
+      var rolesToInsert = new List<IdentityUserRole<string>>
+      {
+        new IdentityUserRole<string> { RoleId = this.administratorRoleId, UserId = this.userId },
+        new IdentityUserRole<string> { RoleId = this.reporterRoleId, UserId = this.userId}
+      };
+
+      // create UserRoles to delete.
+      // the user role "User" is seeded at runtime (Constructor)
+      var rolesToDelete = new List<IdentityUserRole<string>>
+      {
+        new IdentityUserRole<string> {  RoleId = this.userRoleId, UserId = this.userId }
+      };
 
       // action
-      var result = this.userService.GetRolesByUserId(this.userId);
+      this.userService.UpdateUserRoles(rolesToInsert, rolesToDelete);
 
       // assert
-      Assert.IsType(typeof(List<IdentityRole>), result);
-      Assert.True(result.ToList().Count == 1);
-    }
-
-    /// <summary>
-    /// Test the method GetRolesByUserId of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method throws an exception of type <see cref="InvalidOperationException"/>.
-    /// </summary>
-    [Fact]
-    public void GetRolesByUserIdThrowsExceptionDueUserNotFound()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // act and assert
-      Assert.Throws<InvalidOperationException>(
-        () => this.userService.GetRolesByUserId(Guid.NewGuid().ToString()));
+      var roles = this.userService.GetRolesByUserId(this.userId).ToList();
+      Assert.True(roles.Count == 2);
+      Assert.True(roles[0].Name.Equals("Administrator"));
+      Assert.True(roles[1].Name.Equals("Execute Reports Role"));
     }
 
     #endregion Public Methods

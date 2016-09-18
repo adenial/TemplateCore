@@ -1,6 +1,7 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿namespace TemplateCore.Service.Tests.Role
 {
   using Implement;
+  using Interfaces;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
   using Model;
@@ -9,59 +10,48 @@
   using Xunit;
 
   /// <summary>
-  /// Test class that test the constructor of the class <see cref="UserService"/>
+  /// Class test that tests the constructor of the class <see cref="RoleService"/>.
   /// </summary>
   public class Constructor
   {
     #region Private Fields
 
     /// <summary>
-    /// The user service
+    /// The role service
     /// </summary>
-    private UserService userService = null;
+    private IRoleService roleService = null;
 
     #endregion Private Fields
 
     #region Public Methods
 
     /// <summary>
-    /// Test the constructor of the class <see cref="UserService"/>
-    /// Assert the invoke of the constructor returns an instance of the class
+    /// Tests the constructor of the class <see cref="RoleService"/>.
+    /// Assert the invoke of the constructor returns an instance of the class.
     /// </summary>
     [Fact]
-    public void ConstructorOk()
+    public void RoleServiceOk()
     {
       // setup
-      var options = CreateNewContextOptions();
-      var context = new TemplateDbContext(options);
-      IUnitOfWork<TemplateDbContext> unitOFWork = new UnitOfWork<TemplateDbContext>(context);
+      TemplateDbContext context = new TemplateDbContext(CreateNewContextOptions());
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
 
       // action
-      this.userService = new UserService(unitOFWork);
+      this.roleService = new RoleService(unitOfWork);
 
       // assert
-      Assert.IsType(typeof(UserService), this.userService);
+      Assert.IsType(typeof(RoleService), this.roleService);
     }
 
     /// <summary>
-    /// Test the constructor of the class <see cref="UserService"/>
-    /// Assert the invoke of the method throws an exception due parameter unitOfWork
+    /// Tests the constructor of the class <see cref="RoleService"/>.
+    /// Assert the invoke of the constructor throws an exception of type <see cref="ArgumentNullException"/>.
     /// </summary>
     [Fact]
-    public void ConstructorThrowsException()
+    public void RoleServiceThrowsExceptionDueParameter()
     {
-      // This do not count for code coverage, probably due to Action
-      // Action constructor = () => this.userService = new UserService(null);
-      // Assert.Throws(typeof(ArgumentNullException), constructor);
-
-      try
-      {
-        this.userService = new UserService(null);
-      }
-      catch (ArgumentNullException ex)
-      {
-        Assert.IsType(typeof(ArgumentNullException), ex);
-      }
+      // setup, act and assert.
+      Assert.Throws<ArgumentNullException>(() => this.roleService = new RoleService(null));
     }
 
     #endregion Public Methods

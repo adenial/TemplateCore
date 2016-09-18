@@ -25,12 +25,12 @@
     /// Deletes a role with the specified name.
     /// </summary>
     /// <param name="name">The name of the role to delete.</param>
-    void DeleteRole(string name);
+    void DeleteRoleByName(string name);
 
     /// <summary>
     /// Inserts a new role with the specified name
     /// </summary>
     /// <param name="name">The name of the role to Insert.</param>
-    Task Insert(string name);
+    void Insert(string name);
   }
 }

@@ -13,10 +13,12 @@
   using Xunit;
 
   /// <summary>
-  /// Class test that tests the method GetAll of the class <see cref="UserService"/>. 
+  /// Class test that tests the method GetAll of the class <see cref="UserService"/>.
   /// </summary>
   public class GetAll
   {
+    #region Private Fields
+
     /// <summary>
     /// The context options
     /// </summary>
@@ -27,23 +29,9 @@
     /// </summary>
     private UserService userService = null;
 
-    /// <summary>
-    /// Gets all ok.
-    /// </summary>
-    [Fact]
-    public void GetAllOk()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
+    #endregion Private Fields
 
-      // action
-      var result = this.userService.GetAll();
-
-      // assert
-      Assert.IsType(typeof(List<AspNetUser>), result);
-    }
+    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GetAll"/> class.
@@ -96,5 +84,29 @@
         context.SaveChangesAsync();
       }
     }
+
+    #endregion Public Constructors
+
+    #region Public Methods
+
+    /// <summary>
+    /// Gets all ok.
+    /// </summary>
+    [Fact]
+    public void GetAllOk()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      var result = this.userService.GetAll();
+
+      // assert
+      Assert.IsType(typeof(List<AspNetUser>), result);
+    }
+
+    #endregion Public Methods
   }
 }

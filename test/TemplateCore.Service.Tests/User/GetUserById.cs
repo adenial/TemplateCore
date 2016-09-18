@@ -17,10 +17,7 @@
   /// </summary>
   public class GetUserById
   {
-    /// <summary>
-    /// The user identifier
-    /// </summary>
-    private string userId = string.Empty;
+    #region Private Fields
 
     /// <summary>
     /// The context options
@@ -28,44 +25,18 @@
     private DbContextOptions<TemplateDbContext> contextOptions;
 
     /// <summary>
+    /// The user identifier
+    /// </summary>
+    private string userId = string.Empty;
+
+    /// <summary>
     /// The user service
     /// </summary>
     private IUserService userService = null;
 
-    /// <summary>
-    /// Test the method GetUserById of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns an instance of the class <see cref="ApplicationUser"/>.
-    /// </summary>
-    [Fact]
-    public void GetUserByIdOk()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
+    #endregion Private Fields
 
-      // act
-      var result = this.userService.GetUserById(this.userId);
-
-      // assert
-      Assert.IsType(typeof(ApplicationUser), result);
-    }
-
-    /// <summary>
-    /// Test the method GetUserById of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method throws an exception of the type <see cref="InvalidOperationException"/>.
-    /// </summary>
-    [Fact]
-    public void GetUserByIdThrowsExceptionDueUserNotFound()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // act && assert
-      Assert.Throws<InvalidOperationException>(() => this.userService.GetUserById(Guid.NewGuid().ToString()));
-    }
+    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GetUserById"/> class.
@@ -120,5 +91,46 @@
         this.userId = user.Id;
       }
     }
+
+    #endregion Public Constructors
+
+    #region Public Methods
+
+    /// <summary>
+    /// Test the method GetUserById of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method returns an instance of the class <see cref="ApplicationUser"/>.
+    /// </summary>
+    [Fact]
+    public void GetUserByIdOk()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // act
+      var result = this.userService.GetUserById(this.userId);
+
+      // assert
+      Assert.IsType(typeof(ApplicationUser), result);
+    }
+
+    /// <summary>
+    /// Test the method GetUserById of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method throws an exception of the type <see cref="InvalidOperationException"/>.
+    /// </summary>
+    [Fact]
+    public void GetUserByIdThrowsExceptionDueUserNotFound()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // act && assert
+      Assert.Throws<InvalidOperationException>(() => this.userService.GetUserById(Guid.NewGuid().ToString()));
+    }
+
+    #endregion Public Methods
   }
 }
