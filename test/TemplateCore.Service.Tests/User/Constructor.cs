@@ -1,4 +1,4 @@
-﻿namespace TemplateCore.Service.Tests
+﻿namespace TemplateCore.Service.Tests.User
 {
   using Implement;
   using Microsoft.EntityFrameworkCore;

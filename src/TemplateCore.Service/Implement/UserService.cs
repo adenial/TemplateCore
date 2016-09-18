@@ -14,10 +14,16 @@
   /// </summary>
   public class UserService : IUserService
   {
+    #region Private Fields
+
     /// <summary>
     /// UnitOfWork
     /// </summary>
     private IUnitOfWork<TemplateDbContext> unitOfWork = null;
+
+    #endregion Private Fields
+
+    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserService"/> class.
@@ -33,6 +39,10 @@
 
       this.unitOfWork = unitOfWork;
     }
+
+    #endregion Public Constructors
+
+    #region Public Methods
 
     /// <summary>
     /// Determines whether this instance [can insert email] the specified email.
@@ -82,16 +92,21 @@
     /// Deletes the user by its identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
+    /// <exception cref="System.InvalidOperationException">Due user not found.</exception>
     public void DeleteById(string id)
     {
       var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
-      //var user = this.dataContext.Users.Where(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
-      //this.dataContext.Users.Remove(user);
-      this.unitOfWork.UserRepository.Delete(query);
+      if (query != null)
+      {
+        this.unitOfWork.UserRepository.Delete(query);
+        this.unitOfWork.Commit();
+      }
+      else
+      {
+        throw new InvalidOperationException(string.Format("Usert not found with the provided Id, Id provided: {0}", id));
+      }
 
-      //this.dataContext.SaveChanges();
-      this.unitOfWork.Commit();
     }
 
     /// <summary>
@@ -104,7 +119,6 @@
       bool exists = false;
 
       var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
-      //var query = this.dataContext.Users.Where(x => x.Id == id).FirstOrDefault();
 
       if (query != null)
       {
@@ -120,55 +134,16 @@
     /// <returns>List of type <see cref="AspNetUser" />.</returns>
     public IEnumerable<AspNetUser> GetAll()
     {
-      // if users are like a normal context...
-      var users = this.unitOfWork.UserRepository.GetAll().ToList(); // this.dataContext.Users.ToList();
-
+      var users = this.unitOfWork.UserRepository.GetAll().ToList();
       List<AspNetUser> aspNetUsers = new List<AspNetUser>();
-
       foreach (var user in users)
       {
         // roles are null... dont know why, will do it the hard way.
         var aspNetUser = new AspNetUser { Id = new Guid(user.Id), Name = user.Name, UserName = user.UserName, Roles = GetRolesString(user.Id) };
-
         aspNetUsers.Add(aspNetUser);
       }
 
       return aspNetUsers;
-
-      //return users.Select(x => new AspNetUser { Id = new Guid(x.Id), UserName = x.UserName, Name = x.Name, Roles = GetRolesString(x.Roles.ToList()) }).ToList();
-    }
-
-    /// <summary>
-    /// Gets the roles string.
-    /// </summary>
-    /// <param name="userId">The user identifier.</param>
-    /// <returns>System.String.</returns>
-    private string GetRolesString(string userId)
-    {
-      List<string> roleNames = new List<string>();
-
-      //foreach (var role in roles)
-      //{
-      //  var query = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(role.RoleId));
-      //  roleNames.Add(query.Name);
-      //}
-
-      // query all the UserRoles.
-      var userRoles = this.unitOfWork.UseRolesRepository.GetAll().ToList();
-
-      foreach (var userRole in userRoles)
-      {
-        if (userRole.UserId.Equals(userId))
-        {
-          // if the UserRoles is equal...
-          var role = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(userRole.RoleId));
-
-          // finally...
-          roleNames.Add(role.Name);
-        }
-      }
-
-      return string.Join(", ", roleNames);
     }
 
     /// <summary>
@@ -178,6 +153,54 @@
     public IEnumerable<IdentityRole> GetAllRoles()
     {
       return this.unitOfWork.RoleRepository.GetAll().ToList();
+    }
+
+    /// <summary>
+    /// Gets the roles by user identifier.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
+    /// <returns>IEnumerable&lt;IdentityRole&gt;.</returns>
+    public IEnumerable<IdentityRole> GetRolesByUserId(string id)
+    {
+      var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+
+      if (query == null)
+      {
+        throw new InvalidOperationException(string.Format("User not found with the provided id, id provided: {0}", id));
+      }
+
+      List<IdentityRole> userRoles = new List<IdentityRole>();
+      // query all the roles... by user id.
+
+      var roles = this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+
+      foreach (var role in roles)
+      {
+        var userRole = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(role.RoleId, StringComparison.CurrentCultureIgnoreCase));
+        userRoles.Add(userRole);
+      }
+
+      return userRoles;
+    }
+
+    /// <summary>
+    /// Gets the user by identifier.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
+    /// <returns>ApplicationUser.</returns>
+    public ApplicationUser GetUserById(string id)
+    {
+      return this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+    }
+
+    /// <summary>
+    /// Gets the user roles by user identifier.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
+    /// <returns>List of type <see cref="IdentityUserRole<string>"/> .</returns>
+    public IEnumerable<IdentityUserRole<string>> GetUserRolesByUserId(string id)
+    {
+      return this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase)).ToList();
     }
 
     /// <summary>
@@ -237,51 +260,16 @@
     }
 
     /// <summary>
-    /// Gets the user by identifier.
+    /// Updates the user information.
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>ApplicationUser.</returns>
-    public ApplicationUser GetUserById(string id)
+    /// <param name="userId">The user identifier.</param>
+    /// <param name="name">The name.</param>
+    public void UpdateUserInfo(string userId, string name)
     {
-      return this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
-    }
-
-    /// <summary>
-    /// Gets the roles by user identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>IEnumerable&lt;IdentityRole&gt;.</returns>
-    public IEnumerable<IdentityRole> GetRolesByUserId(string id)
-    {
-      var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
-
-      if (query == null)
-      {
-        throw new InvalidOperationException(string.Format("User not found with the provided id, id provided: {0}", id));
-      }
-
-      List<IdentityRole> userRoles = new List<IdentityRole>();
-      // query all the roles... by user id.
-
-      var roles = this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase));
-
-      foreach (var role in roles)
-      {
-        var userRole = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(role.RoleId, StringComparison.CurrentCultureIgnoreCase));
-        userRoles.Add(userRole);
-      }
-
-      return userRoles;
-    }
-
-    /// <summary>
-    /// Gets the user roles by user identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>List of type <see cref="IdentityUserRole<string>"/> .</returns>
-    public IEnumerable<IdentityUserRole<string>> GetUserRolesByUserId(string id)
-    {
-      return this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase)).ToList();
+      var user = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(userId, StringComparison.CurrentCultureIgnoreCase));
+      user.Name = name;
+      this.unitOfWork.UserRepository.Update(user);
+      this.unitOfWork.Commit();
     }
 
     /// <summary>
@@ -307,17 +295,43 @@
       this.unitOfWork.Commit();
     }
 
+    #endregion Public Methods
+
+    #region Private Methods
+
     /// <summary>
-    /// Updates the user information.
+    /// Gets the roles string.
     /// </summary>
     /// <param name="userId">The user identifier.</param>
-    /// <param name="name">The name.</param>
-    public void UpdateUserInfo(string userId, string name)
+    /// <returns>System.String.</returns>
+    private string GetRolesString(string userId)
     {
-      var user = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(userId, StringComparison.CurrentCultureIgnoreCase));
-      user.Name = name;
-      this.unitOfWork.UserRepository.Update(user);
-      this.unitOfWork.Commit();
+      List<string> roleNames = new List<string>();
+
+      //foreach (var role in roles)
+      //{
+      //  var query = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(role.RoleId));
+      //  roleNames.Add(query.Name);
+      //}
+
+      // query all the UserRoles.
+      var userRoles = this.unitOfWork.UseRolesRepository.GetAll().ToList();
+
+      foreach (var userRole in userRoles)
+      {
+        if (userRole.UserId.Equals(userId))
+        {
+          // if the UserRoles is equal...
+          var role = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(userRole.RoleId));
+
+          // finally...
+          roleNames.Add(role.Name);
+        }
+      }
+
+      return string.Join(", ", roleNames);
     }
+
+    #endregion Private Methods
   }
 }
