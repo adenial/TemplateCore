@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -8,10 +9,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Diagnostics;
 using System.Globalization;
+using TemplateCore.Controllers;
 using TemplateCore.Model;
 using TemplateCore.Repository;
-using TemplateCore.Service;
 using TemplateCore.Service.Implement;
 using TemplateCore.Service.Interfaces;
 using TemplateCore.Services;
@@ -112,7 +115,7 @@ namespace TemplateCore
         //  return new ProviderCultureResult("en");
         //}));
       });
-    }    
+    }
 
     /// <summary>
     /// Adds the policies.
@@ -136,8 +139,22 @@ namespace TemplateCore
     /// <param name="seeder">The seeder.</param>
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, TemplateDbContextSeedData seeder)
     {
-      loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-      loggerFactory.AddDebug();
+      //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+      //loggerFactory.AddDebug();
+
+      loggerFactory
+      .WithFilter(new FilterLoggerSettings
+      {
+        { "TemplateCore", LogLevel.Information }
+      })
+      .AddConsole();
+
+      // add Trace Source logging
+      var testSwitch = new SourceSwitch("sourceSwitch", "Logging");
+      testSwitch.Level = SourceLevels.Warning;
+      loggerFactory.AddTraceSource(testSwitch,
+      new TextWriterTraceListener(writer: Console.Out));
+
 
       var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
       app.UseRequestLocalization(locOptions.Value);
@@ -169,6 +186,18 @@ namespace TemplateCore
 
       // seed database.
       seeder.Initialize();
+
+      // Create a catch-all response
+      app.Run(async (context) =>
+      {
+        if (context.Request.Path.Value.Contains("boom"))
+        {
+          throw new Exception("boom!");
+        }
+        var logger = loggerFactory.CreateLogger(typeof(UserController));
+        logger.LogInformation("No endpoint found for request {path}", context.Request.Path);
+        await context.Response.WriteAsync("No endpoint found - try /api/todo.");
+      });
     }
   }
 }
