@@ -209,16 +209,16 @@
     /// <returns>List of type <see cref="IdentityUserRole<string>"/> .</returns>
     public IEnumerable<IdentityUserRole<string>> GetUserRolesByUserId(string id)
     {
-      var query = this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase)).ToList();
+      return this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
-      if (query.Count > 0)
+      /*if (query.Count > 0)
       {
         return query;
       }
       else
       {
         throw new InvalidOperationException(string.Format("No UserRoles were found with the provided user Id, provided user Id: {0}", id));
-      }
+      }*/
     }
 
     /// <summary>

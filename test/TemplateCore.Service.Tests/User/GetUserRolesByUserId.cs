@@ -110,7 +110,7 @@
       Assert.IsType(typeof(List<IdentityUserRole<string>>), result);
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Tests the method GetUserRolesByUserId of the class <see cref="UserService"/>.
     /// Assert the invoke of the method throws an exception of type <see cref="InvalidOperationException"/>.
     /// </summary>
@@ -124,7 +124,7 @@
 
       // act && asert
       Assert.Throws<InvalidOperationException>(() => this.userService.GetUserRolesByUserId(Guid.NewGuid().ToString()));
-    }
+    }*/
 
     #endregion Public Methods
   }

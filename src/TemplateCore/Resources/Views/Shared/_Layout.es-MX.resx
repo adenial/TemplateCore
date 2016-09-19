@@ -132,6 +132,9 @@
   <data name="Info" xml:space="preserve">
     <value>Información</value>
   </data>
+  <data name="Log" xml:space="preserve">
+    <value>Bitácora</value>
+  </data>
   <data name="Roles" xml:space="preserve">
     <value>Perfiles</value>
   </data>

@@ -29,7 +29,7 @@
           @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-          <a class="btn btn-circle btn-icon-only red" title=@Localizer["Delete"] href='@Url.Action("Delete", "User", new { name = item.Name })'>
+          <a class="btn btn-circle btn-icon-only red" title=@Localizer["Delete"] href='@Url.Action("Delete", "Role", new { name = item.Name })'>
             <i class="fa fa-trash"></i>
           </a>
         </td>
