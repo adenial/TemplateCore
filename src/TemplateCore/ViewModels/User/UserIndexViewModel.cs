@@ -31,5 +31,12 @@
     /// <value>The roles.</value>
     [Display(Name = "Roles")]
     public string Roles { get; set; }
+
+    /// <summary>
+    /// Gets or sets the email.
+    /// </summary>
+    /// <value>The email.</value>
+    [Display(Name = "Email")]
+    public string Email { get; set; }
   }
 }

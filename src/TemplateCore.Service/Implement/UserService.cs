@@ -139,7 +139,15 @@
       foreach (var user in users)
       {
         // roles are null... dont know why, will do it the hard way.
-        var aspNetUser = new AspNetUser { Id = new Guid(user.Id), Name = user.Name, UserName = user.UserName, Roles = GetRolesString(user.Id) };
+        var aspNetUser = new AspNetUser
+        {
+          Id = new Guid(user.Id),
+          Name = user.Name,
+          UserName = user.UserName,
+          Roles = GetRolesString(user.Id),
+          Email = user.Email
+        };
+
         aspNetUsers.Add(aspNetUser);
       }
 

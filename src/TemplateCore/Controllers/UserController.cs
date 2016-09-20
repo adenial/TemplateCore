@@ -332,7 +332,7 @@ namespace TemplateCore.Controllers
     /// <returns>IEnumerable&lt;UserIndexViewModel&gt;.</returns>
     private IEnumerable<UserIndexViewModel> GetIndexModelFromUsers(IEnumerable<AspNetUser> users)
     {
-      return users.Select(x => new UserIndexViewModel { Id = x.Id, UserName = x.UserName, Name = x.Name, Roles = x.Roles });
+      return users.Select(x => new UserIndexViewModel { Id = x.Id, UserName = x.UserName, Name = x.Name, Roles = x.Roles, Email = x.Email });
     }
 
     /// <summary>

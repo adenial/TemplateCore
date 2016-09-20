@@ -21,6 +21,9 @@
         @Localizer["Username"]
       </th>
       <th>
+        @Localizer["Email"]
+      </th>
+      <th>
         @Localizer["Roles"]
       </th>
       <th>
@@ -37,6 +40,9 @@
         </td>
         <td>
           @Html.DisplayFor(model => item.UserName)
+        </td>
+        <td>
+          @Html.DisplayFor(model => item.Email)
         </td>
         <td>
           @Html.DisplayFor(model => item.Roles)
