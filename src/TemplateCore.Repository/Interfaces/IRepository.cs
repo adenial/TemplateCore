@@ -38,7 +38,7 @@
     /// </summary>
     /// <param name="where">The where.</param>
     /// <returns>Enumerable of the TEntity class.</returns>
-    Task<IEnumerable<TEntity>> FindByManyAsync(Expression<Func<TEntity, bool>> where);
+    Task<IEnumerable<TEntity>> FindManyByAsync(Expression<Func<TEntity, bool>> where);
 
     /// <summary>
     /// Query by expression.
@@ -58,13 +58,6 @@
     /// </summary>
     /// <returns>Task{List{`0}}.</returns>
     Task<IEnumerable<TEntity>> GetAllAsync();
-
-    /// <summary>
-    /// Query an object by the identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>Object of the TEntity class.</returns>
-    TEntity GetById(int id);
 
     /// <summary>
     /// Insert the entity.

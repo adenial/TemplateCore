@@ -12,7 +12,8 @@
     "TemplateCore.Repository": {
       "target": "project"
     },
-    "Microsoft.CodeCoverage": "1.0.1"
+    "Microsoft.CodeCoverage": "1.0.1",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.1.0-alpha1-22107"
   },
 
   "frameworks": 

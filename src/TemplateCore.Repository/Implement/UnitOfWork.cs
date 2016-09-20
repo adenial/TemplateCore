@@ -59,13 +59,13 @@
       get { return this.userRepository ?? (this.userRepository = new Repository<ApplicationUser>(this.dataContext)); }
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.
     /// </summary>
     public UnitOfWork()
     {
       this.dataContext = new TContext();
-    }
+    }*/
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.

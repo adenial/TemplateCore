@@ -95,7 +95,7 @@
     /// </summary>
     /// <param name="where">The where.</param>
     /// <returns>Enumerable of the TEntity class.</returns>
-    public async Task<IEnumerable<TEntity>> FindByManyAsync(Expression<Func<TEntity, bool>> where)
+    public async Task<IEnumerable<TEntity>> FindManyByAsync(Expression<Func<TEntity, bool>> where)
     {
       return await Dbset.Where(where).ToListAsync();
     }
@@ -126,16 +126,6 @@
     public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
       return await Dbset.ToListAsync();
-    }
-
-    /// <summary>
-    /// Query an object by the identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>Object of the TEntity class.</returns>
-    public TEntity GetById(int id)
-    {
-      return this.Dbset.Find(id);
     }
 
     /// <summary>
