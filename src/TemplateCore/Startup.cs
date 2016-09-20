@@ -139,21 +139,21 @@ namespace TemplateCore
     /// <param name="seeder">The seeder.</param>
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, TemplateDbContextSeedData seeder)
     {
-      //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-      //loggerFactory.AddDebug();
+      loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+      loggerFactory.AddDebug();
 
-      loggerFactory
+      /*loggerFactory
       .WithFilter(new FilterLoggerSettings
       {
         { "TemplateCore", LogLevel.Information }
       })
-      .AddConsole();
+      .AddConsole();*/
 
       // add Trace Source logging
-      var testSwitch = new SourceSwitch("sourceSwitch", "Logging");
+      /*var testSwitch = new SourceSwitch("sourceSwitch", "Logging");
       testSwitch.Level = SourceLevels.Warning;
       loggerFactory.AddTraceSource(testSwitch,
-      new TextWriterTraceListener(writer: Console.Out));
+      new TextWriterTraceListener(writer: Console.Out));*/
 
 
       var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
@@ -165,11 +165,19 @@ namespace TemplateCore
         app.UseDeveloperExceptionPage();
         app.UseDatabaseErrorPage();
         app.UseBrowserLink();
+
+        // status code pages 
+        app.UseStatusCodePages();
+        app.UseStatusCodePagesWithReExecute("/errors/{0}");
       }
       else
       {
         // custom error page.
         app.UseExceptionHandler("/Home/Error");
+
+        // status code pages 
+        app.UseStatusCodePages();
+        app.UseStatusCodePagesWithReExecute("/errors/{0}");
       }
 
       app.UseStaticFiles();
@@ -187,7 +195,7 @@ namespace TemplateCore
       // seed database.
       seeder.Initialize();
 
-      // Create a catch-all response
+      /*// Create a catch-all response
       app.Run(async (context) =>
       {
         if (context.Request.Path.Value.Contains("boom"))
@@ -197,7 +205,7 @@ namespace TemplateCore
         var logger = loggerFactory.CreateLogger(typeof(UserController));
         logger.LogInformation("No endpoint found for request {path}", context.Request.Path);
         await context.Response.WriteAsync("No endpoint found - try /api/todo.");
-      });
+      });*/
     }
   }
 }

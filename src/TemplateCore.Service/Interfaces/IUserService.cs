@@ -3,6 +3,7 @@
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Model;
   using System.Collections.Generic;
+  using System;
 
   /// <summary>
   /// Interface IUserService
@@ -61,6 +62,7 @@
     /// Gets the user by identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
+    /// <exception cref="InvalidOperationException">When the user is not found with the provided Id</exception> 
     /// <returns>ApplicationUser.</returns>
     ApplicationUser GetUserById(string id);
 

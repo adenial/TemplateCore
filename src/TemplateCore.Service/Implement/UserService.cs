@@ -187,6 +187,7 @@
     /// Gets the user by identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
+    /// <exception cref="InvalidOperationException">When the user is not found with the provided Id</exception> 
     /// <returns>ApplicationUser.</returns>
     public ApplicationUser GetUserById(string id)
     {

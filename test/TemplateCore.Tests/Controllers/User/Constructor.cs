@@ -29,10 +29,10 @@ namespace TemplateCore.Tests.Controllers.User
       // setup
       this.userService = new Mock<IUserService>();
       Mock<IStringLocalizer<UserController>> localizer = new Mock<IStringLocalizer<UserController>>();
-      Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
+      // Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
 
       // action
-      var result = new UserController(this.userService.Object, localizer.Object, logger.Object);
+      var result = new UserController(this.userService.Object, localizer.Object);
 
       // assert
       Assert.IsType(typeof(UserController), result);
@@ -48,8 +48,8 @@ namespace TemplateCore.Tests.Controllers.User
       // setup.
       UserController controller = null;
       Mock<IStringLocalizer<UserController>> localizer = new Mock<IStringLocalizer<UserController>>();
-      Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
-      Action constructor = () => controller = new UserController(null, localizer.Object, logger.Object);
+      // Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
+      Action constructor = () => controller = new UserController(null, localizer.Object);
 
       // action & assert
       Assert.Throws(typeof(ArgumentNullException), constructor);
@@ -65,8 +65,8 @@ namespace TemplateCore.Tests.Controllers.User
       // setup.
       UserController controller = null;
       Mock<IUserService> userService = new Mock<IUserService>();
-      Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
-      Action constructor = () => controller = new UserController(userService.Object, null, logger.Object);
+      // Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
+      Action constructor = () => controller = new UserController(userService.Object, null);
 
       // action & assert
       Assert.Throws(typeof(ArgumentNullException), constructor);

@@ -41,10 +41,10 @@
       roles.Add(new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Test 2" });
       roles.Add(new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Test 3" });
       Mock<IUserService> userService = new Mock<IUserService>();
-      Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
+      //Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
       userService.Setup(x => x.GetAllRoles()).Returns(roles);
 
-      this.controller = new UserController(userService.Object, this.localizer.Object, logger.Object);
+      this.controller = new UserController(userService.Object, this.localizer.Object);
 
       // action
       var result = (this.controller.Create() as ViewResult).Model as UserCreateViewModel;
@@ -65,11 +65,11 @@
       this.localizer = new Mock<IStringLocalizer<UserController>>();
       var model = this.CreateViewModel();
       Mock<IUserService> userService = new Mock<IUserService>();
-      Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
+      //Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
       userService.Setup(x => x.CanInsertUserName(model.UserName)).Returns(true);
       userService.Setup(x => x.CanInsertEmail(model.Email)).Returns(true);
 
-      this.controller = new UserController(userService.Object, this.localizer.Object, logger.Object);
+      this.controller = new UserController(userService.Object, this.localizer.Object);
 
       // action
       var result = this.controller.Create(model) as RedirectToActionResult;
@@ -95,7 +95,6 @@
       // NOT WORKING.
       this.localizer.Setup(x => x.GetString(It.IsAny<string>())).Returns(new LocalizedString("", "There's already a user with the provided email."));
 
-
       //var localizedString = new LocalizedString("test", "test");
 
       //this.localizer.Setup(x => x.GetString(It.IsAny<string>())).Returns(localizedString);
@@ -107,10 +106,10 @@
       //this.localizer.SetupProperty(x => x.GetString("There's already a user with the provided username.").Name).SetReturnsDefault("There's already a user with the provided username.");
 
       Mock<IUserService> userService = new Mock<IUserService>();
-      Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
+      //Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
       userService.Setup(x => x.CanInsertUserName(model.UserName)).Returns(false);
       userService.Setup(x => x.GetAllRoles()).Returns(this.CreateRoles());
-      this.controller = new UserController(userService.Object, this.localizer.Object, logger.Object);
+      this.controller = new UserController(userService.Object, this.localizer.Object);
 
       // action
       var result = (this.controller.Create(model) as ViewResult).Model as UserCreateViewModel;

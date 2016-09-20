@@ -31,10 +31,10 @@ namespace TemplateCore.Controllers
     /// </summary>
     private IStringLocalizer<UserController> localizer = null;
 
-    /// <summary>
+    /*/// <summary>
     /// The logger
     /// </summary>
-    private readonly ILogger<UserController> logger = null;
+    private readonly ILogger<UserController> logger = null;*/
 
     #endregion Private Fields
 
@@ -47,7 +47,7 @@ namespace TemplateCore.Controllers
     /// <param name="localizer">The localizer.</param>
     /// <param name="logger">The logger.</param>
     /// <exception cref="System.ArgumentNullException">userService</exception>
-    public UserController(IUserService userService, IStringLocalizer<UserController> localizer, ILogger<UserController> logger)
+    public UserController(IUserService userService, IStringLocalizer<UserController> localizer/*, ILogger<UserController> logger*/)
     {
       if (userService == null)
       {
@@ -59,12 +59,12 @@ namespace TemplateCore.Controllers
         throw new ArgumentNullException("localizer");
       }
 
-      if (logger == null)
+      /*if (logger == null)
       {
         throw new ArgumentNullException("logger");
       }
 
-      this.logger = logger;
+      this.logger = logger;*/
       this.localizer = localizer;
       this.userService = userService;
     }
@@ -123,7 +123,7 @@ namespace TemplateCore.Controllers
 
             // if there are no more validations insert.
             this.userService.Insert(model.Email, model.UserName, model.Name, rolesIds);
-            this.logger.LogInformation(LoggingEvents.INSERT, string.Format("The user {0}, created a new user.", HttpContext.User.Identity.Name));
+            /*this.logger.LogInformation(LoggingEvents.INSERT, string.Format("The user {0}, created a new user.", HttpContext.User.Identity.Name));*/
             return RedirectToAction("Index");
           }
           else
@@ -177,7 +177,7 @@ namespace TemplateCore.Controllers
       {
         // delete and redirect to index.
         this.userService.DeleteById(id);
-        this.logger.LogInformation(LoggingEvents.DELETE, string.Format("The user {0} deleted the user with the Id: {1}", HttpContext.User.Identity.Name, id));
+        /*this.logger.LogInformation(LoggingEvents.DELETE, string.Format("The user {0} deleted the user with the Id: {1}", HttpContext.User.Identity.Name, id));*/
         return RedirectToAction("Index");
       }
     }
@@ -198,9 +198,23 @@ namespace TemplateCore.Controllers
       }
 
       // otherwise search the user given the id.
-      var query = this.userService.GetUserById(id);
+      ApplicationUser user = null;
 
-      if (query == null)
+      try
+      {
+        user = this.userService.GetUserById(id);
+      }
+      catch (Exception ex)
+      {
+        if (ex.GetType().Equals(typeof(InvalidOperationException)))
+        {
+          return this.NotFound();
+        }
+
+        throw ex;
+      }
+
+      if (user == null)
       {
         // return 404
         return this.NotFound();
@@ -208,7 +222,7 @@ namespace TemplateCore.Controllers
 
       // define which information can be updated, if username and email can be updated, validate at post that no user already has the new username or email.
       // id cannot be updated.
-      var model = new UserEditViewModel { Id = query.Id, Name = query.Name };
+      var model = new UserEditViewModel { Id = user.Id, Name = user.Name };
 
       // roles are empty.... (why Identity.. why..)
       var userRoles = this.userService.GetRolesByUserId(id);
@@ -282,7 +296,7 @@ namespace TemplateCore.Controllers
         this.userService.UpdateUserRoles(newRolesToInsert, rolesToDelete);
         this.userService.UpdateUserInfo(model.Id, model.Name);
 
-        this.logger.LogInformation(LoggingEvents.UPDATE, string.Format("The user {0} edited the user {1}", HttpContext.User.Identity.Name, model.Name));
+        /*this.logger.LogInformation(LoggingEvents.UPDATE, string.Format("The user {0} edited the user {1}", HttpContext.User.Identity.Name, model.Name));*/
 
         return RedirectToAction("Index");
       }
@@ -299,8 +313,6 @@ namespace TemplateCore.Controllers
     [Authorize(Roles = "Administrator")]
     public IActionResult Index()
     {
-      // query for the users.
-      this.logger.LogInformation(LoggingEvents.LIST, "Listing all users");
       var users = this.userService.GetAll();
 
       // create view model.
