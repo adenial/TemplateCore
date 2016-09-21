@@ -229,7 +229,7 @@
       {
         new UserRoleCreateViewModel { Check = false, Id = this.administratorRoleId, Name = "Administrator" },
         new UserRoleCreateViewModel { Check = true, Id = this.payrollRoleId, Name = "Payroll" },
-        new UserRoleCreateViewModel { Check = false, Id = this.reporterRoleId, Name = "Execute reports" },
+        new UserRoleCreateViewModel { Check = true, Id = this.reporterRoleId, Name = "Execute reports" },
         new UserRoleCreateViewModel { Check = true, Id = this.userRoleId, Name = "User" }
       };
     }
@@ -255,7 +255,7 @@
     {
       return new List<IdentityRole>
       {
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role for tests purposes"},
+        new IdentityRole { Id = this.administratorRoleId, Name = "Role for tests purposes"},
         new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 2 for tests purposes"},
         new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 3 for tests purposes"},
         new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 4 for tests purposes"},
@@ -272,7 +272,7 @@
     {
       return new List<IdentityRole>
       {
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role for tests purposes" },
+        new IdentityRole { Id = this.administratorRoleId, Name = "Role for tests purposes" },
         new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 2 for tests purposes"}
       };
     }
