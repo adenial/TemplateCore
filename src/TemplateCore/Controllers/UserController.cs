@@ -204,19 +204,8 @@ namespace TemplateCore.Controllers
       {
         user = this.userService.GetUserById(id);
       }
-      catch (Exception ex)
+      catch (InvalidOperationException)
       {
-        if (ex.GetType().Equals(typeof(InvalidOperationException)))
-        {
-          return this.NotFound();
-        }
-
-        throw ex;
-      }
-
-      if (user == null)
-      {
-        // return 404
         return this.NotFound();
       }
 
@@ -332,7 +321,7 @@ namespace TemplateCore.Controllers
     /// <returns>IEnumerable&lt;UserIndexViewModel&gt;.</returns>
     private IEnumerable<UserIndexViewModel> GetIndexModelFromUsers(IEnumerable<AspNetUser> users)
     {
-      return users.Select(x => new UserIndexViewModel { Id = x.Id, UserName = x.UserName, Name = x.Name, Roles = x.Roles, Email = x.Email });
+      return users.Select(x => new UserIndexViewModel { Id = x.Id, UserName = x.UserName, Name = x.Name, Roles = x.Roles, Email = x.Email }).ToList();
     }
 
     /// <summary>
