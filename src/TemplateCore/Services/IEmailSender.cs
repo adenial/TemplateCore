@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TemplateCore.Services
+﻿namespace TemplateCore.Services
 {
-    public interface IEmailSender
-    {
-        Task SendEmailAsync(string email, string subject, string message);
-    }
+  using System.Threading.Tasks;
+
+  public interface IEmailSender
+  {
+    /// <summary>
+    /// Sends the email asynchronous.
+    /// </summary>
+    /// <param name="email">The email.</param>
+    /// <param name="subject">The subject.</param>
+    /// <param name="message">The message.</param>
+    /// <returns></returns>
+    Task SendEmailAsync(string email, string subject, string message);
+  }
 }

@@ -5,7 +5,7 @@ namespace TemplateCore.ViewModels.Account
   public class ForgotPasswordViewModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        //[EmailAddress]
+        public string Username { get; set; }
     }
 }

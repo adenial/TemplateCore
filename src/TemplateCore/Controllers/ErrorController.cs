@@ -1,9 +1,5 @@
 namespace TemplateCore.Controllers
 {
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
-  using System.Threading.Tasks;
   using Microsoft.AspNetCore.Mvc;
 
   /// <summary>
@@ -19,9 +15,9 @@ namespace TemplateCore.Controllers
     }
 
     /// <summary>
-    /// Errors this instance.
+    /// Intercepts the errors.
     /// </summary>
-    /// <returns>IActionResult.</returns>
+    /// <returns>Error View.</returns>
     [Route("/Error/Error/")]
     public IActionResult Error()
     {
@@ -31,9 +27,9 @@ namespace TemplateCore.Controllers
     }
 
     /// <summary>
-    /// Errorses this instance.
+    /// Intercepts the errors from 400 to 600.
     /// </summary>
-    /// <returns>IActionResult.</returns>
+    /// <returns>NotFound Page or Error.</returns>
     public IActionResult Errors()
     {
       var statusCode = HttpContext.Response.StatusCode;
@@ -44,6 +40,7 @@ namespace TemplateCore.Controllers
       }
       else
       {
+        // othe errors....
         return View("~/Views/Shared/Error.cshtml");
       }
     }
