@@ -11,6 +11,9 @@
   /// </summary>
   public class HomeController : Controller
   {
+    /// <summary>
+    /// The localizer
+    /// </summary>
     private readonly IStringLocalizer<HomeController> localizer;
 
     /// <summary>
@@ -74,44 +77,6 @@
       ViewData["Message"] = this.localizer["Your contact page."];
 
       return View();
-    }
-
-    /// <summary>
-    /// Errors this instance.
-    /// </summary>
-    /// <returns>Error Page.</returns>
-    public IActionResult Error()
-    {
-      return View();
-    }
-
-    /// <summary>
-    /// Nots the found.
-    /// </summary>
-    /// <returns>Microsoft.AspNetCore.Mvc.IActionResult.</returns>
-    [Route("/errors/{0}")]
-    public IActionResult Errors()
-    {
-      var statusCode = HttpContext.Response.StatusCode;
-
-      if (statusCode == 404)
-      {
-        return this.RedirectToAction("NotFoundResult");
-      }
-
-      // more custom pages? 403... 500... ??
-      
-      return this.Json(new { response = string.Format("Response, status code: {0}", statusCode) });
-    }
-
-    /// <summary>
-    /// Nots the found.
-    /// </summary>
-    /// <returns>Microsoft.AspNetCore.Mvc.IActionResult.</returns>
-    public IActionResult NotFoundResult()
-    {
-      this.ViewBag.Title = "404 Page Not Found";
-      return this.View();
     }
   }
 }

@@ -18,11 +18,17 @@
   [Authorize]
   public class AccountController : Controller
   {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    #region Private Fields
+
     private readonly IEmailSender _emailSender;
-    private readonly ISmsSender _smsSender;
     private readonly ILogger _logger;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly ISmsSender _smsSender;
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    #endregion Private Fields
+
+    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AccountController"/> class.
@@ -46,122 +52,40 @@
       _logger = loggerFactory.CreateLogger<AccountController>();
     }
 
+    #endregion Public Constructors
+
+    #region Public Methods
+
     /// <summary>
-    /// Logins the specified return URL.
+    /// Accesses the denied.
     /// </summary>
-    /// <param name="returnUrl">The return URL.</param>
-    /// <returns>IActionResult.</returns>
+    /// <returns>Microsoft.AspNetCore.Mvc.IActionResult.</returns>
+    public IActionResult AccessDenied()
+    {
+      return this.View();
+    }
+
+    /// <summary>
+    /// Confirms the email.
+    /// </summary>
+    /// <param name="userId">The user identifier.</param>
+    /// <param name="code">The code.</param>
+    /// <returns>Task&lt;IActionResult&gt;.</returns>
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Login(string returnUrl = null)
+    public async Task<IActionResult> ConfirmEmail(string userId, string code)
     {
-      ViewData["ReturnUrl"] = returnUrl;
-      return View();
-    }
-
-
-    /// <summary>
-    /// Attempt to login with the provided login info.
-    /// </summary>
-    /// <param name="model">The model.</param>
-    /// <param name="returnUrl">The return URL.</param>
-    /// <returns>Redirects to Index page after successful login.</returns>
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-    {
-      ViewData["ReturnUrl"] = returnUrl;
-      if (ModelState.IsValid)
+      if (userId == null || code == null)
       {
-        // This doesn't count login failures towards account lockout
-        // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-        var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
-        if (result.Succeeded)
-        {
-          _logger.LogInformation(1, "User logged in.");
-          return RedirectToLocal(returnUrl);
-        }
-        if (result.RequiresTwoFactor)
-        {
-          return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-        }
-        if (result.IsLockedOut)
-        {
-          _logger.LogWarning(2, "User account locked out.");
-          return View("Lockout");
-        }
-        else
-        {
-          ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-          return View(model);
-        }
+        return View("Error");
       }
-
-      // If we got this far, something failed, redisplay form
-      return View(model);
-    }
-
-    /// <summary>
-    /// Registers the specified return URL.
-    /// </summary>
-    /// <param name="returnUrl">The return URL.</param>
-    /// <returns>IActionResult.</returns>
-    [HttpGet]
-    [AllowAnonymous]
-    public IActionResult Register(string returnUrl = null)
-    {
-      ViewData["ReturnUrl"] = returnUrl;
-      return View();
-    }
-
-
-    /// <summary>
-    /// Registers the specified model.
-    /// </summary>
-    /// <param name="model">The model.</param>
-    /// <param name="returnUrl">The return URL.</param>
-    /// <returns>Task&lt;IActionResult&gt;.</returns>
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
-    {
-      ViewData["ReturnUrl"] = returnUrl;
-      if (ModelState.IsValid)
+      var user = await _userManager.FindByIdAsync(userId);
+      if (user == null)
       {
-        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        var result = await _userManager.CreateAsync(user, model.Password);
-        if (result.Succeeded)
-        {
-          // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-          // Send an email with this link
-          //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-          //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-          //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-          //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-          await _signInManager.SignInAsync(user, isPersistent: false);
-          _logger.LogInformation(3, "User created a new account with password.");
-          return RedirectToLocal(returnUrl);
-        }
-        AddErrors(result);
+        return View("Error");
       }
-
-      // If we got this far, something failed, redisplay form
-      return View(model);
-    }
-
-    /// <summary>
-    /// Logs the off.
-    /// </summary>
-    /// <returns>Task&lt;IActionResult&gt;.</returns>
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> LogOff()
-    {
-      await _signInManager.SignOutAsync();
-      _logger.LogInformation(4, "User logged out.");
-      return RedirectToAction(nameof(HomeController.Index), "Home");
+      var result = await _userManager.ConfirmEmailAsync(user, code);
+      return View(result.Succeeded ? "ConfirmEmail" : "Error");
     }
 
     /// <summary>
@@ -266,29 +190,6 @@
     }
 
     /// <summary>
-    /// Confirms the email.
-    /// </summary>
-    /// <param name="userId">The user identifier.</param>
-    /// <param name="code">The code.</param>
-    /// <returns>Task&lt;IActionResult&gt;.</returns>
-    [HttpGet]
-    [AllowAnonymous]
-    public async Task<IActionResult> ConfirmEmail(string userId, string code)
-    {
-      if (userId == null || code == null)
-      {
-        return View("Error");
-      }
-      var user = await _userManager.FindByIdAsync(userId);
-      if (user == null)
-      {
-        return View("Error");
-      }
-      var result = await _userManager.ConfirmEmailAsync(user, code);
-      return View(result.Succeeded ? "ConfirmEmail" : "Error");
-    }
-
-    /// <summary>
     /// Forgots the password.
     /// </summary>
     /// <returns>IActionResult.</returns>
@@ -340,6 +241,122 @@
     public IActionResult ForgotPasswordConfirmation()
     {
       return View();
+    }
+
+    /// <summary>
+    /// Logins the specified return URL.
+    /// </summary>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>IActionResult.</returns>
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Login(string returnUrl = null)
+    {
+      ViewData["ReturnUrl"] = returnUrl;
+      return View();
+    }
+
+    /// <summary>
+    /// Attempt to login with the provided login info.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>Redirects to Index page after successful login.</returns>
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+    {
+      ViewData["ReturnUrl"] = returnUrl;
+      if (ModelState.IsValid)
+      {
+        // This doesn't count login failures towards account lockout
+        // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+        var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+        if (result.Succeeded)
+        {
+          _logger.LogInformation(1, "User logged in.");
+          return RedirectToLocal(returnUrl);
+        }
+        if (result.RequiresTwoFactor)
+        {
+          return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+        }
+        if (result.IsLockedOut)
+        {
+          _logger.LogWarning(2, "User account locked out.");
+          return View("Lockout");
+        }
+        else
+        {
+          ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+          return View(model);
+        }
+      }
+
+      // If we got this far, something failed, redisplay form
+      return View(model);
+    }
+
+    /// <summary>
+    /// Logs the off.
+    /// </summary>
+    /// <returns>Task&lt;IActionResult&gt;.</returns>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LogOff()
+    {
+      await _signInManager.SignOutAsync();
+      _logger.LogInformation(4, "User logged out.");
+      return RedirectToAction(nameof(HomeController.Index), "Home");
+    }
+
+    /// <summary>
+    /// Registers the specified return URL.
+    /// </summary>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>IActionResult.</returns>
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Register(string returnUrl = null)
+    {
+      ViewData["ReturnUrl"] = returnUrl;
+      return View();
+    }
+
+    /// <summary>
+    /// Registers the specified model.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>Task&lt;IActionResult&gt;.</returns>
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+    {
+      ViewData["ReturnUrl"] = returnUrl;
+      if (ModelState.IsValid)
+      {
+        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (result.Succeeded)
+        {
+          // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+          // Send an email with this link
+          //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+          //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+          //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+          //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+          await _signInManager.SignInAsync(user, isPersistent: false);
+          _logger.LogInformation(3, "User created a new account with password.");
+          return RedirectToLocal(returnUrl);
+        }
+        AddErrors(result);
+      }
+
+      // If we got this far, something failed, redisplay form
+      return View(model);
     }
 
     //
@@ -487,6 +504,8 @@
       }
     }
 
+    #endregion Public Methods
+
     #region Helpers
 
     private void AddErrors(IdentityResult result)
@@ -514,6 +533,6 @@
       }
     }
 
-    #endregion
+    #endregion Helpers
   }
 }

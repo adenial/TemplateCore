@@ -162,22 +162,24 @@ namespace TemplateCore
       // error handling, while at development mode, show error page.
       if (env.IsDevelopment())
       {
-        app.UseDeveloperExceptionPage();
-        app.UseDatabaseErrorPage();
+        //app.UseDeveloperExceptionPage();
+        //app.UseDatabaseErrorPage();
         app.UseBrowserLink();
 
         // status code pages 
-        app.UseStatusCodePages();
-        app.UseStatusCodePagesWithReExecute("/errors/{0}");
+        // app.UseStatusCodePages();
+        // app.UseStatusCodePagesWithReExecute("/errors/{0}");
+        app.UseExceptionHandler("/Error/Error");
+        app.UseStatusCodePagesWithReExecute("/Error/Errors/{0}");
       }
       else
       {
         // custom error page.
-        app.UseExceptionHandler("/Home/Error");
+        //app.UseExceptionHandler("/Home/Error");
 
         // status code pages 
-        app.UseStatusCodePages();
-        app.UseStatusCodePagesWithReExecute("/errors/{0}");
+        app.UseExceptionHandler("/Error/Error");
+        app.UseStatusCodePagesWithReExecute("/Error/Errors/{0}");
       }
 
       app.UseStaticFiles();

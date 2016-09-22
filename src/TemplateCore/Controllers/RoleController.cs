@@ -2,10 +2,11 @@ namespace TemplateCore.Controllers
 {
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.Localization;
   using Service.Interfaces;
+  using System;
   using System.Collections.Generic;
   using System.Linq;
-  using System.Threading.Tasks;
   using ViewModels.Role;
 
   /// <summary>
@@ -18,6 +19,8 @@ namespace TemplateCore.Controllers
 
     private IRoleService roleService;
 
+    private IStringLocalizer<RoleController> localizer;
+
     #endregion Private Fields
 
     #region Public Constructors
@@ -26,8 +29,20 @@ namespace TemplateCore.Controllers
     /// Initializes a new instance of the <see cref="RoleController" /> class.
     /// </summary>
     /// <param name="roleService">The role service.</param>
-    public RoleController(IRoleService roleService)
+    /// <param name="localizer">The localizer.</param>
+    public RoleController(IRoleService roleService, IStringLocalizer<RoleController> localizer)
     {
+      if (roleService == null)
+      {
+        throw new ArgumentNullException("roleService");
+      }
+
+      if (localizer == null)
+      {
+        throw new ArgumentNullException("localizer");
+      }
+
+      this.localizer = localizer;
       this.roleService = roleService;
     }
 
@@ -73,7 +88,7 @@ namespace TemplateCore.Controllers
         else
         {
           // add model error and return view with model.
-          ModelState.AddModelError(string.Empty, "Ya existe un perfil con el nombre proporcionado.");
+          ModelState.AddModelError(string.Empty, this.localizer["There's already a role with the provided name."]);
           return View(model);
         }
       }
