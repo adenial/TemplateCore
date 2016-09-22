@@ -3,7 +3,7 @@
 
 ## The project
 * Based in: [See](https://docs.asp.net/en/latest/intro.html)
-*Decoupled Unit-testable
+* Decoupled Unit-testable
 * Upgraded from AspNET Core 1.0.0 to AspNET Core 1.0.1
 * Layered project, Model, Repository and Services.
 * UnitOfWork (repository)
