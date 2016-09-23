@@ -13,6 +13,7 @@
 * Users: admin and test, password for both of them 1122334455
 * All new accounts are created with the default password: 1122334455
 * Implemented Globalization and internationalization (not finished yet.)
+* Added Code Analysis [See] (https://github.com/DotNetAnalyzers/StyleCopAnalyzers)
 * Working on unit tests.
 
 ## Unit Testing
