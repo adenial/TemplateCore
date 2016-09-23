@@ -244,7 +244,7 @@ namespace TemplateCore.Controllers
        return View(model);
      }*/
 
-    /// <summary>
+    /*/// <summary>
     /// Removes the phone number.
     /// </summary>
     /// <returns>Task&lt;IActionResult&gt;.</returns>
@@ -264,7 +264,7 @@ namespace TemplateCore.Controllers
       }
 
       return this.RedirectToAction(nameof(this.Index), new { Message = ManageMessageId.Error });
-    }
+    }*/
 
     /// <summary>
     /// Sets the password.

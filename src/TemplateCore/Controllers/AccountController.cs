@@ -242,7 +242,7 @@ namespace TemplateCore.Controllers
         var result = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-          this.logger.LogInformation(1, "User logged in.");
+          // this.logger.LogInformation(1, "User logged in.");
           return this.RedirectToLocal(returnUrl);
         }
 
@@ -253,7 +253,7 @@ namespace TemplateCore.Controllers
 
         if (result.IsLockedOut)
         {
-          this.logger.LogWarning(2, "User account locked out.");
+          // this.logger.LogWarning(2, "User account locked out.");
           return this.View("Lockout");
         }
         else
@@ -276,7 +276,8 @@ namespace TemplateCore.Controllers
     public async Task<IActionResult> LogOff()
     {
       await this.signInManager.SignOutAsync();
-      this.logger.LogInformation(4, "User logged out.");
+
+      // this.logger.LogInformation(4, "User logged out.");
       return this.RedirectToAction(nameof(HomeController.Index), "Home");
     }
 
@@ -451,7 +452,7 @@ namespace TemplateCore.Controllers
        }
      }*/
 
-    /// <summary>
+    /*/// <summary>
     /// Adds the errors.
     /// </summary>
     /// <param name="result">The result.</param>
@@ -461,16 +462,16 @@ namespace TemplateCore.Controllers
       {
         this.ModelState.AddModelError(string.Empty, error.Description);
       }
-    }
+    }*/
 
-    /// <summary>
+    /*/// <summary>
     /// Gets the current user asynchronous.
     /// </summary>
     /// <returns>Current user.</returns>
     private Task<ApplicationUser> GetCurrentUserAsync()
     {
       return this.userManager.GetUserAsync(this.HttpContext.User);
-    }
+    }*/
 
     /// <summary>
     /// Redirects to local.

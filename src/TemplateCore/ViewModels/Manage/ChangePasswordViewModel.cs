@@ -16,7 +16,7 @@ namespace TemplateCore.ViewModels.Manage
     /// Gets or sets the old password.
     /// </summary>
     /// <value>The old password.</value>
-    [Required]
+    [Required(ErrorMessage = "The current password is a required field.")]
     [DataType(DataType.Password)]
     [Display(Name = "Current password")]
     public string OldPassword { get; set; }
@@ -25,7 +25,7 @@ namespace TemplateCore.ViewModels.Manage
     /// Gets or sets the new password.
     /// </summary>
     /// <value>The new password.</value>
-    [Required]
+    [Required(ErrorMessage = "The new password is a required field.")]
     [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
     [DataType(DataType.Password)]
     [Display(Name = "New password")]

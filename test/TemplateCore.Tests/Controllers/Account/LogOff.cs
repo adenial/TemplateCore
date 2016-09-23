@@ -1,30 +1,24 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AccessDenied.cs" company="Without name">
+// <copyright file="LogOff.cs" company="Without name">
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
 namespace TemplateCore.Tests.Controllers.Account
 {
-  using System;
-  using System.Collections.Generic;
-  using System.Security.Claims;
   using System.Threading.Tasks;
-  using Microsoft.AspNetCore.Builder;
-  using Microsoft.AspNetCore.Http;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Logging;
-  using Microsoft.Extensions.Options;
-  using Model;
   using Moq;
-  using Services;
   using TemplateCore.Controllers;
+  using TemplateCore.Model;
+  using TemplateCore.Services;
   using Xunit;
 
   /// <summary>
-  /// Class test that tests the method AccessDenied of the class <see cref="AccountController"/> .
+  /// Class test that tests the method LogOff of the class <see cref="AccountController"/>
   /// </summary>
-  public class AccessDenied
+  public class LogOff
   {
     /// <summary>
     /// The controller
@@ -62,36 +56,35 @@ namespace TemplateCore.Tests.Controllers.Account
     private UserManager<ApplicationUser> userManager = null;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AccessDenied"/> class.
-    /// Initializes variables
+    /// Initializes a new instance of the <see cref="LogOff"/> class.
+    /// Initializes variables.
     /// </summary>
-    public AccessDenied()
+    public LogOff()
     {
       this.emailSender = new Mock<IEmailSender>();
       this.logger = new Mock<ILogger>();
       this.smsSender = new Mock<ISmsSender>();
       this.loggerFactory = new Mock<ILoggerFactory>();
-
       this.userManager = MockHelper.TestUserManager<ApplicationUser>(null);
-
       this.signInManager = MockHelper.GetSignInManager(this.userManager);
     }
 
     /// <summary>
-    /// Tests the method AccessDenied of the class <see cref="AccountController"/>.
-    /// Assert the invoke of the method returns an instance of the class <see cref="ViewResult"/>
+    /// Tests the method LogOff of the class <see cref="AccountController"/>.
+    /// Assert the invoke of the method returns an instance of the class <see cref="RedirectToActionResult"/>
     /// </summary>
+    /// <returns>LogOff Post action.</returns>
     [Fact]
-    public void AccessDeniedOk()
+    public async Task LogOffOk()
     {
       // setup
       this.controller = new AccountController(this.userManager, this.signInManager.Object, this.emailSender.Object, this.smsSender.Object, this.loggerFactory.Object);
 
       // action
-      var result = this.controller.AccessDenied() as ViewResult;
+      var result = await this.controller.LogOff();
 
       // assert
-      Assert.IsType(typeof(ViewResult), result);
+      Assert.IsType(typeof(RedirectToActionResult), result);
     }
   }
 }
