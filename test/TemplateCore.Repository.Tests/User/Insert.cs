@@ -112,8 +112,9 @@ namespace TemplateCore.Repository.Tests.User
       TemplateDbContext context = new TemplateDbContext(this.contextOptions);
       var repository = new Repository<ApplicationUser>(context);
 
-      // action && action
-      Assert.Throws<ArgumentNullException>(() => repository.Insert(null));
+      // action
+      var exception = Assert.Throws<ArgumentNullException>(() => repository.Insert(null));
+      Assert.True(exception.Message.Equals("Value cannot be null.\r\nParameter name: entity"));
     }
 
     #endregion Public Methods

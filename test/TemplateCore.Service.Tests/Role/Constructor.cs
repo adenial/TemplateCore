@@ -50,7 +50,7 @@ namespace TemplateCore.Service.Tests.Role
     public void RoleServiceThrowsExceptionDueParameter()
     {
       // setup, act and assert.
-      Assert.Throws<ArgumentNullException>(() => this.roleService = new RoleService(null));
+      Assert.Throws<ArgumentNullException>(() => new RoleService(null));
     }
 
     /// <summary>

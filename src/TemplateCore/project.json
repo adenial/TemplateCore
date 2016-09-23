@@ -94,6 +94,7 @@
     [
       "/additionalfile:..//..//stylecop.json"
     ],
+    "warningsAsErrors" : true,
     "emitEntryPoint": true,
     "preserveCompilationContext": true
   },

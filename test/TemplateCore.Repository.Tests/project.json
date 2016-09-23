@@ -34,6 +34,7 @@
   "buildOptions":
   {
     "xmlDoc": "true",
+    "warningsAsErrors": true,
     "additionalArguments":
     [
       "/additionalfile:..//..//stylecop.json"

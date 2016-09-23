@@ -94,7 +94,8 @@ namespace TemplateCore.Service.Tests.Role
       this.roleService = new RoleService(unitOfWork);
 
       // action & assert
-      Assert.Throws<ArgumentNullException>(() => this.roleService.DeleteRoleByName(string.Empty));
+      var exception = Assert.Throws<ArgumentNullException>(() => this.roleService.DeleteRoleByName(string.Empty));
+      Assert.True(exception.Message.Equals("Value cannot be null.\r\nParameter name: name"));
     }
 
     /// <summary>

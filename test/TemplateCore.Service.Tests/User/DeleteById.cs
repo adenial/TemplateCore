@@ -124,10 +124,12 @@ namespace TemplateCore.Service.Tests.User
       IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
       this.userService = new UserService(unitOfWork);
 
-      Action deleteById = () => this.userService.DeleteById(Guid.NewGuid().ToString());
+      string userId = Guid.NewGuid().ToString();
+
+      Exception exception = Assert.Throws<InvalidOperationException>(() => this.userService.DeleteById(userId));
 
       // action && assert
-      Assert.Throws(typeof(InvalidOperationException), deleteById);
+      Assert.True(exception.Message.Equals(string.Format("Usert not found with the provided Id, Id provided: {0}", userId)));
     }
   }
 }

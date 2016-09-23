@@ -21,7 +21,10 @@
     {
       "target": "project"
     },
-    "Microsoft.CodeCoverage": "1.0.1"
+    "Microsoft.CodeCoverage":
+    {
+      "version": "1.0.1"
+    }
   },
 
   "frameworks":
@@ -39,6 +42,7 @@
   "buildOptions":
   {
     "xmlDoc": "true",
+    "warningsAsErrors": true,
     "additionalArguments":
     [
       "/additionalfile:..//..//stylecop.json"
