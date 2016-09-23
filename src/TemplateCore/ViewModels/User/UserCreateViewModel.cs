@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.ViewModels.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserCreateViewModel.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.ViewModels.User
 {
   using System.Collections.Generic;
   using System.ComponentModel.DataAnnotations;

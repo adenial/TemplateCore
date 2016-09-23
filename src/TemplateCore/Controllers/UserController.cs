@@ -1,17 +1,20 @@
+//-----------------------------------------------------------------------
+// <copyright file="UserController.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Controllers
 {
-  using Core;
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
-  using Microsoft.Extensions.Logging;
-  using Model;
-  using Service.Interfaces;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
-  using ViewModels.User;
+  using TemplateCore.Model;
+  using TemplateCore.Service.Interfaces;
+  using TemplateCore.ViewModels.User;
 
   /// <summary>
   /// Class UserController.
@@ -19,8 +22,6 @@ namespace TemplateCore.Controllers
   [Authorize(Roles = "Administrator")]
   public class UserController : Controller
   {
-    #region Private Fields
-
     /// <summary>
     /// The user service
     /// </summary>
@@ -36,16 +37,11 @@ namespace TemplateCore.Controllers
     /// </summary>
     private readonly ILogger<UserController> logger = null;*/
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="UserController" /> class.
     /// </summary>
     /// <param name="userService">The user service.</param>
     /// <param name="localizer">The localizer.</param>
-    /// <param name="logger">The logger.</param>
     /// <exception cref="System.ArgumentNullException">userService</exception>
     public UserController(IUserService userService, IStringLocalizer<UserController> localizer/*, ILogger<UserController> logger*/)
     {
@@ -69,10 +65,6 @@ namespace TemplateCore.Controllers
       this.userService = userService;
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Create User Action
     /// </summary>
@@ -86,7 +78,7 @@ namespace TemplateCore.Controllers
       var roles = this.userService.GetAllRoles();
 
       // load the roles. id and name.
-      var rolesViewmodel = GetRolesForViewModel(roles);
+      var rolesViewmodel = this.GetRolesForViewModel(roles);
 
       model.Roles = rolesViewmodel;
 
@@ -104,7 +96,7 @@ namespace TemplateCore.Controllers
     [Authorize(Roles = "Administrator")]
     public IActionResult Create(UserCreateViewModel model)
     {
-      if (ModelState.IsValid)
+      if (this.ModelState.IsValid)
       {
         bool canInsert = false;
 
@@ -124,25 +116,26 @@ namespace TemplateCore.Controllers
             // if there are no more validations insert.
             this.userService.Insert(model.Email, model.UserName, model.Name, rolesIds);
             /*this.logger.LogInformation(LoggingEvents.INSERT, string.Format("The user {0}, created a new user.", HttpContext.User.Identity.Name));*/
-            return RedirectToAction("Index");
+            return this.RedirectToAction("Index");
           }
           else
           {
-            ModelState.AddModelError("Email", this.localizer["There's already a user with the provided email."]);
-
+            this.ModelState.AddModelError("Email", this.localizer["There's already a user with the provided email."]);
             var roles = this.userService.GetAllRoles();
+
             // load the roles. id and name.
-            var rolesViewmodel = GetRolesForViewModel(roles);
+            var rolesViewmodel = this.GetRolesForViewModel(roles);
             model.Roles = rolesViewmodel;
             return this.View(model);
           }
         }
         else
         {
-          ModelState.AddModelError("UserName", this.localizer["There's already a user with the provided username."]);
+          this.ModelState.AddModelError("UserName", this.localizer["There's already a user with the provided username."]);
           var roles = this.userService.GetAllRoles();
+
           // load the roles. id and name.
-          var rolesViewmodel = GetRolesForViewModel(roles);
+          var rolesViewmodel = this.GetRolesForViewModel(roles);
           model.Roles = rolesViewmodel;
 
           return this.View(model);
@@ -178,7 +171,7 @@ namespace TemplateCore.Controllers
         // delete and redirect to index.
         this.userService.DeleteById(id);
         /*this.logger.LogInformation(LoggingEvents.DELETE, string.Format("The user {0} deleted the user with the Id: {1}", HttpContext.User.Identity.Name, id));*/
-        return RedirectToAction("Index");
+        return this.RedirectToAction("Index");
       }
     }
 
@@ -217,7 +210,7 @@ namespace TemplateCore.Controllers
       var userRoles = this.userService.GetRolesByUserId(id);
       var allRoles = this.userService.GetAllRoles();
 
-      model.Roles = GetUserRolesForEditViewModel(userRoles, allRoles);
+      model.Roles = this.GetUserRolesForEditViewModel(userRoles, allRoles);
 
       return this.View(model);
     }
@@ -232,7 +225,7 @@ namespace TemplateCore.Controllers
     [Authorize(Roles = "Administrator")]
     public IActionResult Edit(UserEditViewModel model)
     {
-      if (ModelState.IsValid)
+      if (this.ModelState.IsValid)
       {
         // for now the name of the user can be updated too..
 
@@ -287,7 +280,7 @@ namespace TemplateCore.Controllers
 
         /*this.logger.LogInformation(LoggingEvents.UPDATE, string.Format("The user {0} edited the user {1}", HttpContext.User.Identity.Name, model.Name));*/
 
-        return RedirectToAction("Index");
+        return this.RedirectToAction("Index");
       }
       else
       {
@@ -305,14 +298,10 @@ namespace TemplateCore.Controllers
       var users = this.userService.GetAll();
 
       // create view model.
-      var model = GetIndexModelFromUsers(users);
+      var model = this.GetIndexModelFromUsers(users);
 
-      return View(model);
+      return this.View(model);
     }
-
-    #endregion Public Methods
-
-    #region Private Methods
 
     /// <summary>
     /// Gets the index model from users.
@@ -359,7 +348,5 @@ namespace TemplateCore.Controllers
 
       return rolesViewModel;
     }
-
-    #endregion Private Methods
   }
 }

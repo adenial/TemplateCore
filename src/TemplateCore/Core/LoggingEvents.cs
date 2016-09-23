@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.Core
+﻿//-----------------------------------------------------------------------
+// <copyright file="LoggingEvents.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Core
 {
   /// <summary>
   /// Class LoggingEvents.

@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.Tests.Controllers.Home
+﻿//-----------------------------------------------------------------------
+// <copyright file="SetLanguage.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Home
 {
   using Microsoft.AspNetCore.Http;
   using Microsoft.AspNetCore.Mvc;
@@ -13,16 +18,10 @@
   /// </summary>
   public class SetLanguage
   {
-    #region Private Fields
-
     /// <summary>
     /// The localizer
     /// </summary>
     private Mock<IStringLocalizer<HomeController>> localizer = null;
-
-    #endregion Private Fields
-    
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SetLanguage"/> class.
@@ -31,10 +30,6 @@
     {
       this.localizer = new Mock<IStringLocalizer<HomeController>>();
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method SetLanguage POST action of the class <see cref="HomeController"/>.
@@ -63,7 +58,5 @@
       // assert
       Assert.IsType(typeof(LocalRedirectResult), result);
     }
-
-    #endregion Public Methods
   }
 }

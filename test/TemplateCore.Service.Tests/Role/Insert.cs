@@ -1,13 +1,18 @@
-﻿namespace TemplateCore.Service.Tests.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="Insert.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.Role
 {
-  using Implement;
-  using Interfaces;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
@@ -24,27 +29,6 @@
     /// The role service
     /// </summary>
     private IRoleService roleService = null;
-
-    /// <summary>
-    /// Tests the method Insert of the class <see cref="RoleService"/>
-    /// Assert the Role is inserted.
-    /// </summary>
-    [Fact]
-    public void InsertOk()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.roleService = new RoleService(unitOfWork);
-
-      // action
-      int countBeforeInsert = this.roleService.GetAllRoleNames().ToList().Count;
-      this.roleService.Insert("User");
-      int countAfterInsert = this.roleService.GetAllRoleNames().ToList().Count;
-
-      // assert
-      Assert.True(countBeforeInsert < countAfterInsert);
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Insert"/> class.
@@ -72,6 +56,27 @@
 
         context.SaveChangesAsync();
       }
+    }
+
+    /// <summary>
+    /// Tests the method Insert of the class <see cref="RoleService"/>
+    /// Assert the Role is inserted.
+    /// </summary>
+    [Fact]
+    public void InsertOk()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.roleService = new RoleService(unitOfWork);
+
+      // action
+      int countBeforeInsert = this.roleService.GetAllRoleNames().ToList().Count;
+      this.roleService.Insert("User");
+      int countAfterInsert = this.roleService.GetAllRoleNames().ToList().Count;
+
+      // assert
+      Assert.True(countBeforeInsert < countAfterInsert);
     }
   }
 }

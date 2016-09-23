@@ -1,13 +1,18 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="DeleteById.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Repository;
-  using System;
-  using System.Linq;
   using TemplateCore.Model;
+  using TemplateCore.Repository;
   using TemplateCore.Service.Implement;
   using Xunit;
 
@@ -16,8 +21,6 @@
   /// </summary>
   public class DeleteById
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -32,53 +35,6 @@
     /// The user service
     /// </summary>
     private UserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
-
-    /// <summary>
-    /// Test the method DeleteById of the class <see cref="UserService"/>.
-    /// Assert the record was deleted?
-    /// </summary>
-    [Fact]
-    public void DeleteByIdOk()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      int countBeforeDeletion = this.userService.GetAll().ToList().Count;
-      this.userService.DeleteById(this.userId);
-      int countAfterDeletion = this.userService.GetAll().ToList().Count;
-
-      // assert
-      Assert.True(countAfterDeletion < countBeforeDeletion);
-    }
-
-    /// <summary>
-    /// Test the method DeleteById of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method throws an exception due the user is not found.
-    /// </summary>
-    [Fact]
-    public void DeleteByIdThrowsException()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      Action deleteById = () => this.userService.DeleteById(Guid.NewGuid().ToString());
-
-      // action && assert
-      Assert.Throws(typeof(InvalidOperationException), deleteById);
-    }
-
-    #endregion Public Methods
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DeleteById"/> class.
@@ -135,6 +91,43 @@
       }
     }
 
-    #endregion Public Constructors
+    /// <summary>
+    /// Test the method DeleteById of the class <see cref="UserService"/>.
+    /// Assert the record was deleted?
+    /// </summary>
+    [Fact]
+    public void DeleteByIdOk()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      int countBeforeDeletion = this.userService.GetAll().ToList().Count;
+      this.userService.DeleteById(this.userId);
+      int countAfterDeletion = this.userService.GetAll().ToList().Count;
+
+      // assert
+      Assert.True(countAfterDeletion < countBeforeDeletion);
+    }
+
+    /// <summary>
+    /// Test the method DeleteById of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method throws an exception due the user is not found.
+    /// </summary>
+    [Fact]
+    public void DeleteByIdThrowsException()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      Action deleteById = () => this.userService.DeleteById(Guid.NewGuid().ToString());
+
+      // action && assert
+      Assert.Throws(typeof(InvalidOperationException), deleteById);
+    }
   }
 }

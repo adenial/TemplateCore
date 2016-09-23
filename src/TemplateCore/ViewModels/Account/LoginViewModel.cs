@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.ViewModels.Account
+﻿//-----------------------------------------------------------------------
+// <copyright file="LoginViewModel.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.ViewModels.Account
 {
   using System.ComponentModel.DataAnnotations;
 

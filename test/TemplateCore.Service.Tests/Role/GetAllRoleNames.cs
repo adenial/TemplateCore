@@ -1,13 +1,18 @@
-﻿namespace TemplateCore.Service.Tests.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="GetAllRoleNames.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.Role
 {
-  using Implement;
-  using Interfaces;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
@@ -24,25 +29,6 @@
     /// The role service
     /// </summary>
     private IRoleService roleService = null;
-
-    /// <summary>
-    /// Tests the method GetAllRoleNames of the class <see cref="RoleService"/>
-    /// Assert the invoke of the method returns a List of type string with 3 elements.
-    /// </summary>
-    [Fact]
-    public void GetAllRoleNamesOk()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.roleService = new RoleService(unitOfWork);
-
-      // action
-      var result = this.roleService.GetAllRoleNames();
-
-      // assert
-      Assert.True(result.ToList().Count == 3);
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GetAllRoleNames"/> class.
@@ -80,6 +66,25 @@
 
         context.SaveChangesAsync();
       }
+    }
+
+    /// <summary>
+    /// Tests the method GetAllRoleNames of the class <see cref="RoleService"/>
+    /// Assert the invoke of the method returns a List of type string with 3 elements.
+    /// </summary>
+    [Fact]
+    public void GetAllRoleNamesOk()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.roleService = new RoleService(unitOfWork);
+
+      // action
+      var result = this.roleService.GetAllRoleNames();
+
+      // assert
+      Assert.True(result.ToList().Count == 3);
     }
   }
 }

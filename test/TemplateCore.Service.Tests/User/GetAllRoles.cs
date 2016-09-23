@@ -1,13 +1,18 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="GetAllRoles.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System.Collections.Generic;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using Xunit;
 
   /// <summary>
@@ -15,8 +20,6 @@
   /// </summary>
   public class GetAllRoles
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -26,10 +29,6 @@
     /// The user service
     /// </summary>
     private UserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GetAllRoles" /> class.
@@ -68,10 +67,6 @@
       }
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Test the method GetAll of the class <see cref="UserService"/>
     /// Assert the invoke of the method returns a list of the type <see cref="IdentityRole"/>.
@@ -92,7 +87,5 @@
       Assert.IsType(typeof(List<IdentityRole>), result);
       Assert.True(result.Count == 2);
     }
-
-    #endregion Public Methods
   }
 }

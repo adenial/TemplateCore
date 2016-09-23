@@ -1,15 +1,20 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="GetAll.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using Xunit;
 
   /// <summary>
@@ -17,8 +22,6 @@
   /// </summary>
   public class GetAll
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -28,10 +31,6 @@
     /// The user service
     /// </summary>
     private UserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GetAll"/> class.
@@ -85,10 +84,6 @@
       }
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Gets all ok.
     /// </summary>
@@ -106,7 +101,5 @@
       // assert
       Assert.IsType(typeof(List<AspNetUser>), result);
     }
-
-    #endregion Public Methods
   }
 }

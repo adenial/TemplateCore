@@ -1,14 +1,19 @@
-﻿namespace TemplateCore.Tests.Controllers.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Edit.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.User
 {
+  using System;
+  using System.Collections.Generic;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
-  using Model;
   using Moq;
-  using Service.Interfaces;
-  using System;
-  using System.Collections.Generic;
   using TemplateCore.Controllers;
+  using TemplateCore.Model;
+  using TemplateCore.Service.Interfaces;
   using ViewModels.User;
   using Xunit;
 
@@ -17,8 +22,6 @@
   /// </summary>
   public class Edit
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -59,10 +62,6 @@
     /// </summary>
     private Mock<IUserService> userService = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Edit" /> class.
     /// </summary>
@@ -74,10 +73,6 @@
       this.reporterRoleId = Guid.NewGuid().ToString();
       this.userRoleId = Guid.NewGuid().ToString();
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method Edit of the class <see cref="UserController"/>.
@@ -110,13 +105,13 @@
       this.userService = new Mock<IUserService>();
       this.localizer = new Mock<IStringLocalizer<UserController>>();
 
-      this.userService.Setup(x => x.GetUserById(this.userId)).Returns(CreateUser());
-      this.userService.Setup(x => x.GetRolesByUserId(this.userId)).Returns(GetRoles());
-      this.userService.Setup(x => x.GetAllRoles()).Returns(GetAllRoles());
+      this.userService.Setup(x => x.GetUserById(this.userId)).Returns(this.CreateUser());
+      this.userService.Setup(x => x.GetRolesByUserId(this.userId)).Returns(this.GetRoles());
+      this.userService.Setup(x => x.GetAllRoles()).Returns(this.GetAllRoles());
       this.controller = new UserController(this.userService.Object, this.localizer.Object);
 
       // action
-      var result = (this.controller.Edit(userId) as ViewResult).Model as UserEditViewModel;
+      var result = (this.controller.Edit(this.userId) as ViewResult).Model as UserEditViewModel;
 
       // assert
       Assert.IsType(typeof(UserEditViewModel), result);
@@ -145,17 +140,17 @@
 
     /// <summary>
     /// Tests the method Edit POST action of the class <see cref="UserController"/>.
-    /// Assert the invoke of the method returns an instance of the class <see cref="RedirectToActionResult"/>. 
-    /// Happy Path 
+    /// Assert the invoke of the method returns an instance of the class <see cref="RedirectToActionResult"/>.
+    /// Happy Path
     /// </summary>
     [Fact]
     public void EditPostOk()
     {
       // setup
-      var model = new UserEditViewModel { Id = this.userId, Name = "User for tests purposes", Roles = GetRolesEditView() };
+      var model = new UserEditViewModel { Id = this.userId, Name = "User for tests purposes", Roles = this.GetRolesEditView() };
       this.userService = new Mock<IUserService>();
-      this.userService.Setup(x => x.GetUserRolesByUserId(this.userId)).Returns(GetUserRolesPost());
-      this.userService.Setup(x => x.GetAllRoles()).Returns(GetAllRolesPost());
+      this.userService.Setup(x => x.GetUserRolesByUserId(this.userId)).Returns(this.GetUserRolesPost());
+      this.userService.Setup(x => x.GetAllRoles()).Returns(this.GetAllRolesPost());
       this.localizer = new Mock<IStringLocalizer<UserController>>();
       this.controller = new UserController(this.userService.Object, this.localizer.Object);
 
@@ -174,11 +169,11 @@
     public void EditPostInvalidModel()
     {
       // setup
-      var model = new UserEditViewModel { Id = this.userId, Name = "User for tests purposes", Roles = GetRolesEditView() };
+      var model = new UserEditViewModel { Id = this.userId, Name = "User for tests purposes", Roles = this.GetRolesEditView() };
       this.userService = new Mock<IUserService>();
       this.localizer = new Mock<IStringLocalizer<UserController>>();
       this.controller = new UserController(this.userService.Object, this.localizer.Object);
-      this.controller.ModelState.AddModelError("", "Test");
+      this.controller.ModelState.AddModelError(string.Empty, "Test");
 
       // action
       var result = (this.controller.Edit(model) as ViewResult).Model as UserEditViewModel;
@@ -196,16 +191,16 @@
       return new List<IdentityRole>
       {
         new IdentityRole { Id = this.administratorRoleId, Name = "Administrator" },
-        new IdentityRole { Id = this.payrollRoleId, Name = "Payroll"},
-        new IdentityRole { Id = this.reporterRoleId, Name = "Execute Reports"},
-        new IdentityRole { Id = this.userRoleId, Name = "User"}
+        new IdentityRole { Id = this.payrollRoleId, Name = "Payroll" },
+        new IdentityRole { Id = this.reporterRoleId, Name = "Execute Reports" },
+        new IdentityRole { Id = this.userRoleId, Name = "User" }
       };
     }
 
     /// <summary>
     /// Gets the user roles post.
     /// </summary>
-    /// <returns>List of type <see cref="IdentityUserRole<string>"/>.</returns>
+    /// <returns>List of type <see cref="IdentityUserRole{TKey}"/>.</returns>
     private IEnumerable<IdentityUserRole<string>> GetUserRolesPost()
     {
       return new List<IdentityUserRole<string>>
@@ -213,8 +208,7 @@
         // roles the user "already" has.
         new IdentityUserRole<string> { UserId = this.userId, RoleId = this.userRoleId },
         new IdentityUserRole<string> { UserId = this.userId, RoleId = this.administratorRoleId },
-        new IdentityUserRole<string> { UserId = this.userId, RoleId = this.payrollRoleId}
-
+        new IdentityUserRole<string> { UserId = this.userId, RoleId = this.payrollRoleId }
       };
     }
 
@@ -234,10 +228,6 @@
       };
     }
 
-    #endregion Public Methods
-
-    #region Private Methods
-
     /// <summary>
     /// Creates the user.
     /// </summary>
@@ -255,12 +245,12 @@
     {
       return new List<IdentityRole>
       {
-        new IdentityRole { Id = this.administratorRoleId, Name = "Role for tests purposes"},
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 2 for tests purposes"},
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 3 for tests purposes"},
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 4 for tests purposes"},
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 5 for tests purposes"},
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 6 for tests purposes"}
+        new IdentityRole { Id = this.administratorRoleId, Name = "Role for tests purposes" },
+        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 2 for tests purposes" },
+        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 3 for tests purposes" },
+        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 4 for tests purposes" },
+        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 5 for tests purposes" },
+        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 6 for tests purposes" }
       };
     }
 
@@ -273,10 +263,8 @@
       return new List<IdentityRole>
       {
         new IdentityRole { Id = this.administratorRoleId, Name = "Role for tests purposes" },
-        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 2 for tests purposes"}
+        new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Role 2 for tests purposes" }
       };
     }
-
-    #endregion Private Methods
   }
 }

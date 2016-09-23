@@ -1,16 +1,21 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="GetUserRolesByUserId.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
-  using Interfaces;
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
@@ -18,8 +23,6 @@
   /// </summary>
   public class GetUserRolesByUserId
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -35,10 +38,9 @@
     /// </summary>
     private IUserService userService = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GetUserRolesByUserId"/> class.
+    /// </summary>
     public GetUserRolesByUserId()
     {
       // Create a service provider to be shared by all test methods
@@ -87,13 +89,9 @@
       }
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Tests the method GetUserRolesByUserId of the class <see cref="UserService"/>
-    /// Assert the invoke of the method returns a List of the type <see cref="IdentityUserRole<string>"/>
+    /// Assert the invoke of the method returns a List of the type <see cref="IdentityUserRole{TKey}"/>
     /// </summary>
     [Fact]
     public void GetUserRolesByUserIdOk()
@@ -109,23 +107,5 @@
       // assert
       Assert.IsType(typeof(List<IdentityUserRole<string>>), result);
     }
-
-    /*/// <summary>
-    /// Tests the method GetUserRolesByUserId of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method throws an exception of type <see cref="InvalidOperationException"/>.
-    /// </summary>
-    [Fact]
-    public void GetUserRolesByUserIdThrowsExceptionDueUserRolesNotFound()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // act && asert
-      Assert.Throws<InvalidOperationException>(() => this.userService.GetUserRolesByUserId(Guid.NewGuid().ToString()));
-    }*/
-
-    #endregion Public Methods
   }
 }

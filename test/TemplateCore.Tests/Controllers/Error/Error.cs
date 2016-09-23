@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.Tests.Controllers.Error
+﻿//-----------------------------------------------------------------------
+// <copyright file="Error.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Error
 {
   using Microsoft.AspNetCore.Mvc;
   using TemplateCore.Controllers;
@@ -9,8 +14,6 @@
   /// </summary>
   public class Error
   {
-    #region Public Methods
-
     /// <summary>
     /// Tests the method Error of the class <see cref="ErrorController"/>.
     /// Assert the invoke of the method returns an instance of the class <see cref="ViewResult"/>
@@ -27,7 +30,5 @@
       // assert
       Assert.IsType(typeof(ViewResult), result);
     }
-
-    #endregion Public Methods
   }
 }

@@ -1,12 +1,16 @@
-﻿namespace TemplateCore.Service.Implement
+﻿//-----------------------------------------------------------------------
+// <copyright file="RoleService.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Implement
 {
-  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-  using Model;
-  using Repository;
   using System;
   using System.Collections.Generic;
   using System.Linq;
-  using System.Threading.Tasks;
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
   using TemplateCore.Service.Interfaces;
 
   /// <summary>
@@ -14,20 +18,16 @@
   /// </summary>
   public class RoleService : IRoleService
   {
-    #region Private Fields
     /// <summary>
     /// The unit of work
     /// </summary>
     private IUnitOfWork<TemplateDbContext> unitOfWork = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="RoleService"/> class.
+    /// Initializes a new instance of the <see cref="RoleService" /> class.
     /// </summary>
-    /// <param name="context">The context.</param>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <exception cref="System.ArgumentNullException">unitOfWork</exception>
     public RoleService(IUnitOfWork<TemplateDbContext> unitOfWork)
     {
       if (unitOfWork == null)
@@ -37,10 +37,6 @@
 
       this.unitOfWork = unitOfWork;
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Determines whether this instance can insert the specified name.
@@ -65,7 +61,6 @@
     /// Deletes a role with the specified name.
     /// </summary>
     /// <param name="name">The name of the role to delete.</param>
-    /// <returns>Task.</returns>
     public void DeleteRoleByName(string name)
     {
       if (string.IsNullOrWhiteSpace(name))
@@ -109,15 +104,6 @@
       var newIdentityRole = new IdentityRole { Name = name, NormalizedName = name };
       this.unitOfWork.RoleRepository.Insert(newIdentityRole);
       this.unitOfWork.Commit();
-
-      /*var roleStore = new RoleStore<IdentityRole>(context);
-
-      await roleStore.CreateAsync(new IdentityRole { Name = name, NormalizedName = name });
-
-      // not needed
-      // context.SaveChanges();*/
     }
-
-    #endregion Public Methods
   }
 }

@@ -1,13 +1,18 @@
-﻿namespace TemplateCore.Repository.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="FindManyByAsync.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Repository.Tests.User
 {
-  using Microsoft.AspNetCore.Identity;
-  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-  using Microsoft.EntityFrameworkCore;
-  using Microsoft.Extensions.DependencyInjection;
   using System;
   using System.Collections.Generic;
   using System.Linq;
   using System.Threading.Tasks;
+  using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+  using Microsoft.EntityFrameworkCore;
+  using Microsoft.Extensions.DependencyInjection;
   using TemplateCore.Model;
   using Xunit;
 

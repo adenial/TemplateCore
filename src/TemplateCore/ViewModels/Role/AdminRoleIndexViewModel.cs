@@ -1,7 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="AdminRoleIndexViewModel.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.ViewModels.Role
 {
+  using System.ComponentModel.DataAnnotations;
+
   /// <summary>
   /// Class AdminRoleIndexViewModel.
   /// </summary>

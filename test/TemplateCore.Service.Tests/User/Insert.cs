@@ -1,14 +1,19 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Insert.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
-  using Interfaces;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System.Collections.Generic;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
@@ -16,8 +21,6 @@
   /// </summary>
   public class Insert
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -29,10 +32,6 @@
     /// The user service
     /// </summary>
     private IUserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Insert"/> class.
@@ -59,10 +58,6 @@
         this.roleId = role.Id;
       }
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method Insert of the class <see cref="UserService"/>.
@@ -107,7 +102,5 @@
       // assert
       Assert.True(afterInsert > beforeInsert);
     }
-
-    #endregion Public Methods
   }
 }

@@ -1,15 +1,21 @@
-﻿namespace TemplateCore.Repository
+﻿//-----------------------------------------------------------------------
+// <copyright file="UnitOfWork.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Repository
 {
+  using System;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Model;
-  using System;
 
   /// <summary>
   /// Class UnitOfWork.
   /// </summary>
   /// <typeparam name="TContext">The type of the t context.</typeparam>
-  public class UnitOfWork<TContext> : IDisposable, IUnitOfWork<TContext> where TContext : DbContext, new()
+  public class UnitOfWork<TContext> : IDisposable, IUnitOfWork<TContext>
+    where TContext : DbContext, new()
   {
     /// <summary>
     /// The data context
@@ -33,6 +39,15 @@
     private IRepository<IdentityUserRole<string>> useRolesRepository = null;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    public UnitOfWork(TContext context)
+    {
+      this.dataContext = context;
+    }
+
+    /// <summary>
     /// Gets the user roles repository.
     /// </summary>
     /// <value>The user roles repository.</value>
@@ -42,7 +57,7 @@
     }
 
     /// <summary>
-    /// Gets or sets the role repository.
+    /// Gets the role repository.
     /// </summary>
     /// <value>The role repository.</value>
     public IRepository<IdentityRole> RoleRepository
@@ -57,23 +72,6 @@
     public IRepository<ApplicationUser> UserRepository
     {
       get { return this.userRepository ?? (this.userRepository = new Repository<ApplicationUser>(this.dataContext)); }
-    }
-
-    /*/// <summary>
-    /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.
-    /// </summary>
-    public UnitOfWork()
-    {
-      this.dataContext = new TContext();
-    }*/
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.
-    /// </summary>
-    /// <param name="context">The context.</param>
-    public UnitOfWork(TContext context)
-    {
-      this.dataContext = context;
     }
 
     /// <summary>

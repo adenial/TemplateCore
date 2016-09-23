@@ -1,15 +1,20 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="GetRolesByUserId.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using TemplateCore.Service.Interfaces;
   using Xunit;
 
@@ -18,8 +23,6 @@
   /// </summary>
   public class GetRolesByUserId
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -34,10 +37,6 @@
     /// The user service
     /// </summary>
     private IUserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GetRolesByUserId"/> class.
@@ -82,7 +81,6 @@
           user.PasswordHash = hashed;
           var userStore = new UserStore<ApplicationUser>(context);
           userStore.CreateAsync(user);
-          //userStore.AddToRoleAsync(user, "User");
         }
 
         context.SaveChangesAsync();
@@ -97,10 +95,6 @@
         this.userId = user.Id;
       }
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Test the method GetRolesByUserId of the class <see cref="UserService"/>.
@@ -136,10 +130,7 @@
       this.userService = new UserService(unitOfWork);
 
       // act and assert
-      Assert.Throws<InvalidOperationException>(
-        () => this.userService.GetRolesByUserId(Guid.NewGuid().ToString()));
+      Assert.Throws<InvalidOperationException>(() => this.userService.GetRolesByUserId(Guid.NewGuid().ToString()));
     }
-
-    #endregion Public Methods
   }
 }

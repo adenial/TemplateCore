@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.ViewModels.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserRoleCreateViewModel.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.ViewModels.User
 {
   /// <summary>
   /// Class UserRoleCreateViewModel.

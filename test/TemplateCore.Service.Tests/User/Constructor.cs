@@ -1,11 +1,16 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constructor.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
+  using System;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using Xunit;
 
   /// <summary>
@@ -13,16 +18,10 @@
   /// </summary>
   public class Constructor
   {
-    #region Private Fields
-
     /// <summary>
     /// The user service
     /// </summary>
     private UserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
 
     /// <summary>
     /// Test the constructor of the class <see cref="UserService"/>
@@ -50,23 +49,9 @@
     [Fact]
     public void ConstructorThrowsException()
     {
-      // This do not count for code coverage, probably due to Action
-      // Action constructor = () => this.userService = new UserService(null);
-      // Assert.Throws(typeof(ArgumentNullException), constructor);
-
-      try
-      {
-        this.userService = new UserService(null);
-      }
-      catch (ArgumentNullException ex)
-      {
-        Assert.IsType(typeof(ArgumentNullException), ex);
-      }
+      // setup, action & assert
+      Assert.Throws<ArgumentNullException>(() => new UserService(null));
     }
-
-    #endregion Public Methods
-
-    #region Private Methods
 
     /// <summary>
     /// Creates the new context options.
@@ -85,7 +70,5 @@
       builder.UseInMemoryDatabase().UseInternalServiceProvider(serviceProvider);
       return builder.Options;
     }
-
-    #endregion Private Methods
   }
 }

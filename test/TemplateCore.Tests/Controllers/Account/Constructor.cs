@@ -1,5 +1,14 @@
-﻿namespace TemplateCore.Tests.Controllers.Account
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constructor.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Account
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Security.Claims;
+  using System.Threading.Tasks;
   using Microsoft.AspNetCore.Builder;
   using Microsoft.AspNetCore.Http;
   using Microsoft.AspNetCore.Identity;
@@ -8,10 +17,6 @@
   using Model;
   using Moq;
   using Services;
-  using System;
-  using System.Collections.Generic;
-  using System.Security.Claims;
-  using System.Threading.Tasks;
   using TemplateCore.Controllers;
   using Xunit;
 
@@ -20,8 +25,6 @@
   /// </summary>
   public class Constructor
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -57,10 +60,6 @@
     /// </summary>
     private UserManager<ApplicationUser> userManager = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Constructor"/> class.
     /// Initializes variables.
@@ -73,14 +72,15 @@
       this.loggerFactory = new Mock<ILoggerFactory>();
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
+    /// Tests the user manager.
     /// https://github.com/aspnet/Identity/blob/master/test/Shared/MockHelpers.cs
     /// </summary>
-    public static UserManager<TUser> TestUserManager<TUser>(IUserStore<TUser> store = null) where TUser : class
+    /// <typeparam name="TUser">The type of the t user.</typeparam>
+    /// <param name="store">The store.</param>
+    /// <returns>Object of the type <see cref="UserManager{TUser}"/> .</returns>
+    public static UserManager<TUser> TestUserManager<TUser>(IUserStore<TUser> store = null)
+      where TUser : class
     {
       store = store ?? new Mock<IUserStore<TUser>>().Object;
       var options = new Mock<IOptions<IdentityOptions>>();
@@ -92,12 +92,17 @@
       userValidators.Add(validator.Object);
       var pwdValidators = new List<PasswordValidator<TUser>>();
       pwdValidators.Add(new PasswordValidator<TUser>());
-      var userManager = new UserManager<TUser>(store, options.Object, new PasswordHasher<TUser>(),
-          userValidators, pwdValidators, new UpperInvariantLookupNormalizer(),
-          new IdentityErrorDescriber(), null,
-          new Mock<ILogger<UserManager<TUser>>>().Object);
-      validator.Setup(v => v.ValidateAsync(userManager, It.IsAny<TUser>()))
-          .Returns(Task.FromResult(IdentityResult.Success)).Verifiable();
+      var userManager = new UserManager<TUser>(
+        store,
+        options.Object,
+        new PasswordHasher<TUser>(),
+        userValidators,
+        pwdValidators,
+        new UpperInvariantLookupNormalizer(),
+        new IdentityErrorDescriber(),
+        null,
+        new Mock<ILogger<UserManager<TUser>>>().Object);
+      validator.Setup(v => v.ValidateAsync(userManager, It.IsAny<TUser>())).Returns(Task.FromResult(IdentityResult.Success)).Verifiable();
       return userManager;
     }
 
@@ -121,10 +126,9 @@
       this.userManager = TestUserManager<ApplicationUser>(null);
 
       // https://github.com/aspnet/Identity/blob/4ef80fabf66624b464e77ac9dd6e8c4461759e0c/test/Microsoft.AspNetCore.Identity.Test/SecurityStampValidatorTest.cs
-      this.signInManager = new Mock<SignInManager<ApplicationUser>>(userManager,
-     contextAccessor.Object, claimsManager.Object, options.Object, null);
-      signInManager.Setup(s => s.ValidateSecurityStampAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user).Verifiable();
-      signInManager.Setup(s => s.CreateUserPrincipalAsync(user)).ReturnsAsync(principal).Verifiable();
+      this.signInManager = new Mock<SignInManager<ApplicationUser>>(this.userManager, contextAccessor.Object, claimsManager.Object, options.Object, null);
+      this.signInManager.Setup(s => s.ValidateSecurityStampAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user).Verifiable();
+      this.signInManager.Setup(s => s.CreateUserPrincipalAsync(user)).ReturnsAsync(principal).Verifiable();
 
       // action
       this.controller = new AccountController(
@@ -137,7 +141,5 @@
       // assert
       Assert.IsType(typeof(AccountController), this.controller);
     }
-
-    #endregion Public Methods
   }
 }

@@ -1,8 +1,15 @@
 {
   "userSecretsId": "aspnet-TemplateCore-18b7a846-a887-493a-9aa0-3f8673255e54",
 
-  "dependencies": {
-    "Microsoft.NETCore.App": {
+  "dependencies":
+  {
+    "StyleCop.Analyzers":
+    {
+      "version": "1.0.0",
+      "type": "build"
+    },
+    "Microsoft.NETCore.App":
+    {
       "version": "1.0.1",
       "type": "platform"
     },
@@ -10,13 +17,15 @@
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0",
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
-    "Microsoft.AspNetCore.Razor.Tools": {
+    "Microsoft.AspNetCore.Razor.Tools":
+    {
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0",
-    "Microsoft.EntityFrameworkCore.Tools": {
+    "Microsoft.EntityFrameworkCore.Tools":
+    {
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
@@ -28,11 +37,13 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
-    "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
+    "Microsoft.VisualStudio.Web.CodeGeneration.Tools":
+    {
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
+    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc":
+    {
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
@@ -48,51 +59,75 @@
     "System.Diagnostics.TextWriterTraceListener": "4.0.0"
   },
 
-    "tools": {
-      "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
-      "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",
-      "Microsoft.EntityFrameworkCore.Tools": "1.0.0-preview2-final",
-      "Microsoft.Extensions.SecretManager.Tools": "1.0.0-preview2-final",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
-        "version": "1.0.0-preview2-final",
-        "imports": [
-          "portable-net45+win8"
-        ]
-      }
-    },
-
-    "frameworks": {
-      "netcoreapp1.0": {
-        "imports": [
-          "dotnet5.6",
-          "portable-net45+win8"
-        ]
-      }
-    },
-
-    "buildOptions": {
-      "emitEntryPoint": true,
-      "preserveCompilationContext": true
-    },
-
-    "runtimeOptions": {
-      "configProperties": {
-        "System.GC.Server": true
-      }
-    },
-
-    "publishOptions": {
-      "include": [
-        "wwwroot",
-        "Views",
-        "Areas/**/Views",
-        "appsettings.json",
-        "web.config"
+  "tools":
+  {
+    "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",
+    "Microsoft.EntityFrameworkCore.Tools": "1.0.0-preview2-final",
+    "Microsoft.Extensions.SecretManager.Tools": "1.0.0-preview2-final",
+    "Microsoft.VisualStudio.Web.CodeGeneration.Tools":
+    {
+      "version": "1.0.0-preview2-final",
+      "imports":
+      [
+        "portable-net45+win8"
       ]
-    },
-
-    "scripts": {
-      "prepublish": [ "bower install", "dotnet bundle" ],
-      "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
     }
+  },
+
+  "frameworks":
+  {
+    "netcoreapp1.0":
+    {
+      "imports":
+      [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+
+  "buildOptions":
+  {
+    "xmlDoc": "true",
+    "additionalArguments":
+    [
+      "/additionalfile:..//..//stylecop.json"
+    ],
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  },
+
+  "runtimeOptions":
+  {
+    "configProperties":
+    {
+      "System.GC.Server": true
+    }
+  },
+
+  "publishOptions":
+  {
+    "include":
+    [
+      "wwwroot",
+      "Views",
+      "Areas/**/Views",
+      "appsettings.json",
+      "web.config"
+    ]
+  },
+
+  "scripts":
+  {
+    "prepublish":
+    [
+      "bower install",
+      "dotnet bundle"
+    ],
+    "postpublish":
+    [
+      "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%"
+    ]
   }
+}

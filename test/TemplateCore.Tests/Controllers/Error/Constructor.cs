@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.Tests.Controllers.Error
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constructor.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Error
 {
   using TemplateCore.Controllers;
   using Xunit;
@@ -8,8 +13,6 @@
   /// </summary>
   public class Constructor
   {
-    #region Public Methods
-
     /// <summary>
     /// Tests the contructor of the class <see cref="ErrorController"/>
     /// Assert the invoke of the constructor returns an instance of the class.
@@ -25,7 +28,5 @@
       // assert
       Assert.IsType(typeof(ErrorController), controller);
     }
-
-    #endregion Public Methods
   }
 }

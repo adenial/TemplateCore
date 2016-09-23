@@ -1,16 +1,18 @@
-﻿namespace TemplateCore.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="AccountController.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Controllers
 {
+  using System.Threading.Tasks;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Mvc;
-  using Microsoft.AspNetCore.Mvc.Rendering;
   using Microsoft.Extensions.Logging;
-  using System.Linq;
-  using System.Security.Claims;
-  using System.Threading.Tasks;
   using TemplateCore.Model;
   using TemplateCore.Services;
-  using ViewModels.Account;
+  using TemplateCore.ViewModels.Account;
 
   /// <summary>
   /// Class AccountController.
@@ -18,18 +20,20 @@
   [Authorize]
   public class AccountController : Controller
   {
-    #region Private Fields
-
     private readonly IEmailSender emailSender;
     private readonly ILogger logger;
     private readonly SignInManager<ApplicationUser> signInManager;
     private readonly ISmsSender smsSender;
     private readonly UserManager<ApplicationUser> userManager;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AccountController"/> class.
+    /// </summary>
+    /// <param name="userManager">The user manager.</param>
+    /// <param name="signInManager">The sign in manager.</param>
+    /// <param name="emailSender">The email sender.</param>
+    /// <param name="smsSender">The SMS sender.</param>
+    /// <param name="loggerFactory">The logger factory.</param>
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
@@ -44,16 +48,16 @@
       this.logger = loggerFactory.CreateLogger<AccountController>();
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
+    /// <summary>
+    /// Accesses the denied.
+    /// </summary>
+    /// <returns>Unauthorized custom view.</returns>
     public IActionResult AccessDenied()
     {
       return this.View();
     }
 
-    [HttpGet]
+    /*[HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> ConfirmEmail(string userId, string code)
     {
@@ -68,9 +72,9 @@
       }
       var result = await userManager.ConfirmEmailAsync(user, code);
       return View(result.Succeeded ? "ConfirmEmail" : "Error");
-    }
+    }*/
 
-    [HttpPost]
+    /*[HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public IActionResult ExternalLogin(string provider, string returnUrl = null)
@@ -79,7 +83,7 @@
       var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
       var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
       return Challenge(properties, provider);
-    }
+    }*/
 
     /*/// <summary>
     /// Externals the login callback.
@@ -165,14 +169,14 @@
       return View(model);
     }*/
 
-    [HttpGet]
-    [AllowAnonymous]
-    public IActionResult ForgotPassword()
-    {
-      return View();
-    }
+    /* [HttpGet]
+     [AllowAnonymous]
+     public IActionResult ForgotPassword()
+     {
+       return View();
+     }*/
 
-    [HttpPost]
+    /*[HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
@@ -197,68 +201,84 @@
 
       // If we got this far, something failed, redisplay form
       return View(model);
-    }
+    }*/
 
-    [HttpGet]
+    /*[HttpGet]
     [AllowAnonymous]
     public IActionResult ForgotPasswordConfirmation()
     {
       return View();
-    }
+    }*/
 
+    /// <summary>
+    /// Logis the specified return URL.
+    /// </summary>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>IActionResult.</returns>
     [HttpGet]
     [AllowAnonymous]
     public IActionResult Login(string returnUrl = null)
     {
-      ViewData["ReturnUrl"] = returnUrl;
-      return View();
+      this.ViewData["ReturnUrl"] = returnUrl;
+      return this.View();
     }
 
+    /// <summary>
+    /// Log in with the provided credentials.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>Redirects to the previous view.</returns>
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
     {
-      ViewData["ReturnUrl"] = returnUrl;
-      if (ModelState.IsValid)
+      this.ViewData["ReturnUrl"] = returnUrl;
+      if (this.ModelState.IsValid)
       {
         // This doesn't count login failures towards account lockout
         // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-        var result = await signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+        var result = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-          logger.LogInformation(1, "User logged in.");
-          return RedirectToLocal(returnUrl);
+          this.logger.LogInformation(1, "User logged in.");
+          return this.RedirectToLocal(returnUrl);
         }
-        if (result.RequiresTwoFactor)
-        {
-          return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-        }
+
+        /* if (result.RequiresTwoFactor)
+         {
+           return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+         }*/
+
         if (result.IsLockedOut)
         {
-          logger.LogWarning(2, "User account locked out.");
-          return View("Lockout");
+          this.logger.LogWarning(2, "User account locked out.");
+          return this.View("Lockout");
         }
         else
         {
-          ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-          return View(model);
+          this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+          return this.View(model);
         }
       }
 
       // If we got this far, something failed, redisplay form
-      return View(model);
+      return this.View(model);
     }
 
+    /// <summary>
+    /// Logs the off.
+    /// </summary>
+    /// <returns>Redirects to Main page.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> LogOff()
     {
-      await signInManager.SignOutAsync();
-      logger.LogInformation(4, "User logged out.");
-      return RedirectToAction(nameof(HomeController.Index), "Home");
+      await this.signInManager.SignOutAsync();
+      this.logger.LogInformation(4, "User logged out.");
+      return this.RedirectToAction(nameof(HomeController.Index), "Home");
     }
-
 
     /*[HttpGet]
     [AllowAnonymous]
@@ -267,7 +287,6 @@
       ViewData["ReturnUrl"] = returnUrl;
       return View();
     }*/
-
 
     /*[HttpPost]
     [AllowAnonymous]
@@ -298,14 +317,14 @@
       return View(model);
     }*/
 
-    [HttpGet]
+    /*[HttpGet]
     [AllowAnonymous]
     public IActionResult ResetPassword(string code = null)
     {
       return code == null ? View("Error") : View();
-    }
+    }*/
 
-    [HttpPost]
+    /*[HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
@@ -330,30 +349,30 @@
 
       AddErrors(result);
       return View();
-    }
+    }*/
 
-    [HttpGet]
+    /*[HttpGet]
     [AllowAnonymous]
     public IActionResult ResetPasswordConfirmation()
     {
       return View();
-    }
+    }*/
 
-    [HttpGet]
-    [AllowAnonymous]
-    public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
-    {
-      var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
-      if (user == null)
-      {
-        return View("Error");
-      }
-      var userFactors = await userManager.GetValidTwoFactorProvidersAsync(user);
-      var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-      return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
-    }
+    /* [HttpGet]
+     [AllowAnonymous]
+     public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
+     {
+       var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
+       if (user == null)
+       {
+         return View("Error");
+       }
+       var userFactors = await userManager.GetValidTwoFactorProvidersAsync(user);
+       var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
+       return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
+     }*/
 
-    [HttpPost]
+    /*[HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SendCode(SendCodeViewModel model)
@@ -387,9 +406,9 @@
       }
 
       return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
-    }
+    }*/
 
-    [HttpGet]
+    /*[HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)
     {
@@ -400,67 +419,74 @@
         return View("Error");
       }
       return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
-    }
+    }*/
 
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
-    {
-      if (!ModelState.IsValid)
-      {
-        return View(model);
-      }
+    /* [HttpPost]
+     [AllowAnonymous]
+     [ValidateAntiForgeryToken]
+     public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
+     {
+       if (!ModelState.IsValid)
+       {
+         return View(model);
+       }
 
-      // The following code protects for brute force attacks against the two factor codes.
-      // If a user enters incorrect codes for a specified amount of time then the user account
-      // will be locked out for a specified amount of time.
-      var result = await signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe, model.RememberBrowser);
-      if (result.Succeeded)
-      {
-        return RedirectToLocal(model.ReturnUrl);
-      }
-      if (result.IsLockedOut)
-      {
-        logger.LogWarning(7, "User account locked out.");
-        return View("Lockout");
-      }
-      else
-      {
-        ModelState.AddModelError(string.Empty, "Invalid code.");
-        return View(model);
-      }
-    }
+       // The following code protects for brute force attacks against the two factor codes.
+       // If a user enters incorrect codes for a specified amount of time then the user account
+       // will be locked out for a specified amount of time.
+       var result = await signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe, model.RememberBrowser);
+       if (result.Succeeded)
+       {
+         return RedirectToLocal(model.ReturnUrl);
+       }
+       if (result.IsLockedOut)
+       {
+         logger.LogWarning(7, "User account locked out.");
+         return View("Lockout");
+       }
+       else
+       {
+         ModelState.AddModelError(string.Empty, "Invalid code.");
+         return View(model);
+       }
+     }*/
 
-    #endregion Public Methods
-
-    #region Helpers
-
+    /// <summary>
+    /// Adds the errors.
+    /// </summary>
+    /// <param name="result">The result.</param>
     private void AddErrors(IdentityResult result)
     {
       foreach (var error in result.Errors)
       {
-        ModelState.AddModelError(string.Empty, error.Description);
+        this.ModelState.AddModelError(string.Empty, error.Description);
       }
     }
 
+    /// <summary>
+    /// Gets the current user asynchronous.
+    /// </summary>
+    /// <returns>Current user.</returns>
     private Task<ApplicationUser> GetCurrentUserAsync()
     {
-      return userManager.GetUserAsync(HttpContext.User);
+      return this.userManager.GetUserAsync(this.HttpContext.User);
     }
 
+    /// <summary>
+    /// Redirects to local.
+    /// </summary>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>Redirects to the returnUrl.</returns>
     private IActionResult RedirectToLocal(string returnUrl)
     {
-      if (Url.IsLocalUrl(returnUrl))
+      if (this.Url.IsLocalUrl(returnUrl))
       {
-        return Redirect(returnUrl);
+        return this.Redirect(returnUrl);
       }
       else
       {
-        return RedirectToAction(nameof(HomeController.Index), "Home");
+        return this.RedirectToAction(nameof(HomeController.Index), "Home");
       }
     }
-
-    #endregion Helpers
   }
 }

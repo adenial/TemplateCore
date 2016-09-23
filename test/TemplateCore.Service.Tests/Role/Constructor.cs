@@ -1,12 +1,17 @@
-﻿namespace TemplateCore.Service.Tests.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constructor.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.Role
 {
-  using Implement;
-  using Interfaces;
+  using System;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
@@ -14,16 +19,10 @@
   /// </summary>
   public class Constructor
   {
-    #region Private Fields
-
     /// <summary>
     /// The role service
     /// </summary>
     private IRoleService roleService = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the constructor of the class <see cref="RoleService"/>.
@@ -54,10 +53,6 @@
       Assert.Throws<ArgumentNullException>(() => this.roleService = new RoleService(null));
     }
 
-    #endregion Public Methods
-
-    #region Private Methods
-
     /// <summary>
     /// Creates the new context options.
     /// </summary>
@@ -75,7 +70,5 @@
       builder.UseInMemoryDatabase().UseInternalServiceProvider(serviceProvider);
       return builder.Options;
     }
-
-    #endregion Private Methods
   }
 }

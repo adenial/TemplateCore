@@ -1,19 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using Moq;
-using TemplateCore.Controllers;
-using TemplateCore.Service.Interfaces;
-using Xunit;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="Delete.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Tests.Controllers.Role
 {
+  using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.Localization;
+  using Moq;
+  using TemplateCore.Controllers;
+  using TemplateCore.Service.Interfaces;
+  using Xunit;
+
   /// <summary>
   /// Class test that tests the method Delete of the class <see cref="RoleController"/>.
   /// </summary>
   public class Delete
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -26,10 +29,6 @@ namespace TemplateCore.Tests.Controllers.Role
 
     private Mock<IRoleService> roleService = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Delete"/> class.
     /// </summary>
@@ -39,10 +38,6 @@ namespace TemplateCore.Tests.Controllers.Role
 
       this.localizer = new Mock<IStringLocalizer<RoleController>>();
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method Delete of the class <see cref="RoleController"/>.
@@ -77,7 +72,5 @@ namespace TemplateCore.Tests.Controllers.Role
       // assert
       Assert.IsType(typeof(RedirectToActionResult), result);
     }
-
-    #endregion Public Methods
   }
 }

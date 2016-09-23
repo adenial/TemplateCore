@@ -1,13 +1,18 @@
+//-----------------------------------------------------------------------
+// <copyright file="RoleController.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Controllers
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Service.Interfaces;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
-  using ViewModels.Role;
+  using TemplateCore.ViewModels.Role;
 
   /// <summary>
   /// Class AdminRoleController.
@@ -15,15 +20,15 @@ namespace TemplateCore.Controllers
   [Authorize(Roles = "Administrator")]
   public class RoleController : Controller
   {
-    #region Private Fields
-
+    /// <summary>
+    /// The role service
+    /// </summary>
     private IRoleService roleService;
 
+    /// <summary>
+    /// The localizer
+    /// </summary>
     private IStringLocalizer<RoleController> localizer;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RoleController" /> class.
@@ -46,10 +51,6 @@ namespace TemplateCore.Controllers
       this.roleService = roleService;
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Creates this instance.
     /// </summary>
@@ -61,7 +62,7 @@ namespace TemplateCore.Controllers
       var model = new AdminRoleCreateViewModel();
 
       // pass it to view.
-      return View(model);
+      return this.View(model);
     }
 
     /// <summary>
@@ -74,7 +75,7 @@ namespace TemplateCore.Controllers
     [Authorize(Roles = "Administrator")]
     public IActionResult Create(AdminRoleCreateViewModel model)
     {
-      if (ModelState.IsValid)
+      if (this.ModelState.IsValid)
       {
         // validate if new role can be inserted due name (avoid duplicated roles).
         bool canInsert = this.roleService.CanInsert(model.Name);
@@ -88,8 +89,8 @@ namespace TemplateCore.Controllers
         else
         {
           // add model error and return view with model.
-          ModelState.AddModelError(string.Empty, this.localizer["There's already a role with the provided name."]);
-          return View(model);
+          this.ModelState.AddModelError(string.Empty, this.localizer["There's already a role with the provided name."]);
+          return this.View(model);
         }
       }
       else
@@ -113,7 +114,6 @@ namespace TemplateCore.Controllers
       }
 
       // query the role given the name.
-
       this.roleService.DeleteRoleByName(name);
       return this.RedirectToAction("Index");
     }
@@ -126,13 +126,9 @@ namespace TemplateCore.Controllers
     public IActionResult Index()
     {
       var roleNames = this.roleService.GetAllRoleNames();
-      var model = GetIndexViewModelFromRoles(roleNames);
-      return View(model);
+      var model = this.GetIndexViewModelFromRoles(roleNames);
+      return this.View(model);
     }
-
-    #endregion Public Methods
-
-    #region Private Methods
 
     /// <summary>
     /// Gets the view model of the Index Action.
@@ -143,7 +139,5 @@ namespace TemplateCore.Controllers
     {
       return roleNames.Select(x => new AdminRoleIndexViewModel { Name = x }).ToList();
     }
-
-    #endregion Private Methods
   }
 }

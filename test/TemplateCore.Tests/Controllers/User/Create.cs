@@ -1,13 +1,18 @@
-﻿namespace TemplateCore.Tests.Controllers.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Create.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.User
 {
+  using System;
+  using System.Collections.Generic;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Moq;
-  using Service.Interfaces;
-  using System;
-  using System.Collections.Generic;
   using TemplateCore.Controllers;
+  using TemplateCore.Service.Interfaces;
   using TemplateCore.ViewModels.User;
   using Xunit;
 
@@ -16,8 +21,6 @@
   /// </summary>
   public class Create
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -27,10 +30,6 @@
     /// The localizer
     /// </summary>
     private Mock<IStringLocalizer<UserController>> localizer = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
 
     /// <summary>
     /// Test the method Create of the class <see cref="UserController"/>.
@@ -97,7 +96,7 @@
       this.localizer = new Mock<IStringLocalizer<UserController>>();
       Mock<IUserService> userService = new Mock<IUserService>();
       this.controller = new UserController(userService.Object, this.localizer.Object);
-      this.controller.ModelState.AddModelError("", "The Email is a required field.");
+      this.controller.ModelState.AddModelError(string.Empty, "The Email is a required field.");
 
       // action
       var result = (this.controller.Create(model) as ViewResult).Model as UserCreateViewModel;
@@ -172,10 +171,6 @@
       return roles;
     }
 
-    #endregion Public Methods
-
-    #region Private Methods
-
     /// <summary>
     /// Creates the view model.
     /// </summary>
@@ -194,7 +189,5 @@
 
       return model;
     }
-
-    #endregion Private Methods
   }
 }

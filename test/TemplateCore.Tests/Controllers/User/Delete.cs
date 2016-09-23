@@ -1,15 +1,20 @@
-﻿namespace TemplateCore.Tests.Controllers.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Delete.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.User
 {
+  using System;
+  using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Moq;
-  using Service.Interfaces;
   using TemplateCore.Controllers;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
-  using Microsoft.AspNetCore.Mvc;
-  using System;
 
   /// <summary>
-  /// Class test that tests the method Delete of the class <see cref="UserController"/>. 
+  /// Class test that tests the method Delete of the class <see cref="UserController"/>.
   /// </summary>
   public class Delete
   {
@@ -30,7 +35,7 @@
 
     /// <summary>
     /// Tests the method Delete of the class <see cref="UserController"/>.
-    /// Assert the invoke of the method returns <see cref="NotFoundResult"/> 
+    /// Assert the invoke of the method returns <see cref="NotFoundResult"/>
     /// </summary>
     [Fact]
     public void DeleteThrowsExceptionDueParameter()
@@ -71,7 +76,7 @@
 
     /// <summary>
     /// Tests the method Delete of the class <see cref="UserController"/>.
-    /// Assert the invoke of the method returns an instance of the class <see cref="RedirectToActionResult"/> 
+    /// Assert the invoke of the method returns an instance of the class <see cref="RedirectToActionResult"/>
     /// </summary>
     [Fact]
     public void DeleteOk()

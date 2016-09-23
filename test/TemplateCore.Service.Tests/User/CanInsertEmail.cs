@@ -1,22 +1,25 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="CanInsertEmail.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Repository;
-  using System;
-  using System.Linq;
   using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using Xunit;
 
   /// <summary>
   /// Test Class that test the method CanInsertEmail of the service class <see cref="UserService" /></summary>
   public class CanInsertEmail
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -26,56 +29,6 @@
     /// The user service
     /// </summary>
     private UserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
-
-    /// <summary>
-    /// Test the method CanInsertEmail of the class <see cref="UserService"/>
-    /// Assert the invoke of the method returns false.
-    /// </summary>
-    [Fact]
-    public void CanInsertMailFalse()
-    {
-      // setup
-      using (var context = new TemplateDbContext(this.contextOptions))
-      {
-        IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-        this.userService = new UserService(unitOfWork);
-
-        // action
-        var result = this.userService.CanInsertEmail("test@test.com");
-
-        // assert
-        Assert.False(result);
-      }
-    }
-
-    /// <summary>
-    /// Test the method CanInsertEmail of the class <see cref="UserService"/>
-    /// Assert the invoke of the method returns true.
-    /// </summary>
-    [Fact]
-    public void CanInsertMailTrue()
-    {
-      // setup
-      using (var context = new TemplateDbContext(this.contextOptions))
-      {
-        IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-        this.userService = new UserService(unitOfWork);
-
-        // action
-        var result = this.userService.CanInsertEmail("admin@test.com");
-
-        // assert
-        Assert.True(result);
-      }
-    }
-
-    #endregion Public Methods
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CanInsertEmail"/> class.
@@ -128,6 +81,46 @@
       }
     }
 
-    #endregion Public Constructors
+    /// <summary>
+    /// Test the method CanInsertEmail of the class <see cref="UserService"/>
+    /// Assert the invoke of the method returns false.
+    /// </summary>
+    [Fact]
+    public void CanInsertMailFalse()
+    {
+      // setup
+      using (var context = new TemplateDbContext(this.contextOptions))
+      {
+        IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+        this.userService = new UserService(unitOfWork);
+
+        // action
+        var result = this.userService.CanInsertEmail("test@test.com");
+
+        // assert
+        Assert.False(result);
+      }
+    }
+
+    /// <summary>
+    /// Test the method CanInsertEmail of the class <see cref="UserService"/>
+    /// Assert the invoke of the method returns true.
+    /// </summary>
+    [Fact]
+    public void CanInsertMailTrue()
+    {
+      // setup
+      using (var context = new TemplateDbContext(this.contextOptions))
+      {
+        IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+        this.userService = new UserService(unitOfWork);
+
+        // action
+        var result = this.userService.CanInsertEmail("admin@test.com");
+
+        // assert
+        Assert.True(result);
+      }
+    }
   }
 }

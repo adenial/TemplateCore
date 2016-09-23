@@ -1,15 +1,20 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="UpdateUserInfo.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
-  using Interfaces;
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
@@ -17,8 +22,6 @@
   /// </summary>
   public class UpdateUserInfo
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -33,10 +36,6 @@
     /// The user service
     /// </summary>
     private IUserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UpdateUserInfo"/> class.
@@ -90,10 +89,6 @@
       }
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Tests the method UpdateUserInfo of the class <see cref="UserService"/>.
     /// Assert the name of the user was updated.
@@ -131,7 +126,5 @@
       // action && assert
       Assert.Throws<InvalidOperationException>(() => this.userService.UpdateUserInfo(Guid.NewGuid().ToString(), "Test"));
     }
-
-    #endregion Public Methods
   }
 }

@@ -1,11 +1,16 @@
-﻿namespace TemplateCore.Tests.Controllers.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="Index.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Role
 {
+  using System.Collections.Generic;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Moq;
-  using Service.Interfaces;
-  using System.Collections.Generic;
   using TemplateCore.Controllers;
+  using TemplateCore.Service.Interfaces;
   using ViewModels.Role;
   using Xunit;
 
@@ -14,8 +19,6 @@
   /// </summary>
   public class Index
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -31,10 +34,6 @@
     /// </summary>
     private Mock<IRoleService> roleService = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Index"/> class.
     /// </summary>
@@ -44,10 +43,6 @@
 
       this.localizer = new Mock<IStringLocalizer<RoleController>>();
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method Index of the class <see cref="RoleController"/>.
@@ -74,7 +69,5 @@
       // assert
       Assert.IsType(typeof(List<AdminRoleIndexViewModel>), result);
     }
-
-    #endregion Public Methods
   }
 }

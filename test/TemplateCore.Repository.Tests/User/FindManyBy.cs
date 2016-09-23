@@ -1,12 +1,17 @@
-﻿namespace TemplateCore.Repository.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="FindManyBy.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Repository.Tests.User
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
   using TemplateCore.Model;
   using Xunit;
 

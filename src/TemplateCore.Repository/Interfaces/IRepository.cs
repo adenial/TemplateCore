@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.Repository
+﻿//-----------------------------------------------------------------------
+// <copyright file="IRepository.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Repository
 {
   using System;
   using System.Collections.Generic;
@@ -9,10 +14,9 @@
   /// Interface IRepository
   /// </summary>
   /// <typeparam name="TEntity">The type of the t entity.</typeparam>
-  public interface IRepository<TEntity> where TEntity : class
+  public interface IRepository<TEntity>
+    where TEntity : class
   {
-    #region Public Methods
-
     /// <summary>
     /// Delete the specified entity.
     /// </summary>
@@ -70,7 +74,5 @@
     /// </summary>
     /// <param name="entity">The entity to update.</param>
     void Update(TEntity entity);
-
-    #endregion Public Methods
   }
 }

@@ -1,9 +1,13 @@
-﻿namespace TemplateCore.Service.Interfaces
+﻿//-----------------------------------------------------------------------
+// <copyright file="IUserService.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Interfaces
 {
+  using System.Collections.Generic;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Model;
-  using System.Collections.Generic;
-  using System;
 
   /// <summary>
   /// Interface IUserService
@@ -62,8 +66,7 @@
     /// Gets the user by identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
-    /// <exception cref="InvalidOperationException">When the user is not found with the provided Id</exception> 
-    /// <returns>ApplicationUser.</returns>
+    /// <returns>User <see cref="ApplicationUser"/>.</returns>
     ApplicationUser GetUserById(string id);
 
     /// <summary>
@@ -77,7 +80,7 @@
     /// Gets the user roles by user identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
-    /// <returns>List of type <see cref="IdentityUserRole<string>"/> .</returns>
+    /// <returns>List of type <see cref="IdentityUserRole{TKey}"/>.</returns>
     IEnumerable<IdentityUserRole<string>> GetUserRolesByUserId(string id);
 
     /// <summary>
@@ -85,12 +88,12 @@
     /// </summary>
     /// <param name="newRolesToInsert">The new roles to insert.</param>
     /// <param name="rolesToDelete">The roles to delete.</param>
-    /// <param name="newName">The new name.</param>
     void UpdateUserRoles(List<IdentityUserRole<string>> newRolesToInsert, List<IdentityUserRole<string>> rolesToDelete);
 
     /// <summary>
     /// Updates the user information.
     /// </summary>
+    /// <param name="userId">The user identifier.</param>
     /// <param name="name">The name.</param>
     void UpdateUserInfo(string userId, string name);
   }

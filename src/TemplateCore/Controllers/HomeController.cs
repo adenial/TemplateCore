@@ -1,10 +1,15 @@
-﻿namespace TemplateCore.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="HomeController.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Controllers
 {
+  using System;
   using Microsoft.AspNetCore.Http;
   using Microsoft.AspNetCore.Localization;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
-  using System;
 
   /// <summary>
   /// Class HomeController.
@@ -36,7 +41,7 @@
     /// <returns>Index Page.</returns>
     public IActionResult Index()
     {
-      return View();
+      return this.View();
     }
 
     /// <summary>
@@ -48,13 +53,12 @@
     [HttpPost]
     public IActionResult SetLanguage(string culture, string returnUrl)
     {
-      Response.Cookies.Append(
+      this.Response.Cookies.Append(
           CookieRequestCultureProvider.DefaultCookieName,
           CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-          new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-      );
+          new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
 
-      return LocalRedirect(returnUrl);
+      return this.LocalRedirect(returnUrl);
     }
 
     /// <summary>
@@ -63,9 +67,9 @@
     /// <returns>About Page.</returns>
     public IActionResult About()
     {
-      ViewData["Message"] = this.localizer["Your application description page."];
+      this.ViewData["Message"] = this.localizer["Your application description page."];
 
-      return View();
+      return this.View();
     }
 
     /// <summary>
@@ -74,9 +78,9 @@
     /// <returns>Contact Page.</returns>
     public IActionResult Contact()
     {
-      ViewData["Message"] = this.localizer["Your contact page."];
+      this.ViewData["Message"] = this.localizer["Your contact page."];
 
-      return View();
+      return this.View();
     }
   }
 }

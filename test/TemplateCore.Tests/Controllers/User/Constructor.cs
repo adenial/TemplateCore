@@ -1,16 +1,19 @@
-﻿
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constructor.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Tests.Controllers.User
 {
-  using Microsoft.Extensions.Localization;
-  using Microsoft.Extensions.Logging;
-  using Moq;
-  using Service.Interfaces;
   using System;
+  using Microsoft.Extensions.Localization;
+  using Moq;
   using TemplateCore.Controllers;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
-  /// Class test that tests the constructor of the class <see cref="UserController"/> 
+  /// Class test that tests the constructor of the class <see cref="UserController"/>
   /// </summary>
   public class Constructor
   {
@@ -20,7 +23,7 @@ namespace TemplateCore.Tests.Controllers.User
     private Mock<IUserService> userService = null;
 
     /// <summary>
-    /// Test the constructor of the class <see cref="UserController"/>. 
+    /// Test the constructor of the class <see cref="UserController"/>.
     /// Assert the invoke of the method returns an instance of the Controller.
     /// </summary>
     [Fact]
@@ -29,7 +32,6 @@ namespace TemplateCore.Tests.Controllers.User
       // setup
       this.userService = new Mock<IUserService>();
       Mock<IStringLocalizer<UserController>> localizer = new Mock<IStringLocalizer<UserController>>();
-      // Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
 
       // action
       var result = new UserController(this.userService.Object, localizer.Object);
@@ -48,7 +50,6 @@ namespace TemplateCore.Tests.Controllers.User
       // setup.
       UserController controller = null;
       Mock<IStringLocalizer<UserController>> localizer = new Mock<IStringLocalizer<UserController>>();
-      // Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
       Action constructor = () => controller = new UserController(null, localizer.Object);
 
       // action & assert
@@ -65,7 +66,6 @@ namespace TemplateCore.Tests.Controllers.User
       // setup.
       UserController controller = null;
       Mock<IUserService> userService = new Mock<IUserService>();
-      // Mock<ILogger<UserController>> logger = new Mock<ILogger<UserController>>();
       Action constructor = () => controller = new UserController(userService.Object, null);
 
       // action & assert

@@ -1,7 +1,12 @@
-﻿using System;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="AspNetUser.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Model
 {
+  using System;
+
   /// <summary>
   /// Class AspNetUser.
   /// </summary>

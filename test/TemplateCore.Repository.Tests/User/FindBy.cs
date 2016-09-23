@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using TemplateCore.Model;
-using Xunit;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="FindBy.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Repository.Tests.User
 {
+  using System;
+  using System.Linq;
+  using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+  using Microsoft.EntityFrameworkCore;
+  using Microsoft.Extensions.DependencyInjection;
+  using TemplateCore.Model;
+  using Xunit;
+
   /// <summary>
   /// Class test that tests the method FindBy of the <see cref="Repository{TEntity}"/> class.
   /// </summary>

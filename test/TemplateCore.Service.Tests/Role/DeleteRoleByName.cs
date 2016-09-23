@@ -1,18 +1,23 @@
-﻿namespace TemplateCore.Service.Tests.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="DeleteRoleByName.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.Role
 {
-  using Implement;
-  using Interfaces;
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
-  /// Class test that tests the method DeleteRoleByName of the class <see cref="RoleService"/>. 
+  /// Class test that tests the method DeleteRoleByName of the class <see cref="RoleService"/>.
   /// </summary>
   public class DeleteRoleByName
   {
@@ -25,61 +30,6 @@
     /// The role service
     /// </summary>
     private IRoleService roleService = null;
-
-    /// <summary>
-    /// Tests the method DeleteRoleByName of the class <see cref="RoleService"/>.
-    /// Assert the role was deleted.
-    /// Happy path.
-    /// </summary>
-    [Fact]
-    public void DeleteRoleByNameOk()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.roleService = new RoleService(unitOfWork);
-
-      // action
-      int countBeforeDeletetion = this.roleService.GetAllRoleNames().ToList().Count;
-      this.roleService.DeleteRoleByName("User");
-      int countAfterDeletion = this.roleService.GetAllRoleNames().ToList().Count;
-
-      // assert
-      Assert.True(countBeforeDeletetion > countAfterDeletion);
-    }
-
-    /// <summary>
-    /// Tests the method DeleteRoleByName of the class <see cref="RoleService"/>.
-    /// Assert the invoke of the method throws an exception of type <see cref="ArgumentNullException"/> 
-    /// </summary>
-    [Fact]
-    public void DeleteRoleByNameThrowsExceptionDueParameter()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.roleService = new RoleService(unitOfWork);
-
-      // action & assert
-      Assert.Throws<ArgumentNullException>(() => this.roleService.DeleteRoleByName(""));
-    }
-
-    /// <summary>
-    /// Tests the method DeleteRoleByName of the class <see cref="RoleService"/>.
-    /// Assert the invoke of the method throws an exception of type <see cref="ArgumentNullException"/> 
-    /// Tests the case when the role is not found with the provided Id.
-    /// </summary>
-    [Fact]
-    public void DeleteRoleByNameThrowsExceptionDueRoleNotFound()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.roleService = new RoleService(unitOfWork);
-
-      // action & assert
-      Assert.Throws<ArgumentNullException>(() => this.roleService.DeleteRoleByName("Administrator"));
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DeleteRoleByName"/> class.
@@ -107,6 +57,61 @@
 
         context.SaveChangesAsync();
       }
+    }
+
+    /// <summary>
+    /// Tests the method DeleteRoleByName of the class <see cref="RoleService"/>.
+    /// Assert the role was deleted.
+    /// Happy path.
+    /// </summary>
+    [Fact]
+    public void DeleteRoleByNameOk()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.roleService = new RoleService(unitOfWork);
+
+      // action
+      int countBeforeDeletetion = this.roleService.GetAllRoleNames().ToList().Count;
+      this.roleService.DeleteRoleByName("User");
+      int countAfterDeletion = this.roleService.GetAllRoleNames().ToList().Count;
+
+      // assert
+      Assert.True(countBeforeDeletetion > countAfterDeletion);
+    }
+
+    /// <summary>
+    /// Tests the method DeleteRoleByName of the class <see cref="RoleService"/>.
+    /// Assert the invoke of the method throws an exception of type <see cref="ArgumentNullException"/>
+    /// </summary>
+    [Fact]
+    public void DeleteRoleByNameThrowsExceptionDueParameter()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.roleService = new RoleService(unitOfWork);
+
+      // action & assert
+      Assert.Throws<ArgumentNullException>(() => this.roleService.DeleteRoleByName(string.Empty));
+    }
+
+    /// <summary>
+    /// Tests the method DeleteRoleByName of the class <see cref="RoleService"/>.
+    /// Assert the invoke of the method throws an exception of type <see cref="ArgumentNullException"/>
+    /// Tests the case when the role is not found with the provided Id.
+    /// </summary>
+    [Fact]
+    public void DeleteRoleByNameThrowsExceptionDueRoleNotFound()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.roleService = new RoleService(unitOfWork);
+
+      // action & assert
+      Assert.Throws<ArgumentNullException>(() => this.roleService.DeleteRoleByName("Administrator"));
     }
   }
 }

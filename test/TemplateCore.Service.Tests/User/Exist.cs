@@ -1,14 +1,19 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Exist.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using Xunit;
 
   /// <summary>
@@ -16,8 +21,6 @@
   /// </summary>
   public class Exist
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -32,52 +35,6 @@
     /// The user service
     /// </summary>
     private UserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
-
-    /// <summary>
-    /// Test the method Exist of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns False.
-    /// </summary>
-    [Fact]
-    public void ExistFalse()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      var result = this.userService.Exist(Guid.NewGuid().ToString());
-
-      // assert
-      Assert.False(result);
-    }
-
-    /// <summary>
-    /// Test the method Exist of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns True.
-    /// </summary>
-    [Fact]
-    public void ExistTrue()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      var result = this.userService.Exist(this.userId);
-
-      // assert
-      Assert.True(result);
-    }
-
-    #endregion Public Methods
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Exist"/> class.
@@ -134,6 +91,42 @@
       }
     }
 
-    #endregion Public Constructors
+    /// <summary>
+    /// Test the method Exist of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method returns False.
+    /// </summary>
+    [Fact]
+    public void ExistFalse()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      var result = this.userService.Exist(Guid.NewGuid().ToString());
+
+      // assert
+      Assert.False(result);
+    }
+
+    /// <summary>
+    /// Test the method Exist of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method returns True.
+    /// </summary>
+    [Fact]
+    public void ExistTrue()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      var result = this.userService.Exist(this.userId);
+
+      // assert
+      Assert.True(result);
+    }
   }
 }

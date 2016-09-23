@@ -1,8 +1,16 @@
-﻿namespace TemplateCore.ViewModels.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserIndexViewModel.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.ViewModels.User
 {
   using System;
   using System.ComponentModel.DataAnnotations;
 
+  /// <summary>
+  /// Class UserIndexViewModel.
+  /// </summary>
   public class UserIndexViewModel
   {
     /// <summary>

@@ -1,10 +1,15 @@
-﻿namespace TemplateCore.Tests.Controllers.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="Create.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Role
 {
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Moq;
-  using Service.Interfaces;
   using TemplateCore.Controllers;
+  using TemplateCore.Service.Interfaces;
   using ViewModels.Role;
   using Xunit;
 
@@ -13,8 +18,6 @@
   /// </summary>
   public class Create
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -30,10 +33,6 @@
     /// </summary>
     private Mock<IRoleService> roleService = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Create"/> class.
     /// </summary>
@@ -42,10 +41,6 @@
       this.roleService = new Mock<IRoleService>();
       this.localizer = new Mock<IStringLocalizer<RoleController>>();
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method create of the class <see cref="RoleController"/>
@@ -124,7 +119,5 @@
       // assert
       Assert.IsType(typeof(RedirectToActionResult), result);
     }
-
-    #endregion Public Methods
   }
 }

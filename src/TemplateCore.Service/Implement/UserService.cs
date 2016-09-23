@@ -1,12 +1,17 @@
-﻿namespace TemplateCore.Service.Implement
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserService.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Implement
 {
-  using Microsoft.AspNetCore.Identity;
-  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-  using Model;
-  using Repository;
   using System;
   using System.Collections.Generic;
   using System.Linq;
+  using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
   using TemplateCore.Service.Interfaces;
 
   /// <summary>
@@ -14,21 +19,16 @@
   /// </summary>
   public class UserService : IUserService
   {
-    #region Private Fields
-
     /// <summary>
     /// UnitOfWork
     /// </summary>
     private IUnitOfWork<TemplateDbContext> unitOfWork = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="UserService"/> class.
+    /// Initializes a new instance of the <see cref="UserService" /> class.
     /// </summary>
-    /// <param name="dataContext">The data context.</param>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <exception cref="System.ArgumentNullException">unitOfWork</exception>
     /// <exception cref="ArgumentNullException">dataContext</exception>
     public UserService(IUnitOfWork<TemplateDbContext> unitOfWork)
     {
@@ -40,10 +40,6 @@
       this.unitOfWork = unitOfWork;
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Determines whether this instance [can insert email] the specified email.
     /// </summary>
@@ -54,8 +50,6 @@
       bool canInsert = false;
 
       var query = this.unitOfWork.UserRepository.FindBy(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
-
-      //var query = this.dataContext.Users.Where(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
 
       if (query == null)
       {
@@ -76,8 +70,6 @@
       bool canInsert = false;
 
       var query = this.unitOfWork.UserRepository.FindBy(x => x.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase));
-
-      //var query = this.dataContext.Users.Where(x => x.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
 
       if (query == null)
       {
@@ -106,7 +98,6 @@
       {
         throw new InvalidOperationException(string.Format("Usert not found with the provided Id, Id provided: {0}", id));
       }
-
     }
 
     /// <summary>
@@ -144,7 +135,7 @@
           Id = new Guid(user.Id),
           Name = user.Name,
           UserName = user.UserName,
-          Roles = GetRolesString(user.Id),
+          Roles = this.GetRolesString(user.Id),
           Email = user.Email
         };
 
@@ -178,8 +169,6 @@
       }
 
       List<IdentityRole> userRoles = new List<IdentityRole>();
-      // query all the roles... by user id.
-
       var roles = this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase));
 
       foreach (var role in roles)
@@ -195,8 +184,7 @@
     /// Gets the user by identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
-    /// <exception cref="InvalidOperationException">When the user is not found with the provided Id</exception> 
-    /// <returns>ApplicationUser.</returns>
+    /// <returns>User <see cref="ApplicationUser"/>.</returns>
     public ApplicationUser GetUserById(string id)
     {
       var query = this.unitOfWork.UserRepository.FindBy(x => x.Id.Equals(id, StringComparison.CurrentCultureIgnoreCase));
@@ -215,19 +203,10 @@
     /// Gets the user roles by user identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
-    /// <returns>List of type <see cref="IdentityUserRole<string>"/> .</returns>
+    /// <returns>List of type <see cref="IdentityUserRole{TKey}" />.</returns>
     public IEnumerable<IdentityUserRole<string>> GetUserRolesByUserId(string id)
     {
       return this.unitOfWork.UseRolesRepository.FindManyBy(x => x.UserId.Equals(id, StringComparison.CurrentCultureIgnoreCase)).ToList();
-
-      /*if (query.Count > 0)
-      {
-        return query;
-      }
-      else
-      {
-        throw new InvalidOperationException(string.Format("No UserRoles were found with the provided user Id, provided user Id: {0}", id));
-      }*/
     }
 
     /// <summary>
@@ -261,12 +240,6 @@
       // attach to context.
       // this.dataContext.Users.Add(newUser);
       this.unitOfWork.UserRepository.Insert(newUser);
-
-      // save changes in context.
-      //this.unitOfWork.Commit();
-
-      // query for the user by its username, or check if the newUser's Id is updated after commit.
-      //var insertedUser = this.unitOfWork.UserRepository.FindBy(x => x.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase));
 
       var allUserRoles = this.unitOfWork.UseRolesRepository.GetAll().ToList();
 
@@ -312,7 +285,6 @@
     /// </summary>
     /// <param name="newRolesToInsert">The new roles to insert.</param>
     /// <param name="rolesToDelete">The roles to delete.</param>
-    /// <param name="newName">The new name.</param>
     public void UpdateUserRoles(List<IdentityUserRole<string>> newRolesToInsert, List<IdentityUserRole<string>> rolesToDelete)
     {
       foreach (var newRole in newRolesToInsert)
@@ -330,10 +302,6 @@
       this.unitOfWork.Commit();
     }
 
-    #endregion Public Methods
-
-    #region Private Methods
-
     /// <summary>
     /// Gets the roles string.
     /// </summary>
@@ -342,12 +310,6 @@
     private string GetRolesString(string userId)
     {
       List<string> roleNames = new List<string>();
-
-      //foreach (var role in roles)
-      //{
-      //  var query = this.unitOfWork.RoleRepository.FindBy(x => x.Id.Equals(role.RoleId));
-      //  roleNames.Add(query.Name);
-      //}
 
       // query all the UserRoles.
       var userRoles = this.unitOfWork.UseRolesRepository.GetAll().ToList();
@@ -366,7 +328,5 @@
 
       return string.Join(", ", roleNames);
     }
-
-    #endregion Private Methods
   }
 }

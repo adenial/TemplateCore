@@ -1,3 +1,8 @@
+//-----------------------------------------------------------------------
+// <copyright file="ErrorController.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Controllers
 {
   using Microsoft.AspNetCore.Mvc;
@@ -23,7 +28,7 @@ namespace TemplateCore.Controllers
     {
       // at Startup
       // app.UseExceptionHandler("/Home/Error")
-      return View("~/Views/Shared/Error.cshtml");
+      return this.View("~/Views/Shared/Error.cshtml");
     }
 
     /// <summary>
@@ -32,16 +37,16 @@ namespace TemplateCore.Controllers
     /// <returns>NotFound Page or Error.</returns>
     public IActionResult Errors()
     {
-      var statusCode = HttpContext.Response.StatusCode;
+      var statusCode = this.HttpContext.Response.StatusCode;
 
       if (statusCode == 404)
       {
-        return View("~/Views/Shared/NotFound.cshtml");
+        return this.View("~/Views/Shared/NotFound.cshtml");
       }
       else
       {
         // othe errors....
-        return View("~/Views/Shared/Error.cshtml");
+        return this.View("~/Views/Shared/Error.cshtml");
       }
     }
   }

@@ -1,12 +1,17 @@
-﻿namespace TemplateCore.Service.Tests.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="CanInsert.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.Role
 {
-  using Implement;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
   using Model;
-  using Repository;
-  using System.Linq;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using TemplateCore.Service.Interfaces;
   using Xunit;
 
@@ -15,8 +20,6 @@
   /// </summary>
   public class CanInsert
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -26,10 +29,6 @@
     /// The role service
     /// </summary>
     private IRoleService roleService = null;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CanInsert"/> class.
@@ -58,10 +57,6 @@
         context.SaveChangesAsync();
       }
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method CanInsert of the class <see cref="RoleService"/>
@@ -100,7 +95,5 @@
       // assert
       Assert.True(result);
     }
-
-    #endregion Public Methods
   }
 }

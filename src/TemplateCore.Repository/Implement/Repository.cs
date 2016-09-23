@@ -1,41 +1,28 @@
-﻿namespace TemplateCore.Repository
+﻿//-----------------------------------------------------------------------
+// <copyright file="Repository.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Repository
 {
-  using Microsoft.EntityFrameworkCore;
   using System;
   using System.Collections.Generic;
   using System.Linq;
   using System.Linq.Expressions;
   using System.Threading.Tasks;
+  using Microsoft.EntityFrameworkCore;
 
   /// <summary>
   /// Class Repository.
   /// </summary>
   /// <typeparam name="TEntity">The type of the t entity.</typeparam>
-  public class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEntity : class
+  public class Repository<TEntity> : IDisposable, IRepository<TEntity>
+    where TEntity : class
   {
-    #region Private Fields
-
     /// <summary>
     /// The data context
     /// </summary>
     private readonly DbContext dataContext;
-
-    #endregion Private Fields
-
-    #region Private Properties
-
-    /// <summary>
-    /// Gets the dbset.
-    /// </summary>
-    /// <value>The dbset.</value>
-    private DbSet<TEntity> Dbset
-    {
-      get { return this.dataContext.Set<TEntity>(); }
-    }
-
-    #endregion Private Properties
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Repository{TEntity}"/> class.
@@ -46,9 +33,14 @@
       this.dataContext = context;
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
+    /// <summary>
+    /// Gets the dbset.
+    /// </summary>
+    /// <value>The dbset.</value>
+    private DbSet<TEntity> Dbset
+    {
+      get { return this.dataContext.Set<TEntity>(); }
+    }
 
     /// <summary>
     /// Delete the specified entity.
@@ -87,17 +79,7 @@
     /// <returns>Object of the TEntity class.</returns>
     public async Task<TEntity> FindByAsync(Expression<Func<TEntity, bool>> where)
     {
-      return await Dbset.Where(where).FirstOrDefaultAsync();
-    }
-
-    /// <summary>
-    /// find by many as an asynchronous operation.
-    /// </summary>
-    /// <param name="where">The where.</param>
-    /// <returns>Enumerable of the TEntity class.</returns>
-    public async Task<IEnumerable<TEntity>> FindManyByAsync(Expression<Func<TEntity, bool>> where)
-    {
-      return await Dbset.Where(where).ToListAsync();
+      return await this.Dbset.Where(where).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -108,6 +90,16 @@
     public IEnumerable<TEntity> FindManyBy(Expression<Func<TEntity, bool>> where)
     {
       return this.Dbset.Where(where).ToList();
+    }
+
+    /// <summary>
+    /// find by many as an asynchronous operation.
+    /// </summary>
+    /// <param name="where">The where.</param>
+    /// <returns>Enumerable of the TEntity class.</returns>
+    public async Task<IEnumerable<TEntity>> FindManyByAsync(Expression<Func<TEntity, bool>> where)
+    {
+      return await this.Dbset.Where(where).ToListAsync();
     }
 
     /// <summary>
@@ -125,7 +117,7 @@
     /// <returns>Task{List{`0}}.</returns>
     public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-      return await Dbset.ToListAsync();
+      return await this.Dbset.ToListAsync();
     }
 
     /// <summary>
@@ -154,7 +146,5 @@
       this.Dbset.Attach(entity);
       this.dataContext.Entry(entity).State = EntityState.Modified;
     }
-
-    #endregion Public Methods
   }
 }

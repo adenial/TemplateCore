@@ -1,7 +1,11 @@
-﻿namespace TemplateCore.Service.Interfaces
+﻿//-----------------------------------------------------------------------
+// <copyright file="IRoleService.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Interfaces
 {
   using System.Collections.Generic;
-  using System.Threading.Tasks;
 
   /// <summary>
   /// Interface IRoleService

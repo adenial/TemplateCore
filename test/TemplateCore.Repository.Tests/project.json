@@ -2,29 +2,41 @@
   "version": "1.0.0-*",
   "testRunner": "xunit",
 
-  "dependencies": {
-    "Microsoft.NETCore.App": {
+  "dependencies":
+  {
+    "Microsoft.NETCore.App":
+    {
       "type": "platform",
       "version": "1.0.1"
     },
     "xunit": "2.1.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "TemplateCore.Repository": {
+    "TemplateCore.Repository":
+    {
       "target": "project"
     },
     "Microsoft.CodeCoverage": "1.0.1",
     "Microsoft.EntityFrameworkCore.InMemory": "1.1.0-alpha1-22107"
   },
 
-  "frameworks": 
+  "frameworks":
   {
-    "netcoreapp1.0": 
+    "netcoreapp1.0":
     {
-      "imports": [
+      "imports":
+      [
         "dnxcore50",
         "dotnet54",
         "portable-net45+win8"
       ]
     }
+  },
+  "buildOptions":
+  {
+    "xmlDoc": "true",
+    "additionalArguments":
+    [
+      "/additionalfile:..//..//stylecop.json"
+    ]
   }
 }

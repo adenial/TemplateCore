@@ -1,6 +1,10 @@
-﻿namespace TemplateCore.Model
+﻿//-----------------------------------------------------------------------
+// <copyright file="TemplateDbContext.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Model
 {
-  using System;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
 
@@ -17,29 +21,17 @@
             : base(options)
     {
       // create db
-      Database.EnsureCreated();
+      this.Database.EnsureCreated();
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TemplateDbContext"/> class.
     /// </summary>
     public TemplateDbContext()
-      : base( new DbContextOptions<TemplateDbContext>())
+      : base(new DbContextOptions<TemplateDbContext>())
     {
       // create db, lets wait till SetDbInitializer is implemented in EntityFramework Core.
-      Database.EnsureCreated();
-    }
-
-    /// <summary>
-    /// Configures the schema needed for the identity framework.
-    /// </summary>
-    /// <param name="builder">The builder being used to construct the model for this context.</param>
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-      base.OnModelCreating(builder);
-      // Customize the ASP.NET Identity model and override the defaults if needed.
-      // For example, you can rename the ASP.NET Identity table names and more.
-      // Add your customizations after calling base.OnModelCreating(builder);
+      this.Database.EnsureCreated();
     }
 
     /// <summary>
@@ -52,6 +44,19 @@
     public override int SaveChanges()
     {
       return base.SaveChanges();
+    }
+
+    /// <summary>
+    /// Configures the schema needed for the identity framework.
+    /// </summary>
+    /// <param name="builder">The builder being used to construct the model for this context.</param>
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+      base.OnModelCreating(builder);
+
+      // Customize the ASP.NET Identity model and override the defaults if needed.
+      // For example, you can rename the ASP.NET Identity table names and more.
+      // Add your customizations after calling base.OnModelCreating(builder);
     }
   }
 }

@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="ISmsSender.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Services
 {
-    public interface ISmsSender
-    {
-        Task SendSmsAsync(string number, string message);
-    }
+  using System.Threading.Tasks;
+
+  /// <summary>
+  /// Interface ISmsSender
+  /// </summary>
+  public interface ISmsSender
+  {
+    /// <summary>
+    /// Sends the SMS asynchronous.
+    /// </summary>
+    /// <param name="number">The number.</param>
+    /// <param name="message">The message.</param>
+    /// <returns>Task.</returns>
+    Task SendSmsAsync(string number, string message);
+  }
 }

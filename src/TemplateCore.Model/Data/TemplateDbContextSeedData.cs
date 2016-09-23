@@ -1,34 +1,29 @@
-﻿namespace TemplateCore.Model
+﻿//-----------------------------------------------------------------------
+// <copyright file="TemplateDbContextSeedData.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Model
 {
-  using Microsoft.AspNetCore.Identity;
-  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using System;
   using System.Linq;
+  using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
   /// <summary>
   /// Class TemplateDbContextSeedData.
   /// </summary>
   public class TemplateDbContextSeedData
   {
-    #region Private Fields
-
     /// <summary>
     /// The password byt default
     /// </summary>
-    private const string password = "1122334455";
-
-    #endregion Private Fields
-
-    #region Private Fields
+    private const string Password = "1122334455";
 
     /// <summary>
     /// The context
     /// </summary>
     private TemplateDbContext context;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TemplateDbContextSeedData"/> class.
@@ -39,16 +34,12 @@
       this.context = context;
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Initializes this instance.
     /// </summary>
     public void Initialize()
     {
-      SeedAdminUser();
+      this.SeedAdminUser();
     }
 
     /// <summary>
@@ -68,20 +59,20 @@
         SecurityStamp = Guid.NewGuid().ToString()
       };
 
-      var roleStore = new RoleStore<IdentityRole>(context);
+      var roleStore = new RoleStore<IdentityRole>(this.context);
 
-      if (!context.Roles.Any(r => r.Name == "Administrator"))
+      if (!this.context.Roles.Any(r => r.Name == "Administrator"))
       {
         var roleAdministrator = new IdentityRole { Name = "Administrator", NormalizedName = "Administrator" };
         await roleStore.CreateAsync(roleAdministrator);
       }
 
-      if (!context.Users.Any(u => u.UserName == adminUser.UserName))
+      if (!this.context.Users.Any(u => u.UserName == adminUser.UserName))
       {
         var hasher = new PasswordHasher<ApplicationUser>();
-        var hashed = hasher.HashPassword(adminUser, password);
+        var hashed = hasher.HashPassword(adminUser, Password);
         adminUser.PasswordHash = hashed;
-        var userStore = new UserStore<ApplicationUser>(context);
+        var userStore = new UserStore<ApplicationUser>(this.context);
         await userStore.CreateAsync(adminUser);
         await userStore.AddToRoleAsync(adminUser, "Administrator");
       }
@@ -98,23 +89,22 @@
         SecurityStamp = Guid.NewGuid().ToString()
       };
 
-      if (!context.Roles.Any(r => r.Name == "User"))
+      if (!this.context.Roles.Any(r => r.Name == "User"))
       {
         await roleStore.CreateAsync(new IdentityRole { Name = "User", NormalizedName = "User" });
       }
 
-      if (!context.Users.Any(u => u.UserName == user.UserName))
+      if (!this.context.Users.Any(u => u.UserName == user.UserName))
       {
         var hasher = new PasswordHasher<ApplicationUser>();
-        var hashed = hasher.HashPassword(user, password);
+        var hashed = hasher.HashPassword(user, Password);
         user.PasswordHash = hashed;
-        var userStore = new UserStore<ApplicationUser>(context);
+        var userStore = new UserStore<ApplicationUser>(this.context);
         await userStore.CreateAsync(user);
         await userStore.AddToRoleAsync(user, "User");
       }
 
-      await context.SaveChangesAsync();
+      await this.context.SaveChangesAsync();
     }
-    #endregion Public Methods
   }
 }

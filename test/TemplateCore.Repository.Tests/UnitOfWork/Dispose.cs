@@ -1,16 +1,21 @@
-﻿namespace TemplateCore.Repository.Tests.UnitOfWork
+﻿//-----------------------------------------------------------------------
+// <copyright file="Dispose.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Repository.Tests.UnitOfWork
 {
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using System;
-  using System.Linq;
   using TemplateCore.Model;
   using Xunit;
 
   /// <summary>
-  /// Class tests that tests the Dispose method of <see cref="UnitOfWork<TContext>"/> class.
+  /// Class tests that tests the Dispose method of <see cref="UnitOfWork{TContext}"/> 
   /// </summary>
   public class Dispose : IDisposable
   {
@@ -41,7 +46,7 @@
     #region Public Constructors
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="FindBy"/> class.
+    /// Initializes a new instance of the <see cref="Dispose"/> class.
     /// </summary>
     public Dispose()
     {

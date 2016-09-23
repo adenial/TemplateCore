@@ -1,16 +1,21 @@
-﻿namespace TemplateCore.Repository.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Insert.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Repository.Tests.User
 {
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using System;
-  using System.Linq;
+  using TemplateCore.Model;
   using Xunit;
 
   /// <summary>
-  /// Class test that tests the method Insert of the class <see cref="Repository{TEntity}<"/>.
+  /// Class test that tests the method Insert of the class <see cref="Repository{TEntity}"/>.
   /// </summary>
   public class Insert
   {
@@ -58,7 +63,7 @@
     #region Public Methods
 
     /// <summary>
-    /// Tests the method Insert of the class <see cref="UserService"/>.
+    /// Tests the method Insert of the class <see cref="Repository{TEntity}"/>.
     /// Happy path.
     /// Assert after the Insert of the user the count of the users incremented.
     /// </summary>

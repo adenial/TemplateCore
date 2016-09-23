@@ -1,15 +1,31 @@
 {
   "version": "1.0.0-*",
 
-  "dependencies": {
+  "dependencies":
+  {
+    "StyleCop.Analyzers":
+    {
+      "version": "1.0.0",
+      "type": "build"
+    },
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1",
     "NETStandard.Library": "1.6.0"
   },
 
-  "frameworks": {
-    "netstandard1.6": {
+  "frameworks":
+  {
+    "netstandard1.6":
+    {
       "imports": "dnxcore50"
     }
+  },
+  "buildOptions":
+  {
+    "xmlDoc": "true",
+    "additionalArguments":
+    [
+      "/additionalfile:..//..//stylecop.json"
+    ]
   }
 }

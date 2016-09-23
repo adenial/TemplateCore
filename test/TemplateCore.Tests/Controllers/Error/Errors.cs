@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.Tests.Controllers.Error
+﻿//-----------------------------------------------------------------------
+// <copyright file="Errors.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Error
 {
   using Microsoft.AspNetCore.Http;
   using Microsoft.AspNetCore.Mvc;
@@ -11,8 +16,6 @@
   /// </summary>
   public class Errors
   {
-    #region Public Methods
-
     /// <summary>
     /// Tests the method of the class <see cref="ErrorController"/>.
     /// Asserts the invoke of the method returns an instance of the class <see cref="ViewResult"/>.
@@ -26,8 +29,7 @@
       var actionContext = new ActionContext(
         httpContext,
         new RouteData(),
-        new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor()
-        );
+        new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor());
 
       var controller = new ErrorController();
       var controllerContext = new ControllerContext(actionContext);
@@ -53,8 +55,7 @@
       var actionContext = new ActionContext(
         httpContext,
         new RouteData(),
-        new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor()
-        );
+        new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor());
 
       var controller = new ErrorController();
       var controllerContext = new ControllerContext(actionContext);
@@ -67,7 +68,5 @@
       // assert
       Assert.IsType(typeof(ViewResult), result);
     }
-
-    #endregion Public Methods
   }
 }

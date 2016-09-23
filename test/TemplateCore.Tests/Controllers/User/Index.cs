@@ -1,13 +1,18 @@
-﻿namespace TemplateCore.Tests.Controllers.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="Index.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.User
 {
-  using Microsoft.AspNetCore.Mvc;
-  using Microsoft.Extensions.Localization;
-  using Model;
-  using Moq;
-  using Service.Interfaces;
   using System;
   using System.Collections.Generic;
+  using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.Localization;
+  using Moq;
   using TemplateCore.Controllers;
+  using TemplateCore.Model;
+  using TemplateCore.Service.Interfaces;
   using ViewModels.User;
   using Xunit;
 
@@ -16,8 +21,6 @@
   /// </summary>
   public class Index
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -38,10 +41,6 @@
     /// </summary>
     private Mock<IUserService> userService = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Index"/> class.
     /// </summary>
@@ -49,14 +48,10 @@
     {
       this.users = new List<AspNetUser>
       {
-        new AspNetUser { Email = "test@test.com", Id = Guid.NewGuid(), Name = "Test", Roles= string.Empty, UserName = "test" },
-        new AspNetUser { Email = "test1@test.com", Id = Guid.NewGuid(), Name = "Test", Roles= "User", UserName = "test1" }
+        new AspNetUser { Email = "test@test.com", Id = Guid.NewGuid(), Name = "Test", Roles = string.Empty, UserName = "test" },
+        new AspNetUser { Email = "test1@test.com", Id = Guid.NewGuid(), Name = "Test", Roles = "User", UserName = "test1" }
       };
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method Index of the class <see cref="UserController"/>
@@ -77,7 +72,5 @@
       // assert
       Assert.IsType(typeof(List<UserIndexViewModel>), result);
     }
-
-    #endregion Public Methods
   }
 }

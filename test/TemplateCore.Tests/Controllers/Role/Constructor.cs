@@ -1,11 +1,13 @@
-﻿/// <summary>
-/// The Role namespace.
-/// </summary>
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constructor.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Tests.Controllers.Role
 {
+  using System;
   using Microsoft.Extensions.Localization;
   using Moq;
-  using System;
   using TemplateCore.Controllers;
   using TemplateCore.Service.Interfaces;
   using Xunit;
@@ -15,8 +17,6 @@ namespace TemplateCore.Tests.Controllers.Role
   /// </summary>
   public class Constructor
   {
-    #region Private Fields
-
     /// <summary>
     /// The localizer
     /// </summary>
@@ -26,10 +26,6 @@ namespace TemplateCore.Tests.Controllers.Role
     /// The role service
     /// </summary>
     private Mock<IRoleService> roleService = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the constructor of the class <see cref="RoleController"/>
@@ -75,7 +71,5 @@ namespace TemplateCore.Tests.Controllers.Role
 
       Assert.Throws<ArgumentNullException>(() => new RoleController(null, this.localizer.Object));
     }
-
-    #endregion Public Methods
   }
 }

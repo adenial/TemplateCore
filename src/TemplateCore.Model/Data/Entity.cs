@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="Entity.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Model
 {
   /// <summary>
@@ -11,14 +11,10 @@ namespace TemplateCore.Model
   /// <typeparam name="T">Base Entity</typeparam>
   public abstract class Entity<T> : BaseEntity, IEntity<T>
   {
-    #region Public Properties
-
     /// <summary>
     /// Gets or sets the identifier.
     /// </summary>
     /// <value>The identifier.</value>
     public virtual T Id { get; set; }
-
-    #endregion Public Properties
   }
 }

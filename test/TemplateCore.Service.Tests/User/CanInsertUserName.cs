@@ -1,14 +1,19 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="CanInsertUserName.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
+  using System;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
   using Xunit;
 
   /// <summary>
@@ -16,8 +21,6 @@
   /// </summary>
   public class CanInsertUserName
   {
-    #region Private Fields
-
     /// <summary>
     /// The context options
     /// </summary>
@@ -29,49 +32,7 @@
     private UserService userService = null;
 
     /// <summary>
-    /// Test the method CanInsertUserName of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns False.
-    /// </summary>
-    [Fact]
-    public void CanInsertUserNameFalse()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      var result = this.userService.CanInsertUserName("test");
-
-      // assert
-      Assert.False(result);
-    }
-
-    /// <summary>
-    /// Test the method CanInsertUserName of the class <see cref="UserService"/>.
-    /// Assert the invoke of the method returns True.
-    /// </summary>
-    [Fact]
-    public void CanInsertUserNameTrue()
-    {
-      // setup
-      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
-      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
-      this.userService = new UserService(unitOfWork);
-
-      // action
-      var result = this.userService.CanInsertUserName("test 1");
-
-      // assert
-      Assert.True(result);
-    }
-
-    #endregion Private Fields
-
-    #region Public Constructors
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CanInsertEmail"/> class.
+    /// Initializes a new instance of the <see cref="CanInsertUserName"/> class.
     /// </summary>
     public CanInsertUserName()
     {
@@ -121,6 +82,42 @@
       }
     }
 
-    #endregion Public Constructors
+    /// <summary>
+    /// Test the method CanInsertUserName of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method returns False.
+    /// </summary>
+    [Fact]
+    public void CanInsertUserNameFalse()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      var result = this.userService.CanInsertUserName("test");
+
+      // assert
+      Assert.False(result);
+    }
+
+    /// <summary>
+    /// Test the method CanInsertUserName of the class <see cref="UserService"/>.
+    /// Assert the invoke of the method returns True.
+    /// </summary>
+    [Fact]
+    public void CanInsertUserNameTrue()
+    {
+      // setup
+      TemplateDbContext context = new TemplateDbContext(this.contextOptions);
+      IUnitOfWork<TemplateDbContext> unitOfWork = new UnitOfWork<TemplateDbContext>(context);
+      this.userService = new UserService(unitOfWork);
+
+      // action
+      var result = this.userService.CanInsertUserName("test 1");
+
+      // assert
+      Assert.True(result);
+    }
   }
 }

@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.ViewModels.Role
+﻿//-----------------------------------------------------------------------
+// <copyright file="AdminRoleCreateViewModel.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.ViewModels.Role
 {
   using System.ComponentModel.DataAnnotations;
 

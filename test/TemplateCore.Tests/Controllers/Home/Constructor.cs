@@ -1,18 +1,21 @@
-﻿using Microsoft.Extensions.Localization;
-using Moq;
-using System;
-using TemplateCore.Controllers;
-using Xunit;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="Constructor.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace TemplateCore.Tests.Controllers.Home
 {
+  using System;
+  using Microsoft.Extensions.Localization;
+  using Moq;
+  using TemplateCore.Controllers;
+  using Xunit;
+
   /// <summary>
   /// Class test that tests the constructor of the class <see cref="HomeController"/>
   /// </summary>
   public class Constructor
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -22,10 +25,6 @@ namespace TemplateCore.Tests.Controllers.Home
     /// The localizer
     /// </summary>
     private Mock<IStringLocalizer<HomeController>> localizer = null;
-
-    #endregion Private Fields
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the constructor of the class <see cref="HomeController"/>.
@@ -54,7 +53,5 @@ namespace TemplateCore.Tests.Controllers.Home
       // setup, act and assert
       Assert.Throws<ArgumentNullException>(() => this.controller = new HomeController(null));
     }
-
-    #endregion Public Methods
   }
 }

@@ -1,4 +1,9 @@
-﻿namespace TemplateCore.Tests.Controllers.Home
+﻿//-----------------------------------------------------------------------
+// <copyright file="About.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Tests.Controllers.Home
 {
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
@@ -11,8 +16,6 @@
   /// </summary>
   public class About
   {
-    #region Private Fields
-
     /// <summary>
     /// The controller
     /// </summary>
@@ -23,10 +26,6 @@
     /// </summary>
     private Mock<IStringLocalizer<HomeController>> localizer = null;
 
-    #endregion Private Fields
-
-    #region Public Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="About"/> class.
     /// </summary>
@@ -34,10 +33,6 @@
     {
       this.localizer = new Mock<IStringLocalizer<HomeController>>();
     }
-
-    #endregion Public Constructors
-
-    #region Public Methods
 
     /// <summary>
     /// Tests the method Index of the class <see cref="HomeController"/>
@@ -55,7 +50,5 @@
       // assert
       Assert.IsType(typeof(ViewResult), result);
     }
-
-    #endregion Public Methods
   }
 }

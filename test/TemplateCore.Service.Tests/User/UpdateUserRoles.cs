@@ -1,16 +1,21 @@
-﻿namespace TemplateCore.Service.Tests.User
+﻿//-----------------------------------------------------------------------
+// <copyright file="UpdateUserRoles.cs" company="Without name">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
+namespace TemplateCore.Service.Tests.User
 {
-  using Implement;
-  using Interfaces;
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.DependencyInjection;
-  using Model;
-  using Repository;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
+  using TemplateCore.Model;
+  using TemplateCore.Repository;
+  using TemplateCore.Service.Implement;
+  using TemplateCore.Service.Interfaces;
   using Xunit;
 
   /// <summary>
@@ -18,8 +23,6 @@
   /// </summary>
   public class UpdateUserRoles
   {
-    #region Private Fields
-
     /// <summary>
     /// The administrator role identifier
     /// </summary>
@@ -49,10 +52,6 @@
     /// The user service
     /// </summary>
     private IUserService userService = null;
-
-    #endregion Private Fields
-
-    #region Public Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UpdateUserRoles"/> class.
@@ -117,10 +116,6 @@
       }
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
-
     /// <summary>
     /// Tests the method UpdateUserRoles of the class <see cref="UserService"/>.
     /// Assert the count of UserRoles of user after the invoke of the method, must be 2 roles.
@@ -138,14 +133,14 @@
       var rolesToInsert = new List<IdentityUserRole<string>>
       {
         new IdentityUserRole<string> { RoleId = this.administratorRoleId, UserId = this.userId },
-        new IdentityUserRole<string> { RoleId = this.reporterRoleId, UserId = this.userId}
+        new IdentityUserRole<string> { RoleId = this.reporterRoleId, UserId = this.userId }
       };
 
       // create UserRoles to delete.
       // the user role "User" is seeded at runtime (Constructor)
       var rolesToDelete = new List<IdentityUserRole<string>>
       {
-        new IdentityUserRole<string> {  RoleId = this.userRoleId, UserId = this.userId }
+        new IdentityUserRole<string> { RoleId = this.userRoleId, UserId = this.userId }
       };
 
       // action
@@ -157,7 +152,5 @@
       Assert.True(roles[0].Name.Equals("Administrator"));
       Assert.True(roles[1].Name.Equals("Execute Reports Role"));
     }
-
-    #endregion Public Methods
   }
 }
