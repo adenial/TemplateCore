@@ -155,7 +155,7 @@ namespace TemplateCore
       .AddDataAnnotationsLocalization();
 
       // Add application services.
-      services.AddTransient<TemplateDbContextSeedData>();
+      // services.AddTransient<TemplateDbContextSeedData>();
       services.AddTransient<IUnitOfWork<TemplateDbContext>, UnitOfWork<TemplateDbContext>>();
       services.AddTransient<IEmailSender, AuthMessageSender>();
       services.AddTransient<ISmsSender, AuthMessageSender>();

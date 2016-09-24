@@ -74,7 +74,8 @@ namespace TemplateCore.Controllers
         if (result.Succeeded)
         {
           await this.signInManager.SignInAsync(user, isPersistent: false);
-          this.logger.LogInformation(3, "User changed their password successfully.");
+
+          // this.logger.LogInformation(3, "User changed their password successfully.");
           return this.RedirectToAction(nameof(this.Index), new { Message = ManageMessageId.ChangePasswordSuccess });
         }
 
@@ -375,7 +376,7 @@ namespace TemplateCore.Controllers
     /// <summary>
     /// Gets the current user asynchronous.
     /// </summary>
-    /// <returns>Task&lt;ApplicationUser&gt;.</returns>
+    /// <returns>Logged User.</returns>
     private Task<ApplicationUser> GetCurrentUserAsync()
     {
       return this.userManager.GetUserAsync(this.HttpContext.User);

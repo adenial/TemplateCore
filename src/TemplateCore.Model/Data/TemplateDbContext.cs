@@ -31,7 +31,7 @@ namespace TemplateCore.Model
       : base(new DbContextOptions<TemplateDbContext>())
     {
       // create db, lets wait till SetDbInitializer is implemented in EntityFramework Core.
-      this.Database.EnsureCreated();
+      // this.Database.EnsureCreated();
     }
 
     /// <summary>

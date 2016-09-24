@@ -5,20 +5,13 @@
 //-----------------------------------------------------------------------
 namespace TemplateCore.Tests.Controllers.Account
 {
-  using System;
-  using System.Collections.Generic;
-  using System.Security.Claims;
-  using System.Threading.Tasks;
-  using Microsoft.AspNetCore.Builder;
-  using Microsoft.AspNetCore.Http;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Logging;
-  using Microsoft.Extensions.Options;
-  using Model;
   using Moq;
-  using Services;
   using TemplateCore.Controllers;
+  using TemplateCore.Model;
+  using TemplateCore.Services;
   using Xunit;
 
   /// <summary>

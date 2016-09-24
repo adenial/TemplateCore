@@ -2,22 +2,30 @@
   "version": "1.0.0-*",
   "testRunner": "xunit",
 
-  "dependencies": {
-    "Microsoft.NETCore.App": {
+  "dependencies":
+  {
+    "Microsoft.NETCore.App":
+    {
       "type": "platform",
       "version": "1.0.1"
     },
     "xunit": "2.1.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "TemplateCore.Model": {
+    "Moq": "4.6.38-alpha",
+    "TemplateCore.Model":
+    {
       "target": "project"
     },
+    "Microsoft.EntityFrameworkCore.InMemory": "1.0.1",
     "Microsoft.CodeCoverage": "1.0.1"
   },
 
-  "frameworks": {
-    "netcoreapp1.0": {
-      "imports": [
+  "frameworks":
+  {
+    "netcoreapp1.0":
+    {
+      "imports":
+      [
         "dnxcore50",
         "dotnet54",
         "portable-net45+win8"

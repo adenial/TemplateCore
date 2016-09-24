@@ -3,7 +3,7 @@
 //     Company copyright tag.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace TemplateCore.Tests.Controllers.Account
+namespace TemplateCore.Tests.Controllers
 {
   using System;
   using System.Collections.Generic;
@@ -54,6 +54,22 @@ namespace TemplateCore.Tests.Controllers.Account
         new Mock<ILogger<UserManager<TUser>>>().Object);
       validator.Setup(v => v.ValidateAsync(userManager, It.IsAny<TUser>())).Returns(Task.FromResult(IdentityResult.Success)).Verifiable();
       return userManager;
+    }
+
+    /// <summary>
+    /// Mocks the user manager.
+    /// </summary>
+    /// <typeparam name="TUser">The type of the t user.</typeparam>
+    /// <returns>Mock&lt;UserManager&lt;TUser&gt;&gt;.</returns>
+    public static Mock<UserManager<TUser>> MockUserManager<TUser>()
+      where TUser : class
+    {
+      var store = new Mock<IUserStore<TUser>>();
+      var mgr = new Mock<UserManager<TUser>>(store.Object, null, null, null, null, null, null, null, null);
+
+      // mgr.Object.UserValidators.Add(new UserValidator<TUser>());
+      // mgr.Object.PasswordValidators.Add(new PasswordValidator<TUser>());
+      return mgr;
     }
 
     /// <summary>
