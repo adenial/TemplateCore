@@ -14,12 +14,11 @@
 * All new accounts are created with the default password: **1122334455**, can be changed at `UserService`.
 * Implemented Globalization and internationalization (not finished yet.)
 * Added Code Analysis [See] (https://github.com/DotNetAnalyzers/StyleCopAnalyzers).
-* Working on unit tests.
 * Database provider SQL (configured as localdb).
 * Made from the ASP.NET Core Web Application (.NET Core) Template with `Individual User Accounts` authentication.
 
 ## Configuration
-* WarningAsErrors **true** can be changed at `buildOptions` node of each project.json file.
+* WarningAsErrors **false** can be changed at `buildOptions` node of each project.json file.
 * ConnectionString at node section `TemplateConnection` of appsettings.json.
 
 ## Unit Testing
