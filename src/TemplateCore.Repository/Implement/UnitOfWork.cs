@@ -39,6 +39,11 @@ namespace TemplateCore.Repository
     private IRepository<IdentityUserRole<string>> useRolesRepository = null;
 
     /// <summary>
+    /// The role claims repository
+    /// </summary>
+    private IRepository<IdentityRoleClaim<string>> roleClaimsRepository = null;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.
     /// </summary>
     /// <param name="context">The context.</param>
@@ -72,6 +77,15 @@ namespace TemplateCore.Repository
     public IRepository<ApplicationUser> UserRepository
     {
       get { return this.userRepository ?? (this.userRepository = new Repository<ApplicationUser>(this.dataContext)); }
+    }
+
+    /// <summary>
+    /// Gets the role claims repository.
+    /// </summary>
+    /// <value>The role claims repository.</value>
+    public IRepository<IdentityRoleClaim<string>> RoleClaimsRepository
+    {
+      get { return this.roleClaimsRepository ?? (this.roleClaimsRepository = new Repository<IdentityRoleClaim<string>>(this.dataContext)); }
     }
 
     /// <summary>

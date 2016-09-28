@@ -14,6 +14,8 @@ namespace TemplateCore.Service.Tests.Role
   using TemplateCore.Service.Implement;
   using TemplateCore.Service.Interfaces;
   using Xunit;
+  using System.Collections.Generic;
+  using System.Security.Claims;
 
   /// <summary>
   /// Class test that tests the method Insert of the class <see cref="RoleService"/>.
@@ -72,7 +74,7 @@ namespace TemplateCore.Service.Tests.Role
 
       // action
       int countBeforeInsert = this.roleService.GetAllRoleNames().ToList().Count;
-      this.roleService.Insert("User");
+      this.roleService.Insert("User", new List<Claim>());
       int countAfterInsert = this.roleService.GetAllRoleNames().ToList().Count;
 
       // assert

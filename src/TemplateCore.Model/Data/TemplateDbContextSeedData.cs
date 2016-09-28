@@ -9,6 +9,7 @@ namespace TemplateCore.Model
   using System.Linq;
   using Microsoft.AspNetCore.Identity;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+  using System.Security.Claims;
 
   /// <summary>
   /// Class TemplateDbContextSeedData.
@@ -60,6 +61,7 @@ namespace TemplateCore.Model
       };
 
       var roleStore = new RoleStore<IdentityRole>(this.context);
+      var roleManager = new RoleManager<IdentityRole>(roleStore, null, null, null, null, null);
 
       if (!this.context.Roles.Any(r => r.Name == "Administrator"))
       {
@@ -75,6 +77,11 @@ namespace TemplateCore.Model
         var userStore = new UserStore<ApplicationUser>(this.context);
         await userStore.CreateAsync(adminUser);
         await userStore.AddToRoleAsync(adminUser, "Administrator");
+        await roleManager.AddClaimAsync(roleManager.Roles.ToList().Where(x => x.Name == "Administrator").FirstOrDefault(), new Claim(CustomClaimTypes.Permission, "Administrator.Menu"));
+        await roleManager.AddClaimAsync(roleManager.Roles.ToList().Where(x => x.Name == "Administrator").FirstOrDefault(), new Claim(CustomClaimTypes.Permission, "Users.List"));
+        await roleManager.AddClaimAsync(roleManager.Roles.ToList().Where(x => x.Name == "Administrator").FirstOrDefault(), new Claim(CustomClaimTypes.Permission, "Users.Create"));
+        await roleManager.AddClaimAsync(roleManager.Roles.ToList().Where(x => x.Name == "Administrator").FirstOrDefault(), new Claim(CustomClaimTypes.Permission, "Users.Update"));
+        await roleManager.AddClaimAsync(roleManager.Roles.ToList().Where(x => x.Name == "Administrator").FirstOrDefault(), new Claim(CustomClaimTypes.Permission, "Users.Delete"));
       }
 
       var user = new ApplicationUser

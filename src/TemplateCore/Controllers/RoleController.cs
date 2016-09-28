@@ -13,6 +13,7 @@ namespace TemplateCore.Controllers
   using Microsoft.Extensions.Localization;
   using Service.Interfaces;
   using TemplateCore.ViewModels.Role;
+  using System.Security.Claims;
 
   /// <summary>
   /// Class AdminRoleController.
@@ -61,15 +62,33 @@ namespace TemplateCore.Controllers
       // create model.
       var model = new AdminRoleCreateViewModel();
 
+      model.Claims = this.GetClaims();
+
       // pass it to view.
       return this.View(model);
     }
 
     /// <summary>
-    /// Creates the specified model.
+    /// Gets the claims.
+    /// </summary>
+    /// <returns>List of type <see cref="RoleClaimCreateViewModel"/>.</returns>
+    private IEnumerable<RoleClaimCreateViewModel> GetClaims()
+    {
+      var claims = this.roleService.GetClaims();
+
+      if (claims != null)
+      {
+        return claims.Select(x => new RoleClaimCreateViewModel { Check = false, Value = x.Value.Value, Key = x.Key, Type = x.Value.Type }).ToList();
+      }
+
+      return null;
+    }
+
+    /// <summary>
+    /// Action to create a new user.
     /// </summary>
     /// <param name="model">The model.</param>
-    /// <returns>IActionResult.</returns>
+    /// <returns>Redirects to Index or returns view with model.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Administrator")]
@@ -82,8 +101,11 @@ namespace TemplateCore.Controllers
 
         if (canInsert)
         {
+          // create claims and insert too.
+          var claims = model.Claims.Where(x => x.Check == true).Select(x => new Claim(x.Type, x.Value)).ToList();
+
           // insert new role and redirect.
-          this.roleService.Insert(model.Name);
+          this.roleService.Insert(model.Name, claims);
           return this.RedirectToAction("Index");
         }
         else
@@ -100,10 +122,10 @@ namespace TemplateCore.Controllers
     }
 
     /// <summary>
-    /// Deletes the specified name.
+    /// Deletes the user with the provided name.
     /// </summary>
     /// <param name="name">The name.</param>
-    /// <returns>IActionResult.</returns>
+    /// <returns>Redirects to Index or view not found.</returns>
     [Authorize(Roles = "Administrator")]
     public IActionResult Delete(string name)
     {
@@ -119,9 +141,9 @@ namespace TemplateCore.Controllers
     }
 
     /// <summary>
-    /// Indexes this instance.
+    /// Index page.
     /// </summary>
-    /// <returns>IActionResult.</returns>
+    /// <returns>List role view.</returns>
     [Authorize(Roles = "Administrator")]
     public IActionResult Index()
     {

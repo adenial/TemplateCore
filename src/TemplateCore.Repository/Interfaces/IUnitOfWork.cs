@@ -30,6 +30,12 @@ namespace TemplateCore.Repository
     IRepository<IdentityUserRole<string>> UseRolesRepository { get; }
 
     /// <summary>
+    /// Gets role claims repository
+    /// </summary>
+    /// <value>The role claims repository.</value>
+    IRepository<IdentityRoleClaim<string>> RoleClaimsRepository { get; }
+
+    /// <summary>
     /// Gets the user repository.
     /// </summary>
     /// <value>The user repository.</value>

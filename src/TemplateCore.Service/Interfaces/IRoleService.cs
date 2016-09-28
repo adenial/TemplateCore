@@ -6,6 +6,7 @@
 namespace TemplateCore.Service.Interfaces
 {
   using System.Collections.Generic;
+  using System.Security.Claims;
 
   /// <summary>
   /// Interface IRoleService
@@ -35,6 +36,13 @@ namespace TemplateCore.Service.Interfaces
     /// Inserts a new role with the specified name
     /// </summary>
     /// <param name="name">The name of the role to Insert.</param>
-    void Insert(string name);
+    /// <param name="claims">The claims.</param>
+    void Insert(string name, IEnumerable<Claim> claims);
+
+    /// <summary>
+    /// Gets the claims.
+    /// </summary>
+    /// <returns>Dictionary of type string, Claim.</returns>
+    Dictionary<string, Claim> GetClaims();
   }
 }

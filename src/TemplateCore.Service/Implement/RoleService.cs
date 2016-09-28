@@ -8,6 +8,7 @@ namespace TemplateCore.Service.Implement
   using System;
   using System.Collections.Generic;
   using System.Linq;
+  using System.Security.Claims;
   using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
   using TemplateCore.Model;
   using TemplateCore.Repository;
@@ -96,13 +97,38 @@ namespace TemplateCore.Service.Implement
     }
 
     /// <summary>
+    /// Gets the claims.
+    /// </summary>
+    /// <returns>Dictionary of type string, Claim.</returns>
+    public Dictionary<string, Claim> GetClaims()
+    {
+      return new Dictionary<string, Claim>()
+      {
+        // user actions.
+        { "View Administrator Menu", new Claim(CustomClaimTypes.Permission, "Administrator.Menu") },
+        { "View Users", new Claim(CustomClaimTypes.Permission, "Users.List") },
+        { "Create Users", new Claim(CustomClaimTypes.Permission, "Users.Create") },
+        { "Update Users", new Claim(CustomClaimTypes.Permission, "Users.Update") },
+        { "Delete Users", new Claim(CustomClaimTypes.Permission, "Users.Delete") }
+      };
+    }
+
+    /// <summary>
     /// Inserts a new role with the specified name
     /// </summary>
     /// <param name="name">The name of the role to Insert.</param>
-    public void Insert(string name)
+    /// <param name="claims">The claims.</param>
+    public void Insert(string name, IEnumerable<Claim> claims)
     {
       var newIdentityRole = new IdentityRole { Name = name, NormalizedName = name };
+
       this.unitOfWork.RoleRepository.Insert(newIdentityRole);
+
+      foreach (var claim in claims)
+      {
+        this.unitOfWork.RoleClaimsRepository.Insert(new IdentityRoleClaim<string> { RoleId = newIdentityRole.Id, ClaimType = claim.Type, ClaimValue = claim.Value });
+      }
+
       this.unitOfWork.Commit();
     }
   }

@@ -1,5 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Authorization
 @model IEnumerable<UserIndexViewModel>
+@inject IAuthorizationService AuthorizationService
 @inject IViewLocalizer Localizer
 
 @{
@@ -8,9 +10,13 @@
 
 <h2>@Localizer["Users"]</h2>
 
-<div class="col-sm-12 text-right">
-  <a asp-action="Create"><i class="fa fa-plus"></i></a>
-</div>
+@if (await AuthorizationService.AuthorizeAsync(User, "Create Users"))
+{
+  <div class="col-sm-12 text-right">
+    <a asp-action="Create"><i class="fa fa-plus"></i></a>
+  </div>
+}
+
 <table class="table">
   <thead>
     <tr>
@@ -48,8 +54,15 @@
           @Html.DisplayFor(model => item.Roles)
         </td>
         <td>
-          <a class="btn btn-circle btn-icon-only red" title=@Localizer["Edit"] href='@Url.Action("Edit", "User", new { id = item.Id })'><i class="fa fa-pencil-square-o"></i></a>
+          @if (await AuthorizationService.AuthorizeAsync(User, "Update Users"))
+          {
+            <a class="btn btn-circle btn-icon-only red" title=@Localizer["Edit"] href='@Url.Action("Edit", "User", new { id = item.Id })'><i class="fa fa-pencil-square-o"></i></a>
+          }
+
+          @if (await AuthorizationService.AuthorizeAsync(User, "Delete Users"))
+          {
           <a class="btn btn-circle btn-icon-only red" title=@Localizer["Delete"] href='@Url.Action("Delete", "User", new { id = item.Id })'><i class="fa fa-trash"></i></a>
+          }
         </td>
       </tr>
     }

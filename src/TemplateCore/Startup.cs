@@ -85,15 +85,15 @@ namespace TemplateCore
       // error handling, while at development mode, show error page.
       if (env.IsDevelopment())
       {
-        // app.UseDeveloperExceptionPage();
-        // app.UseDatabaseErrorPage();
+         app.UseDeveloperExceptionPage();
+         app.UseDatabaseErrorPage();
         app.UseBrowserLink();
 
         // status code pages
         // app.UseStatusCodePages();
         // app.UseStatusCodePagesWithReExecute("/errors/{0}");
-        app.UseExceptionHandler("/Error/Error");
-        app.UseStatusCodePagesWithReExecute("/Error/Errors/{0}");
+        // app.UseExceptionHandler("/Error/Error");
+        // app.UseStatusCodePagesWithReExecute("/Error/Errors/{0}");
       }
       else
       {
@@ -206,7 +206,12 @@ namespace TemplateCore
       // policies
       services.AddAuthorization(options =>
       {
-        options.AddPolicy("View Administrator Menu", policy => policy.RequireRole("Administrator"));
+        // administration CRUD Users + View Menu.
+        options.AddPolicy("View Administrator Menu", policy => policy.RequireClaim(CustomClaimTypes.Permission, "Administrator.Menu"));
+        options.AddPolicy("View Users", policy => policy.RequireClaim(CustomClaimTypes.Permission, "Users.List"));
+        options.AddPolicy("Create Users", policy => policy.RequireClaim(CustomClaimTypes.Permission, "Users.Create"));
+        options.AddPolicy("Update Users", policy => policy.RequireClaim(CustomClaimTypes.Permission, "Users.Update"));
+        options.AddPolicy("Delete Users", policy => policy.RequireClaim(CustomClaimTypes.Permission, "Users.Delete"));
       });
     }
   }

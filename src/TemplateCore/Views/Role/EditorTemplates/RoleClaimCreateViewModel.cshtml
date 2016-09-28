@@ -1,0 +1,19 @@
+@model RoleClaimCreateViewModel
+
+
+<tr>
+  <td>
+    @Html.CheckBoxFor(model => model.Check)
+  </td>
+  <td>
+    @Html.DisplayFor(model => model.Type)
+    @Html.HiddenFor(model => model.Type)
+  </td>
+  <td>
+    @Html.DisplayFor(model => model.Value)
+    @Html.HiddenFor(model => model.Value)
+  </td>
+  <td>
+    @Html.HiddenFor(model => model.Key)
+  </td>
+</tr>

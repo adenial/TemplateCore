@@ -19,7 +19,7 @@ namespace TemplateCore.Controllers
   /// <summary>
   /// Class UserController.
   /// </summary>
-  [Authorize(Roles = "Administrator")]
+  [Authorize(Policy = "View Administrator Menu")]
   public class UserController : Controller
   {
     /// <summary>
@@ -32,18 +32,13 @@ namespace TemplateCore.Controllers
     /// </summary>
     private IStringLocalizer<UserController> localizer = null;
 
-    /*/// <summary>
-    /// The logger
-    /// </summary>
-    private readonly ILogger<UserController> logger = null;*/
-
     /// <summary>
     /// Initializes a new instance of the <see cref="UserController" /> class.
     /// </summary>
     /// <param name="userService">The user service.</param>
     /// <param name="localizer">The localizer.</param>
     /// <exception cref="System.ArgumentNullException">userService</exception>
-    public UserController(IUserService userService, IStringLocalizer<UserController> localizer/*, ILogger<UserController> logger*/)
+    public UserController(IUserService userService, IStringLocalizer<UserController> localizer)
     {
       if (userService == null)
       {
@@ -55,12 +50,6 @@ namespace TemplateCore.Controllers
         throw new ArgumentNullException("localizer");
       }
 
-      /*if (logger == null)
-      {
-        throw new ArgumentNullException("logger");
-      }
-
-      this.logger = logger;*/
       this.localizer = localizer;
       this.userService = userService;
     }
@@ -69,7 +58,8 @@ namespace TemplateCore.Controllers
     /// Create User Action
     /// </summary>
     /// <returns>View to create a new User</returns>
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "Create Users")]
     public IActionResult Create()
     {
       // create view model.
@@ -93,7 +83,7 @@ namespace TemplateCore.Controllers
     /// <returns>Redirect to Index or return View with ModelErrors.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "Create Users")]
     public IActionResult Create(UserCreateViewModel model)
     {
       if (this.ModelState.IsValid)
@@ -115,7 +105,6 @@ namespace TemplateCore.Controllers
 
             // if there are no more validations insert.
             this.userService.Insert(model.Email, model.UserName, model.Name, rolesIds);
-            /*this.logger.LogInformation(LoggingEvents.INSERT, string.Format("The user {0}, created a new user.", HttpContext.User.Identity.Name));*/
             return this.RedirectToAction("Index");
           }
           else
@@ -152,7 +141,7 @@ namespace TemplateCore.Controllers
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>Redirects to Index Page or HttpNotFound (404).</returns>
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "Delete Users")]
     public IActionResult Delete(string id)
     {
       if (string.IsNullOrWhiteSpace(id))
@@ -170,7 +159,6 @@ namespace TemplateCore.Controllers
       {
         // delete and redirect to index.
         this.userService.DeleteById(id);
-        /*this.logger.LogInformation(LoggingEvents.DELETE, string.Format("The user {0} deleted the user with the Id: {1}", HttpContext.User.Identity.Name, id));*/
         return this.RedirectToAction("Index");
       }
     }
@@ -180,7 +168,7 @@ namespace TemplateCore.Controllers
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>IActionResult.</returns>
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "Update Users")]
     public IActionResult Edit(string id)
     {
       // validate if string is not null or empty.
@@ -222,7 +210,7 @@ namespace TemplateCore.Controllers
     /// <returns>Redirects to Index or to present the errors due validation.</returns>
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "Update Users")]
     public IActionResult Edit(UserEditViewModel model)
     {
       if (this.ModelState.IsValid)
@@ -278,8 +266,6 @@ namespace TemplateCore.Controllers
         this.userService.UpdateUserRoles(newRolesToInsert, rolesToDelete);
         this.userService.UpdateUserInfo(model.Id, model.Name);
 
-        /*this.logger.LogInformation(LoggingEvents.UPDATE, string.Format("The user {0} edited the user {1}", HttpContext.User.Identity.Name, model.Name));*/
-
         return this.RedirectToAction("Index");
       }
       else
@@ -292,7 +278,8 @@ namespace TemplateCore.Controllers
     /// Index Page
     /// </summary>
     /// <returns>Index Page.</returns>
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "View Users")]
     public IActionResult Index()
     {
       var users = this.userService.GetAll();
@@ -307,7 +294,7 @@ namespace TemplateCore.Controllers
     /// Gets the index model from users.
     /// </summary>
     /// <param name="users">The users.</param>
-    /// <returns>IEnumerable&lt;UserIndexViewModel&gt;.</returns>
+    /// <returns>List <see cref="UserIndexViewModel"/>.</returns>
     private IEnumerable<UserIndexViewModel> GetIndexModelFromUsers(IEnumerable<AspNetUser> users)
     {
       return users.Select(x => new UserIndexViewModel { Id = x.Id, UserName = x.UserName, Name = x.Name, Roles = x.Roles, Email = x.Email }).ToList();
@@ -317,7 +304,7 @@ namespace TemplateCore.Controllers
     /// Gets the roles for view model.
     /// </summary>
     /// <param name="roles">The roles.</param>
-    /// <returns>System.Collections.Generic.IEnumerable&lt;TemplateCore.ViewModels.User.UserRoleCreateViewModel&gt;.</returns>
+    /// <returns>List of type <see cref="UserRoleCreateViewModel"/>.</returns>
     private IEnumerable<UserRoleCreateViewModel> GetRolesForViewModel(IEnumerable<IdentityRole> roles)
     {
       return roles.Select(x => new UserRoleCreateViewModel { Id = x.Id, Name = x.Name }).ToList();
@@ -328,7 +315,7 @@ namespace TemplateCore.Controllers
     /// </summary>
     /// <param name="userRoles">The user roles.</param>
     /// <param name="roles">The roles.</param>
-    /// <returns>List of type <see cref="UserRoleCreateViewModel"/> .</returns>
+    /// <returns>List of type <see cref="UserRoleCreateViewModel"/>.</returns>
     private IEnumerable<UserRoleCreateViewModel> GetUserRolesForEditViewModel(IEnumerable<IdentityRole> userRoles, IEnumerable<IdentityRole> roles)
     {
       // this will create the view for all the roles... (the grid..)
